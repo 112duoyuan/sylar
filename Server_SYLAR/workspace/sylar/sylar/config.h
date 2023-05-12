@@ -6,6 +6,8 @@
 #include <sstream>
 #include <boost/lexical_cast.hpp>
 #include "sylar/log.h"
+#include <yaml-cpp/yaml.h>
+
 
 namespace sylar{
 
@@ -15,7 +17,7 @@ public:
     ConfigVarBase(const std::string& name,const std::string& description = "")
         :m_name(name)
         ,m_description(description){
-
+            std::transform(m_name.begin(),m_name.end(),m_name.begin(),::tolower);
         }
         virtual ~ConfigVarBase(){}
         const std::string& getName() const {return m_name;}
@@ -27,8 +29,27 @@ protected:
     std::string m_name;
     std::string m_description;
 };
+//FromStr T operator()(const std::string&)
+//ToStr std::string operator() (const T&)
+//from_type to_type
+template<class F ,class T>
+class LexicalCast{
+public:
+    T oeprator()(const F& v){
+        return boost::lexical_cast<T>(v);
+    }
+};
 
-template<class T,>
+template<class T>
+class LexicalCast<std::string,std::vector<T>>{
+public:
+    std::vector<T> operator()(const std::string& v){
+        YAML::Node node = YAML::Load(v);
+    }
+};
+
+template<class T, class FromStr = LexicalCast<std::string,T>
+            ,class ToStr = LexicalCast<T,std::string>>
 class ConfigVar :public ConfigVarBase{
 public:
     typedef std::shared_ptr<ConfigVar> ptr;
@@ -41,7 +62,8 @@ public:
     std::string toString() override{
         try{
             //进行字符串与整数/浮点数之间的字面转换
-            boost::lexical_cast<std::string>(m_val);
+            //boost::lexical_cast<std::string>(m_val);
+            return ToStr()(m_val);
         }catch(std::exception& e){
             //typeid 获取类型信息
             SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) <<  "ConfigVar::toString exception"
@@ -51,14 +73,14 @@ public:
     }
     bool fromString(const std::string& val) override{
         try{
-            m_val = boost::
-        }
-
-            catch (std::exception& e){
-                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception"    
+            //m_val = boost::
+            setValue(FromStr()(val));
+        }catch (std::exception& e){
+            SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception"    
                     << e.what() << "convert: string to " << typeid(m_val).name();
-            }
-            return false;
+        }
+        return false;
+            
     }
 
     const T getValue() const {return m_val;} 
@@ -80,7 +102,7 @@ public:
             SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
             return tmp;
         }
-        if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ._012345678") 
+        if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._012345678") 
             != std::string::npos) {
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
                 throw std::invalid_argument(name);
@@ -100,6 +122,8 @@ public:
         return std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
     }
 
+    static void LoadFromYaml(const YAML::Node& root);
+    static ConfigVarBase LookupBase(const std::string& name);
 private:
     static ConfigVarMap m_datas;
 };
