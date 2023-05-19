@@ -13,7 +13,7 @@
 #include <list>
 #include <unordered_map>
 #include <unordered_set>
-
+#include <functional>
 
 
 namespace sylar{
@@ -32,6 +32,7 @@ public:
 
         virtual std::string toString() = 0;
         virtual bool fromString(const std::string& val) = 0;
+        virtual std::string getTypeName() const =  0;
 protected:
     std::string m_name;
     std::string m_description;
@@ -237,7 +238,9 @@ template<class T, class FromStr = LexicalCast<std::string,T>
             ,class ToStr = LexicalCast<T,std::string>>
 class ConfigVar :public ConfigVarBase{
 public:
+    typedef typedef std::function<void (const T& old_value,const T& new_value)> on_change_cb;
     typedef std::shared_ptr<ConfigVar> ptr;
+    
     ConfigVar(const std::string& name
             ,const T& default_value
             ,const std::string& description = "")
@@ -262,17 +265,45 @@ public:
             setValue(FromStr()(val));
         }catch (std::exception& e){
             SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "ConfigVar::toString exception"    
-                    << e.what() << "convert: string to " << typeid(m_val).name();
+                    << e.what() << "convert: string to " << typeid(m_val).name()
+                    << " - " <<val;
         }
         return false;
             
     }
 
     const T getValue() const {return m_val;} 
-    void setValue(const T& v){m_val = v;}
+    void setValue(const T& v){
+        if(v == m_val){
+            return;
+        }
+        for(auto& i:m_cbs){
+            i.second(m_val,v);
+        }
+        m_val = v;
+    }
+
+    std::string getTypeName() const override {return typeid(T).name();}
+
+    void addListener(uint64_t key,on_change_cb cb){
+        m_cbs[key] = cb;
+    }
+
+    void deleteListener(uint64_t key){
+        m_cbs.erase.erase(key);
+    }
+    on_change_cb getListener(uint64_t key){
+        auto it = m_cbs.find(key);
+        return it == m_cbs.end() ? nullptr : it->second;
+    }
+
+    void clearListener(){
+        m_cbs.clear();
+    }
 private:
     T m_val;
-
+    //变更回调数组，uint64_t key 要求唯一，一般可以用hash
+    std::map<uint64_t,on_change_cb> m_cbs;
 };
 
 class Config{
@@ -282,11 +313,20 @@ public:
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
             const T& default_value, const std::string& description = ""){
-        auto tmp = Lookup(name);
-        if(tmp){
-            SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
-            return tmp;
+        auto it = s_datas.find(name);
+        if(it != s_datas.end()){
+            auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
+            if(tmp){
+                SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
+                return tmp;
+            } else{
+                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists but type not"
+                        << typeid(T).name() << " real_type = " << it->second->getTypeName()
+                            <<" " << it->second->toString();
+                return nullptr;
+            }
         }
+
         if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._012345678") 
             != std::string::npos) {
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
