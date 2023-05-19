@@ -1,0 +1,48 @@
+# yaml测试样例
+# null 或 NULL 为关键字，不能写
+
+# 名称
+# 字符串
+name: conf file
+
+# 版本
+# 如按浮点，2.0会转换成2
+# 如按字符串，保留原样
+version: 2.0
+
+# 布尔类，转换为1或0
+need: true
+
+# 时间
+time: 2020-10-03T09:21:13
+
+empty: nul
+
+# 对象
+# 加双引号会转义\n，即会换行
+my:
+  name: late \n lee
+  name1: "late \n lee"
+  age: 99
+  
+# 块
+text: |
+  hello
+  world!
+
+# 数组
+fruit:
+  - apple
+  - apple1
+  - apple2
+  - apple3
+  - apple4
+  - apple5
+
+# 多级数组
+multi:
+  sta:
+    - 110 210 ddd 99
+    - 133 135 1 2 1588 1509
+    - 310-410
+    - 333-444
