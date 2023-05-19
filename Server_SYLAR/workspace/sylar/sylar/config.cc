@@ -2,11 +2,11 @@
 
 
 namespace sylar{
-Config::ConfigVarMap Config::s_datas;
+Config::ConfigVarMap Config::m_datas;
 
 ConfigVarBase::ptr Config::LookupBase(const std::string& name){
-    auto it = s_datas.find(name);
-    return it == s_datas.end() ? nullptr : it->second;
+    auto it = m_datas.find(name);
+    return it == m_datas.end() ? nullptr : it->second;
 }
 //"A.B", 10
 //A:
@@ -20,7 +20,7 @@ static void ListAllMember(const std::string& prefix,
             SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "cONFIG INVALILD NAME: "<<prefix << " : "<<node;
             return;
         }      
-        output.push_back(std::make_pair(prefix,ndoe));  
+        output.push_back(std::make_pair(prefix,node));  
         if(node.IsMap()){
             for(auto it = node.begin();
                     it != node.end();++it){
@@ -32,7 +32,7 @@ static void ListAllMember(const std::string& prefix,
 void Config::LoadFromYaml(const YAML::Node& root){
     std::list<std::pair<std::string, const YAML::Node>>all_node;
     ListAllMember("",root,all_node);
-    for(auto& i : all_nodes){
+    for(auto& i : all_node){
         std::string key = i.first;
         if(key.empty()){
             continue;

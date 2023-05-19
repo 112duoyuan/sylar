@@ -5,7 +5,7 @@
 #include <string>
 #include <sstream>
 #include <boost/lexical_cast.hpp>
-#include "sylar/log.h"
+#include "log.h"
 #include <yaml-cpp/yaml.h>
 #include <vector>
 #include <map>
@@ -43,7 +43,12 @@ protected:
 template<class F ,class T>
 class LexicalCast{
 public:
-    T oeprator()(const F& v){
+    T operator()(const F& v){
+        //用于字面值转换
+        // integer -> string
+        // string- > integer
+        // integer -> char
+        // float- > string
         return boost::lexical_cast<T>(v);
     }
 };
@@ -52,13 +57,14 @@ template<class T>
 class LexicalCast<std::string,std::vector<T>>{
 public:
     std::vector<T> operator()(const std::string& v){
+        //读取yaml配置文件 load函数将数据转为列表或字典
         YAML::Node node = YAML::Load(v);
         typename std::vector<T>vec;
         std::stringstream ss;
         for(size_t i = 0; i < node.size(); ++i){
             ss.str("");
             ss << node[i];
-            vec.push_back(LexicalCast<std::srting,T>()(ss.str()));
+            vec.push_back(LexicalCast<std::string,T>()(ss.str()));
         }
         return vec;
     }
@@ -73,7 +79,7 @@ public:
             node.push_back(YAML::Load(LexicalCast<T,std::string>()(i)));
         }
         std::stringstream ss;
-        ss << ndoe;
+        ss << node;
         return ss.str();
     }
 };
@@ -88,7 +94,7 @@ public:
         for(size_t i = 0; i < node.size(); ++i){
             ss.str("");
             ss << node[i];
-            vec.push_back(LexicalCast<std::srting,T>()(ss.str()));
+            vec.push_back(LexicalCast<std::string,T>()(ss.str()));
         }
         return vec;
     }
@@ -103,7 +109,7 @@ public:
             node.push_back(YAML::Load(LexicalCast<T,std::string>()(i)));
         }
         std::stringstream ss;
-        ss << ndoe;
+        ss << node;
         return ss.str();
     }
 };
@@ -118,7 +124,7 @@ public:
         for(size_t i = 0; i < node.size(); ++i){
             ss.str("");
             ss << node[i];
-            vec.insert(LexicalCast<std::srting,T>()(ss.str()));
+            vec.insert(LexicalCast<std::string,T>()(ss.str()));
         }
         return vec;
     }
@@ -133,7 +139,7 @@ public:
             node.push_back(YAML::Load(LexicalCast<T,std::string>()(i)));
         }
         std::stringstream ss;
-        ss << ndoe;
+        ss << node;
         return ss.str();
     }
 };
@@ -148,7 +154,7 @@ public:
         for(size_t i = 0; i < node.size(); ++i){
             ss.str("");
             ss << node[i];
-            vec.insert(LexicalCast<std::srting,T>()(ss.str()));
+            vec.insert(LexicalCast<std::string,T>()(ss.str()));
         }
         return vec;
     }
@@ -233,12 +239,12 @@ public:
 };
 
 
-
+//Config ConfigVarBase
 template<class T, class FromStr = LexicalCast<std::string,T>
             ,class ToStr = LexicalCast<T,std::string>>
 class ConfigVar :public ConfigVarBase{
 public:
-    typedef typedef std::function<void (const T& old_value,const T& new_value)> on_change_cb;
+    typedef std::function<void (const T& old_value,const T& new_value)> on_change_cb;
     typedef std::shared_ptr<ConfigVar> ptr;
     
     ConfigVar(const std::string& name
@@ -313,8 +319,8 @@ public:
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
             const T& default_value, const std::string& description = ""){
-        auto it = s_datas.find(name);
-        if(it != s_datas.end()){
+        auto it = m_datas.find(name);
+        if(it != m_datas.end()){
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
             if(tmp){
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
@@ -334,14 +340,14 @@ public:
             }
 
             typename ConfigVar<T>::ptr v(new ConfigVar<T>(name,default_value,description));
-            s_datas[name] = v;
+            m_datas[name] = v;
             return v;
     }
 
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name){
-        auto it = s_datas.find(name);
-        if(it == s_datas.end()){
+        auto it = m_datas.find(name);
+        if(it == m_datas.end()){
             return nullptr;
         }
         return std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
