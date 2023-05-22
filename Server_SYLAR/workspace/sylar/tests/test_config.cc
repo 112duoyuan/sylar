@@ -1,5 +1,5 @@
-#include "sylar/config.h"
-#include "sylar/log.h"
+#include "../sylar/config.h"
+#include "../sylar/log.h"
 #include <yaml-cpp/yaml.h>
 
 sylar::ConfigVar<int>::ptr g_int_value_config = 
@@ -16,7 +16,7 @@ sylar::ConfigVar<std::list<int>>::ptr g_int_list_value_config =
 sylar::ConfigVar<std::set<int>>::ptr g_int_set_value_config = 
     sylar::Config::Lookup("system.int_set",std::set<int>(1,2),"system int set");
 sylar::ConfigVar<std::unordered_set<int>>::ptr g_int_uset_value_config = 
-    sylar::Config::Lookup("system.int_uset",unordered_set<int>(1,2),"system int uset");
+    sylar::Config::Lookup("system.int_uset",std::unordered_set<int>(1,2),"system int uset");
 sylar::ConfigVar<std::map<std::string,int>>::ptr g_str_int_map_value_config = 
     sylar::Config::Lookup("system.str_int_map",std::map<std::string,int>{{"k",2}},"system string int map");
 sylar::ConfigVar<std::unordered_map<std::string,int>>::ptr g_str_int_umap_value_config = 
@@ -49,7 +49,7 @@ void print_yaml(const YAML::Node& node, int level){
 }
 void test_yaml(){
     YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
-    print_yaml(node,0);
+    print_yaml(root,0);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root.Scalar();
 
 }
@@ -119,7 +119,7 @@ public:
 
 namespace sylar{
 template<class T>
-class LexicalCast<std::string,std::unordered_map<std::string , T>>{
+class LexicalCast<std::string,Person>{
 public:
     Person  operator()(const std::string& v){
         YAML::Node node = YAML::Load(v);
@@ -161,7 +161,7 @@ void test_class(){
             << " - " << g_person->toString();
 #define XX_PM(g_var,prefix) \
     { \
-            auto m = g_person.map->getValue();\
+            auto m = g_var->getValue();\
             for(auto& i : m){ \
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << prefix <<": " << i.first << " - " << i.second.toString(); \
             }\

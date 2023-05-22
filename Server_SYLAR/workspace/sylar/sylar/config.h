@@ -321,6 +321,7 @@ public:
             const T& default_value, const std::string& description = ""){
         auto it = m_datas.find(name);
         if(it != m_datas.end()){
+            //类型强制转换
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
             if(tmp){
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
@@ -354,7 +355,7 @@ public:
     }
 
     static void LoadFromYaml(const YAML::Node& root);
-    static ConfigVarBase LookupBase(const std::string& name);
+    static ConfigVarBase::ptr LookupBase(const std::string& name);
 private:
     static ConfigVarMap m_datas;
 };
