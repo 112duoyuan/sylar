@@ -4,21 +4,28 @@
 
 sylar::ConfigVar<int>::ptr g_int_value_config = 
     sylar::Config::Lookup("system.port",(int)8080,"system port");
+
 sylar::ConfigVar<float>::ptr g_int_valuex_config = 
     sylar::Config::Lookup("system.port",(float)8080,"system port");
 
 sylar::ConfigVar<int>::ptr g_float_value_config = 
     sylar::Config::Lookup("system.value",(int)10.2f,"system value");
+
 sylar::ConfigVar<std::vector<int>>::ptr g_int_vec_value_config = 
     sylar::Config::Lookup("system.int_vec",std::vector<int>(1,2),"system int vec");
+
 sylar::ConfigVar<std::list<int>>::ptr g_int_list_value_config = 
     sylar::Config::Lookup("system.int_list",std::list<int>(1,2),"system int list");
+
 sylar::ConfigVar<std::set<int>>::ptr g_int_set_value_config = 
-    sylar::Config::Lookup("system.int_set",std::set<int>(1,2),"system int set");
+    sylar::Config::Lookup("system.int_set",std::set<int>(1,2),"system int set");//1
+
 sylar::ConfigVar<std::unordered_set<int>>::ptr g_int_uset_value_config = 
-    sylar::Config::Lookup("system.int_uset",std::unordered_set<int>(1,2),"system int uset");
+    sylar::Config::Lookup("system.int_uset",std::unordered_set<int>(1,2),"system int uset");//2
+
 sylar::ConfigVar<std::map<std::string,int>>::ptr g_str_int_map_value_config = 
     sylar::Config::Lookup("system.str_int_map",std::map<std::string,int>{{"k",2}},"system string int map");
+
 sylar::ConfigVar<std::unordered_map<std::string,int>>::ptr g_str_int_umap_value_config = 
     sylar::Config::Lookup("system.str_int_umap",std::unordered_map<std::string,int>{{"k",2}},"system string int umap");
 
@@ -56,7 +63,7 @@ void test_yaml(){
 void test_config(){
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before:"<<g_int_value_config->getValue();
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before:"<<g_float_value_config->toString();
-#define XX(g_var,name,prefix) \    
+#define XX(g_var,name,prefix) \
     {\
         auto& v = g_var->getValue(); \
         for(auto& i:v){ \
@@ -64,7 +71,7 @@ void test_config(){
         }\
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << #prefix " " #name " yaml:" << g_var->toString();\
     }
-#define XX_M(g_var,name,prefix) \    
+#define XX_M(g_var,name,prefix) \
     {\
         auto& v = g_var->getValue(); \
         for(auto& i:v){ \
@@ -118,10 +125,10 @@ public:
 };
 
 namespace sylar{
-template<class T>
+template<>
 class LexicalCast<std::string,Person>{
 public:
-    Person  operator()(const std::string& v){
+    Person operator()(const std::string& v){
         YAML::Node node = YAML::Load(v);
         Person p;
         p.m_name = node["name"].as<std::string>();
@@ -131,7 +138,7 @@ public:
     }
 };
 
-template<class T>
+template<>
 class LexicalCast<Person,std::string>{
 public:
     std::string operator()(const Person& p){
@@ -159,8 +166,8 @@ sylar::ConfigVar<std::map<std::string,std::vector<Person> > >::ptr g_person_vec_
 void test_class(){
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: " <<g_person->getValue().toString() 
             << " - " << g_person->toString();
-#define XX_PM(g_var,prefix) \
-    { \
+#define XX_PM(g_var,prefix)\
+    {\
             auto m = g_var->getValue();\
             for(auto& i : m){ \
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << prefix <<": " << i.first << " - " << i.second.toString(); \
