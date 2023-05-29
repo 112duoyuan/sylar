@@ -14,6 +14,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <functional>
+#include <iostream>
 
 
 namespace sylar{
@@ -25,6 +26,7 @@ public:
         :m_name(name)
         ,m_description(description){
             std::transform(m_name.begin(),m_name.end(),m_name.begin(),::tolower);
+            std::cout << "configvarbase" << std::endl;
         }
         virtual ~ConfigVarBase(){}
         const std::string& getName() const {return m_name;}
@@ -253,6 +255,7 @@ public:
             ,const std::string& description = "")
         :ConfigVarBase(name,description)
         ,m_val(default_value){
+            std::cout << "configVar" << std::endl;
         }
     std::string toString() override{
         try{
@@ -320,9 +323,18 @@ public:
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
             const T& default_value, const std::string& description = ""){
+        std::string name1 = "111";
+        std::string description1 = "222";
+
+        std::cout << "name: " << name1 << std::endl;
+        std::cout << "type is "<<typeid(default_value).name() << std::endl;
+        std::cout << "description: "<<description1 << std::endl;
+
         auto it = m_datas.find(name);
+
         if(it != m_datas.end()){
             //类型强制转换
+            std::cout << "find name!! " <<  std::endl;
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
             if(tmp){
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
@@ -334,7 +346,7 @@ public:
                 return nullptr;
             }
         }
-
+        std::cout << "can't find name!! " <<  std::endl;
         if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._012345678") 
             != std::string::npos) {
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
