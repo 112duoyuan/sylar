@@ -323,12 +323,11 @@ public:
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
             const T& default_value, const std::string& description = ""){
-        std::string name1 = "111";
-        std::string description1 = "222";
 
-        std::cout << "name: " << name1 << std::endl;
+        std::cout << "name: " << name << std::endl;
+
         std::cout << "type is "<<typeid(default_value).name() << std::endl;
-        std::cout << "description: "<<description1 << std::endl;
+        std::cout << "description: "<<description << std::endl;
 
         auto it = m_datas.find(name);
 
@@ -340,6 +339,10 @@ public:
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
                 return tmp;
             } else{
+                std::cout << "name " << name << std::endl;
+                std::cout << typeid(T).name() << std::endl;
+                std::cout << it->second->getTypeName() << std::endl;
+
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists but type not"
                         << typeid(T).name() << " real_type = " << it->second->getTypeName()
                             <<" " << it->second->toString();
