@@ -325,8 +325,6 @@ public:
             const T& default_value, const std::string& description = ""){
 
         std::cout << "name: " << name << std::endl;
-
-        std::cout << "type is "<<typeid(default_value).name() << std::endl;
         std::cout << "description: "<<description << std::endl;
 
         auto it = m_datas.find(name);

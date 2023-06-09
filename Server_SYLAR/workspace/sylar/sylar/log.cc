@@ -191,8 +191,9 @@ LogEvent::LogEvent(std::shared_ptr<Logger>logger,LogLevel::Level level
 
 Logger::Logger(const std::string& name)
     :m_name(name)
-    ,m_level(LogLevel::DEBUG){
+    ,m_level(LogLevel::UNKNOW){
     //重置指针
+    std::cout << "level is unknow 0" << std::endl;
     m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));
 }
 
@@ -398,6 +399,7 @@ void LogFormatter::init(){//str, format, type
 
 
 LoggerManager::LoggerManager(){
+    std::cout << "new Logger" << std::endl;
     m_root.reset(new Logger);
     m_root->addAppender(LogAppender::ptr(new StdoutLogAppender));
 }

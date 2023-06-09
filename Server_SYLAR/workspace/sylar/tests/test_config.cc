@@ -91,10 +91,10 @@ void test_config(){
     //XX_M(g_str_int_map_value_config,str_int_map,before);
     //XX_M(g_str_int_umap_value_config,str_int_umap,before);
 
-    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
-    sylar::Config::LoadFromYaml(root);
+    // YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
+    // sylar::Config::LoadFromYaml(root);
 
-    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after:"<<g_int_value_config->getValue();
+    // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after:"<<g_int_value_config->getValue();
     //SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after:"<<g_float_value_config->toString();
 
     //XX(g_int_vec_value_config,int_vec,after);
@@ -199,8 +199,8 @@ void test_class(){
 
 
 int main(int argc,char ** argv){
-    //test_config();
-    test_yaml();
+    test_config();
+    //test_yaml();
     //test_class();
     return 0;
 }
