@@ -11,6 +11,7 @@
 #include <map>
 #include "util.h"
 #include "singleton.h"
+#include <iostream>
 
 #define SYLAR_LOG_LEVEL(logger,level) \
     if(logger->getLevel() <= level) \
@@ -210,7 +211,8 @@ public:
 
     void init();
 
-    Logger::ptr getRoot() const {return m_root;}
+    Logger::ptr getRoot() const {
+        return m_root;}
 private:
     std::map<std::string,Logger::ptr>m_loggers;
     Logger::ptr m_root;
