@@ -56,7 +56,7 @@ void print_yaml(const YAML::Node& node, int level){
 }
 void test_yaml(){
     std::cout << "enter test_yaml " << std::endl;
-    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/test.yml");
     print_yaml(root,0);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root.Scalar();
     std::cout << "exit test_yaml " << std::endl;
@@ -91,7 +91,7 @@ void test_config(){
     XX_M(g_str_int_map_value_config,str_int_map,before);
     XX_M(g_str_int_umap_value_config,str_int_umap,before);
 
-    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/test.yml");
     sylar::Config::LoadFromYaml(root);
 
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after:"<<g_int_value_config->getValue();
@@ -157,13 +157,13 @@ public:
 }
 
 sylar::ConfigVar<Person>::ptr g_person = 
-    sylar::Config::Lookup("class.Person",Person(),"system person");
+    sylar::Config::Lookup("class.person",Person(),"system person");
 
-// sylar::ConfigVar<std::map<std::string,Person> >::ptr g_person_map = 
-//     sylar::Config::Lookup("class.Person.map",std::map<std::string, Person>{},"system person");
+sylar::ConfigVar<std::map<std::string,Person> >::ptr g_person_map = 
+    sylar::Config::Lookup("class.person.map",std::map<std::string, Person>{},"system person");
 
-// sylar::ConfigVar<std::map<std::string,std::vector<Person> > >::ptr g_person_vec_map = 
-//     sylar::Config::Lookup("class.vec_map",std::map<std::string, std::vector<Person> >{},"system person");
+sylar::ConfigVar<std::map<std::string,std::vector<Person> > >::ptr g_person_vec_map = 
+    sylar::Config::Lookup("class.vec_map",std::map<std::string, std::vector<Person> >{},"system person");
 
 
 void test_class(){
@@ -184,17 +184,17 @@ void test_class(){
                 << "new_value=" << new_value.toString();
     });
 
-    // XX_PM(g_person_map,"class.map before");
-    // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: "<<g_person_vec_map->toString();
+    XX_PM(g_person_map,"class.map before");
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "before: "<<g_person_vec_map->toString();
 
     YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
     sylar::Config::LoadFromYaml(root);
     
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " <<g_person->getValue().toString() 
             << " - " << g_person->toString();
-    // XX_PM(g_person_map,"class.map after");
-    // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " <<g_person_vec_map->toString();
-    // std::cout << "exit test_class" << std::endl;
+    XX_PM(g_person_map,"class.map after");
+    SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after: " <<g_person_vec_map->toString();
+    std::cout << "exit test_class" << std::endl;
 }
 
 

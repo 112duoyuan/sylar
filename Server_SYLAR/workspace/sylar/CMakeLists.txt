@@ -11,18 +11,12 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
 SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
 include_directories(/home/xu/yaml/yaml-cpp-master/include)
-include_directories(/Server_SYLAR/sylar/include)
-
-
-
 
 set(LIB_SRC
     sylar/log.cc
     sylar/util.cc
     sylar/config.cc
 )
-#set (CMAKE_LIBRARY_OUTPUT ${PROJECT_SOURCE_DIR}/lib)
-
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
 
 
@@ -35,7 +29,6 @@ add_executable(test_config tests/test_config.cc)
 add_dependencies(test_config sylar)
 
 target_link_libraries(test_config sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp)
-
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib) #库文件的输出路径

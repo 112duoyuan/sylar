@@ -40,9 +40,11 @@
 #define SYLAR_LOG_FMT_FATAL(logger,fmt,...) SYLAR_LOG_FMT_LEVEL(logger,sylar::LogLevel::FATAL,fmt,__VA_ARGS__)
 
 #define SYLAR_LOG_ROOT() sylar::LoggerMgr::GetInstance()->getRoot()
-
+#define SYLAR_LOG_NAME(name) sylar::LoggerMgr::GetInstance()->getLogger(name)
 namespace sylar{
 
+class Logger;
+class LoggerManager;
 //日志级别
 class LogLevel{
 public:
@@ -159,6 +161,7 @@ protected:
 */
 
 class Logger:public std::enable_shared_from_this<Logger>{
+friend class LoggerManager;
 public:
     typedef std::shared_ptr<Logger>ptr;
    
@@ -170,9 +173,10 @@ public:
     void warn(LogEvent::ptr event);
     void error(LogEvent::ptr event);
     void fatal(LogEvent::ptr event);
-
+    void clearAppenders();
     void addAppender(LogAppender::ptr appender);
     void delAppender(LogAppender::ptr appender);
+
     LogLevel::Level getLevel() const  {return m_level;}//const 说明函数成员对象是不可修改的
     void setLevel (LogLevel::Level val){m_level = val;}
 
@@ -182,6 +186,7 @@ private:
     LogLevel::Level m_level;//日志级别
     std::list<LogAppender::ptr>m_appenders; //Appender集合
     LogFormatter::ptr m_formatter;
+    Logger::ptr m_root;
 };   
 //输出到控制台的Appender
 class StdoutLogAppender : public LogAppender{
@@ -211,8 +216,7 @@ public:
 
     void init();
 
-    Logger::ptr getRoot() const {
-        return m_root;}
+    Logger::ptr getRoot() const {return m_root;}
 private:
     std::map<std::string,Logger::ptr>m_loggers;
     Logger::ptr m_root;
