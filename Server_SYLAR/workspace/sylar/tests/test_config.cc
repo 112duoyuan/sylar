@@ -56,7 +56,7 @@ void print_yaml(const YAML::Node& node, int level){
 }
 void test_yaml(){
     std::cout << "enter test_yaml " << std::endl;
-    YAML::Node root = YAML::LoadFile("/home/xu/sylar/Server_SYLAR/sylar/bin/conf/log.yml");
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/test.yml");
     print_yaml(root,0);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root.Scalar();
     std::cout << "exit test_yaml " << std::endl;
@@ -199,8 +199,8 @@ void test_class(){
 
 
 int main(int argc,char ** argv){
-    test_config();
-    test_yaml();
-    //test_class();
+    //test_config();
+    //test_yaml();
+    test_class();
     return 0;
 }
