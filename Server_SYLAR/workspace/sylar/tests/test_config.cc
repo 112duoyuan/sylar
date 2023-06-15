@@ -1,3 +1,4 @@
+//需要看看yaml文件怎么递归解析的
 #include "../sylar/config.h"
 #include "../sylar/log.h"
 #include <yaml-cpp/yaml.h>
@@ -156,8 +157,8 @@ public:
 };
 }
 
-// sylar::ConfigVar<Person>::ptr g_person = 
-//     sylar::Config::Lookup("class.Person",Person(),"system person");
+sylar::ConfigVar<Person>::ptr g_person = 
+    sylar::Config::Lookup("class.person",Person(),"system person");
 
 // sylar::ConfigVar<std::map<std::string,Person> >::ptr g_person_map = 
 //     sylar::Config::Lookup("class.Person.map",std::map<std::string, Person>(),"system person");

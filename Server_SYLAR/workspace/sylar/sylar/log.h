@@ -57,6 +57,8 @@ public:
         FATAL = 5
     };
     static const char* ToString(LogLevel::Level level); //返回一个string字符串
+    static LogLevel FromString(const std::string& str);
+
 };
 
 class Logger;
