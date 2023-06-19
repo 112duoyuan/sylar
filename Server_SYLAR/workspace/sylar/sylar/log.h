@@ -11,7 +11,6 @@
 #include <map>
 #include "util.h"
 #include "singleton.h"
-#include <iostream>
 
 #define SYLAR_LOG_LEVEL(logger,level) \
     if(logger->getLevel() <= level) \
@@ -58,6 +57,8 @@ public:
         FATAL = 5
     };
     static const char* ToString(LogLevel::Level level); //返回一个string字符串
+    static LogLevel FromString(const std::string& str);
+
 };
 
 class Logger;
@@ -127,7 +128,7 @@ public:
         virtual void format(std::ostream& os, std::shared_ptr<Logger> logger,LogLevel::Level level ,LogEvent::ptr event) = 0;
     };
     void init();
-
+    const std::string getPattern() const {return m_pattern;}
     bool isError() const {return m_error;}
 private:
     bool m_error = false;
@@ -139,7 +140,7 @@ class LogAppender{
 public:
     typedef std::shared_ptr<LogAppender>ptr;
     virtual ~LogAppender(){}
-
+    virtual std::string toYamlString() = 0;
     virtual void log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event) = 0;
 
     void setFormatter(LogFormatter::ptr val){ m_formatter = val;}
@@ -188,7 +189,7 @@ public:
     void setFormatter(const std::string& val);
     LogFormatter::ptr getFormatter();
 
-
+    std::string toYamkString();
 private:
     std::string m_name;
     LogLevel::Level m_level;//日志级别
@@ -201,7 +202,7 @@ class StdoutLogAppender : public LogAppender{
 public:
     typedef std::shared_ptr<StdoutLogAppender>ptr;
     void log(Logger::ptr logger,LogLevel::Level level,LogEvent::ptr event)override;
-
+    std::string toYamlString() override;
 private:
 };
 //定于输出到文件的Appender
@@ -210,7 +211,7 @@ public:
     typedef std::shared_ptr<FileLogAppender> ptr;
     FileLogAppender(const std::string& filename);
     void log(Logger::ptr logger,LogLevel::Level level,LogEvent::ptr event)override;
-
+    std::string toYamlString() override;
     bool reopen();
 private:
     std::string m_filename;
@@ -225,6 +226,7 @@ public:
     void init();
 
     Logger::ptr getRoot() const {return m_root;}
+    std::string toYamlString();
 private:
     std::map<std::string,Logger::ptr>m_loggers;
     Logger::ptr m_root;

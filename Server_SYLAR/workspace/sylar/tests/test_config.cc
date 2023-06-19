@@ -2,10 +2,11 @@
 #include "../sylar/config.h"
 #include "../sylar/log.h"
 #include <yaml-cpp/yaml.h>
+#include <iostream>
 
 // sylar::ConfigVar<int>::ptr g_int_value_config = 
 //     sylar::Config::Lookup("system.port",(int)8080,"system port");
-
+#if 1
 sylar::ConfigVar<float>::ptr g_int_valuex_config = 
     sylar::Config::Lookup("system.port",(float)8080,"system port");
 
@@ -197,10 +198,23 @@ void test_class(){
     std::cout << "exit test_class" << std::endl;
 }
 
+void test_log(){
+    static sylar::Loggerptr system_log = SYLAR_LOG_NAME("system");
+    SYLAR_LOG_INFO(system_log) << "hello system" << std::endl; 
+    std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
+    sylar::Config::LoadFromYaml(root);
+    std::cout << "========================" <<std::endl;
+    std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
+    std::cout << "========================" <<std::endl;
+    std::cout << root << std::endl;
+    SYLAR_LOG_INFO(system_log) << "hello system" << std::endl; 
 
+}
 int main(int argc,char ** argv){
     //test_config();
     //test_yaml();
-    test_class();
+    //test_class();
+    test_log();
     return 0;
 }
