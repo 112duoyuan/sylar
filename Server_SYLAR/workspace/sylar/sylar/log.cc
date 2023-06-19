@@ -1,3 +1,4 @@
+//P17 21:09
 #include "log.h"
 #include <map>
 #include<functional>
@@ -26,6 +27,20 @@ const char* LogLevel::ToString(LogLevel::Level level){
     }
     return "UNKNOW";
 }
+LogLevel::Level LogLevel::FromString(const std::string& str){
+#define XX(name) \
+    if(str == #name) {\
+        reutrn LogLevel::name \
+    }
+    XX(DEBUG);
+    XX(INFO);
+    XX(WARN);
+    XX(ERROR);
+    XX(FATAL);
+    return LogLevel::UNKNOW;
+#undef XX
+}
+
 
 LogEventWrap::LogEventWrap(LogEvent::ptr e)
     :m_event(e){
@@ -196,7 +211,21 @@ Logger::Logger(const std::string& name)
     //重置指针
     m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T[%p]%T[%c]%T%f:%l%T%m%n"));
 }
-
+void Logger::setFormatter(LoggerFormatter::ptr val){
+    m_formatter = val;
+}
+void Logger::setFormatter(const std::string& val){
+    sylar::LogFormatter::ptr new_val(new sylar::LogFormatter(val));
+    if(new_val->isError()){
+        std::cout << "Logger setFormatter name=" << m_name 
+            << "value= " << val <<" invalid formatter" <<std::endl;
+        return;
+    }
+    m_formatter = new_val;
+}
+LogFormatter::ptr Logger::getFormatter(){
+    return m_formatter;
+}
 void Logger::addAppender(LogAppender::ptr appender){
     if(!appender->getFormatter()){
         appender->setFormatter(m_formatter);
@@ -449,6 +478,87 @@ struct LogDefine{
         return name < oth.name;
     }
 };
+template<class T>
+class LexicalCast<std::string,std::set<LogDefine>>{
+public:
+    std::set<LogDefine> operator()(const std::string& v){
+        //读取yaml配置文件 load函数将数据转为列表或字典
+        YAML::Node node = YAML::Load(v);
+        std::set<LogDefine>vec;
+
+       for(size_t i = 0; i < node.size(); ++i){
+           auto& n =node[i];
+           if(!n["name"].IsDefined()){
+                std::cout << "log config error: name is null," << n
+                        <<std::endl;
+                continue;
+           }
+           LogDefine ld;
+           ld.name = n["name"].as<std::string>();
+           ld.level = LogLevel::FromString(n["level"].IsDefined() ? n["level"].as<std::string>() : "");
+           if(n["formatter"].IsDefined()){
+                ld.formatter = n["formatter"].as<std::string>();
+           }
+           if(n["appender"].isDefined()){
+                for(size_t x = 0; x < n["appenders"].size(); ++x){
+                    auto a = n["appenders"][x];
+                    if(!a["type"].IsDefined()){
+                        std::cout << "log config error: appender type is null, " << a
+                                <<std::endl;
+                        continue;
+                    }
+                    std::string type = a["type"].as<std::string>();
+                    LogAppenderDefine lad;
+                    if(type == "FileLogAppender"){
+                        lad.type =1;
+                        if(!n["file"].IsDefined()) {
+                            std::cout << "log config error: fileappender file is null"
+                                <<a <<std::endl;
+                            continue;
+                        }
+                        lad.file = n["file"].as<std::string>();
+                        if(n["formatter"].IsDefined()){
+                            lad.formatter = n["formatter"].as<std::string>();
+                        }
+
+                    }else if(type == "StdoutLogAppender"){
+                        lad.type = 2;
+                    }else{
+                        std::cout << "log config error: apppender type is invalid, " <<
+                                << std::endl;
+                        continue;
+                    }
+                    ld.appenders.push_back(lad);
+                } 
+           }
+
+           vec.insert(ld);
+        }
+        return vec;
+    }
+};
+
+template<class T>
+class LexicalCast<std::set<LogDefine>,std::string>{
+public:
+    std::string operator()(const std::set<LogDefine>& v){
+        YAML::Node node;
+       for(auto& i : v){
+            YAML::Node n;
+            n["name"] = i.name;
+            n["level"] = LogLevel::ToString(i.level);
+
+            if(m_formatter.empty()){
+                
+            }
+        }
+        std::stringstream ss;
+        ss << node;
+        return ss.str();
+    }
+};
+
+
 sylar::ConfigVar<std::set<LogDefine> >g_log_defines = 
     sylar::Config::Lookup("logs", std::vector<LogDefine>(), "logs config");
 
@@ -456,23 +566,38 @@ struct LogIniter {
     LogIniter(){
         g_log_defines->addListener(0xF1E231,[](const std::set<LogDefine>& old_value,
                     const std::set<LogDefine>& new_value){
+            SYLAR_LOG_NAME(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
             //新增
             for(auto& i : new_value){
                 auto it = old_value.find(i);
+                sylar::Logger::ptr logger;
                 if(it == old_value.end()){
                     //新增logger
-                    sylar::Logger::ptr logger(new sylar::Logger(i.name));
-                    logger->setLevel(i.level);
-                    if(!i.formatter.empty()){
-                        logger->  
-                    }
+                    logger.reset(new sylar::Logger(i.name));
                 }else{
                     if(!(i == *it)){
                         //修改的logger
-
+                        logger = SYLAR_LOG_NAME(i.name);
+                       
+                        }
                     }
-                }
+                    logger->setLevel(i.level);
+                    if(!i.formatter.empty()){
+                        logger->setFormatter(i.formatter);
+                    }
+                    logger->clearAppenders();
+                    for(auto& a : i.appenders){
+                        sylar::LogAppender::ptr ap;
+                        if(a.type == 1){
+                            ap.reset(new FileLogAppender(i.file));
+                        } else if(a.type == 2){
+                            ap.reset(new StdoutLogAppender);
+                        }
+                        ap->setLevel(a.level);
+                        logger->addAppender(ap);
+                    }
             }
+            
             for(auto& i : old_value){
                 auto it=new_value.find(i);
                 if(it == new_value.end()){

@@ -11,7 +11,6 @@
 #include <map>
 #include "util.h"
 #include "singleton.h"
-#include <iostream>
 
 #define SYLAR_LOG_LEVEL(logger,level) \
     if(logger->getLevel() <= level) \
@@ -58,6 +57,8 @@ public:
         FATAL = 5
     };
     static const char* ToString(LogLevel::Level level); //返回一个string字符串
+    static LogLevel FromString(const std::string& str);
+
 };
 
 class Logger;
@@ -127,6 +128,8 @@ public:
         virtual void format(std::ostream& os, std::shared_ptr<Logger> logger,LogLevel::Level level ,LogEvent::ptr event) = 0;
     };
     void init();
+
+    bool isError() const {return m_error;}
 private:
     bool m_error = false;
     std::string m_pattern;
@@ -181,6 +184,12 @@ public:
     void setLevel (LogLevel::Level val){m_level = val;}
 
     const std::string& getName() const {return m_name;}
+
+    void setFormatter(LoggerFormatter::ptr val);
+    void setFormatter(const std::string& val);
+    LogFormatter::ptr getFormatter();
+
+
 private:
     std::string m_name;
     LogLevel::Level m_level;//日志级别
