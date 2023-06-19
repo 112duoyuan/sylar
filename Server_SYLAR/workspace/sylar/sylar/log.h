@@ -12,6 +12,7 @@
 #include "util.h"
 #include "singleton.h"
 
+P18 15:01
 #define SYLAR_LOG_LEVEL(logger,level) \
     if(logger->getLevel() <= level) \
         sylar::LogEventWrap(sylar::LogEvent::ptr(new sylar::LogEvent(logger,level,\
@@ -189,7 +190,7 @@ public:
     void setFormatter(const std::string& val);
     LogFormatter::ptr getFormatter();
 
-
+    std::string toYam
 private:
     std::string m_name;
     LogLevel::Level m_level;//日志级别

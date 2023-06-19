@@ -197,10 +197,14 @@ void test_class(){
     std::cout << "exit test_class" << std::endl;
 }
 
-
+void test_log(){
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
+    
+}
 int main(int argc,char ** argv){
     //test_config();
     //test_yaml();
-    test_class();
+    //test_class();
+    test_log();
     return 0;
 }

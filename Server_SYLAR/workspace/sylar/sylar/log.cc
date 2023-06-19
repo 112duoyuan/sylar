@@ -499,7 +499,7 @@ public:
            if(n["formatter"].IsDefined()){
                 ld.formatter = n["formatter"].as<std::string>();
            }
-           if(n["appender"].isDefined()){
+           if(n["appenders"].IsDefined()){
                 for(size_t x = 0; x < n["appenders"].size(); ++x){
                     auto a = n["appenders"][x];
                     if(!a["type"].IsDefined()){
@@ -511,14 +511,14 @@ public:
                     LogAppenderDefine lad;
                     if(type == "FileLogAppender"){
                         lad.type =1;
-                        if(!n["file"].IsDefined()) {
+                        if(!a["file"].IsDefined()) {
                             std::cout << "log config error: fileappender file is null"
                                 <<a <<std::endl;
                             continue;
                         }
-                        lad.file = n["file"].as<std::string>();
+                        lad.file = a["file"].as<std::string>();
                         if(n["formatter"].IsDefined()){
-                            lad.formatter = n["formatter"].as<std::string>();
+                            lad.formatter = a["formatter"].as<std::string>();
                         }
 
                     }else if(type == "StdoutLogAppender"){
@@ -548,9 +548,24 @@ public:
             n["name"] = i.name;
             n["level"] = LogLevel::ToString(i.level);
 
-            if(m_formatter.empty()){
-                
+            if(i.formatter.empty()){
+                n["level"] = i.formatter;
             }
+            for(auto& a : i.appenders){
+                YAML::Node na;
+                if(a.type == 1){
+                    na["type"] = "FileLogAppender";
+                    na["file"] = a.file;
+                }else if(a.type == 2){
+                    na["type"] = "StdoutLogAppender";
+                }
+                na["level"] = LogLevel::ToString(a.level);
+                if(!a.formatter.empty()){
+                    na["formatter"] = a.formatter;
+                }
+                n["appenders"].push_back(na);
+            }
+            node.push_back(n);
         }
         std::stringstream ss;
         ss << node;
@@ -573,7 +588,7 @@ struct LogIniter {
                 sylar::Logger::ptr logger;
                 if(it == old_value.end()){
                     //新增logger
-                    logger.reset(new sylar::Logger(i.name));
+                    logger = SYLAR_LOG_NAME(i.name);
                 }else{
                     if(!(i == *it)){
                         //修改的logger
