@@ -195,6 +195,7 @@ Logger::Logger(const std::string& name)
     ,m_level(LogLevel::DEBUG){
     //重置指针
     m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T[%p]%T[%c]%T%f:%l%T%m%n"));
+<<<<<<< HEAD
 }
 void Logger::setFormatter(LoggerFormatter::ptr val){
     m_formatter = val;
@@ -210,6 +211,8 @@ void Logger::setFormatter(const std::string& val){
 }
 LogFormatter::ptr Logger::getFormatter(){
     return m_formatter;
+=======
+>>>>>>> origin/main
 }
 void Logger::addAppender(LogAppender::ptr appender){
     if(!appender->getFormatter()){
@@ -478,6 +481,7 @@ struct LogIniter {
                     sylar::Logger::ptr logger(new sylar::Logger(i.name));
                     logger->setLevel(i.level);
                     if(!i.formatter.empty()){
+<<<<<<< HEAD
                         logger->setFormatter(i.formatter);
                     }
                     logger->clearAppenders();
@@ -490,6 +494,9 @@ struct LogIniter {
                         }
                         ap->setLevel(a.level);
                         logger->addAppender(ap);
+=======
+                        logger->  
+>>>>>>> origin/main
                     }
                 }else{
                     if(!(i == *it)){

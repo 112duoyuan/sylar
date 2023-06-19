@@ -11,6 +11,7 @@
 #include <map>
 #include "util.h"
 #include "singleton.h"
+#include <iostream>
 
 #define SYLAR_LOG_LEVEL(logger,level) \
     if(logger->getLevel() <= level) \
