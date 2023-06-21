@@ -321,9 +321,9 @@ public:
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name,
             const T& default_value, const std::string& description = ""){
-        auto it = m_datas.find(name);
+        auto it = GetDatas().find(name);
 
-        if(it != m_datas.end()){
+        if(it != GetDatas().end()){
             //类型强制转换
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
             if(tmp){
@@ -347,14 +347,14 @@ public:
             }
 
         typename ConfigVar<T>::ptr v(new ConfigVar<T>(name,default_value,description));
-        m_datas[name] = v;
+        GetDatas()[name] = v;
         return v;
     }
 
     template<class T>
     static typename ConfigVar<T>::ptr Lookup(const std::string& name){
-        auto it = m_datas.find(name);
-        if(it == m_datas.end()){
+        auto it = GetDatas().find(name);
+        if(it == GetDatas().end()){
             return nullptr;
         }
         return std::dynamic_pointer_cast<ConfigVar<T>>(it->second);

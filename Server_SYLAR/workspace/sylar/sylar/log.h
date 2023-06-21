@@ -57,7 +57,7 @@ public:
         FATAL = 5
     };
     static const char* ToString(LogLevel::Level level); //返回一个string字符串
-    static LogLevel FromString(const std::string& str);
+    static LogLevel::Level FromString(const std::string& str);
 
 };
 
@@ -187,7 +187,7 @@ public:
 
     const std::string& getName() const {return m_name;}
 
-    void setFormatter(LoggerFormatter::ptr val);
+    void setFormatter(LogFormatter::ptr val);
     void setFormatter(const std::string& val);
     LogFormatter::ptr getFormatter();
 

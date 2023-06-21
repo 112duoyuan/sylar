@@ -2,7 +2,7 @@
 
 
 namespace sylar{
-Config::ConfigVarMap Config::m_datas;
+Config::ConfigVarMap m_datas;
 
 ConfigVarBase::ptr Config::LookupBase(const std::string& name){
     auto it = m_datas.find(name);

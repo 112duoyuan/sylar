@@ -30,7 +30,7 @@ const char* LogLevel::ToString(LogLevel::Level level){
 LogLevel::Level LogLevel::FromString(const std::string& str){
 #define XX(level, v) \
     if(str == #v) {\
-        reutrn LogLevel::level; \
+        return LogLevel::level; \
     }
     XX(DEBUG,debug);
     XX(INFO,info);
@@ -225,7 +225,7 @@ Logger::Logger(const std::string& name)
     //重置指针
     m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T[%p]%T[%c]%T%f:%l%T%m%n"));
 }
-void Logger::setFormatter(LoggerFormatter::ptr val){
+void Logger::setFormatter(LogFormatter::ptr val){
     m_formatter = val;
 
     for(auto& i : m_appenders){
@@ -266,7 +266,7 @@ LogFormatter::ptr Logger::getFormatter(){
 }
 void Logger::addAppender(LogAppender::ptr appender){
     if(!appender->getFormatter()){
-        appender->setFormatter = m_formatter;
+        appender->setFormatter(m_formatter);
     }
     m_appenders.push_back(appender);
 }
@@ -330,8 +330,8 @@ std::string FileLogAppender::toYamlString(){
     if(m_level != LogLevel::UNKNOW){
         node["level"] = LogLevel::ToString(m_level);
     }
-    if(m_hasFormatter && m_formatetr){
-        node["formatter"] = m_formatetr->getPattern();
+    if(m_hasFormatter && m_formatter){
+        node["formatter"] = m_formatter->getPattern();
     }
     std::stringstream ss;
     ss << node;
