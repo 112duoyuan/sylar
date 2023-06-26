@@ -223,7 +223,8 @@ Logger::Logger(const std::string& name)
     :m_name(name)
     ,m_level(LogLevel::DEBUG){
     //重置指针
-    m_formatter.reset(new LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T[%p]%T[%c]%T%f:%l%T%m%n"));
+    //m_formatter.reset(new LogFormatter(""));
+    m_formatter = nullptr;
 }
 void Logger::setFormatter(LogFormatter::ptr val){
     m_formatter = val;
@@ -393,14 +394,19 @@ std::ostream& LogFormatter::format(std::ostream& ofs, Logger::ptr  logger, LogLe
 void LogFormatter::init(){//str, format, type
     std::vector<std::tuple<std::string, std::string, int> > vec;
     std::string nstr;
+    std::cout << "pattern " << m_pattern << std::endl;
+    std::cout << "pattern size "<<m_pattern.size() << std::endl;
     for(size_t i = 0; i < m_pattern.size(); ++i) {
         if(m_pattern[i] != '%') {
+            std::cout << "m_pattern[i] != '%'";
             nstr.append(1, m_pattern[i]);
+            std::cout << "nstr " << nstr << std::endl;
             continue;
         }
 
         if((i + 1) < m_pattern.size()) {
             if(m_pattern[i + 1] == '%') {
+                std::cout << "m_pattern[i + 1] != '%'";
                 nstr.append(1, '%');
                 continue;
             }
@@ -416,13 +422,14 @@ void LogFormatter::init(){//str, format, type
             if(!fmt_status && (!isalpha(m_pattern[n]) && m_pattern[n] != '{'
                     && m_pattern[n] != '}')) {
                 str = m_pattern.substr(i + 1, n - i - 1);
+                std::cout << "fmt_status不为1 i + 1 = " << i+1<< " n -i - 1 " <<n-i-1  <<" str " << str << std::endl;
                 break;
             }
-            if(fmt_status == 0) {
-                if(m_pattern[n] == '{') {
-                    str = m_pattern.substr(i + 1, n - i - 1);
-                    //std::cout << "*" << str << std::endl;
-                    fmt_status = 1; //解析格式
+            if(fmt_status == 0){
+                if(m_pattern[n] == '{'){
+                    str = m_pattern.substr(i+1, n-i-1);
+                    std::cout << "fmt_status == 0 i+1 " <<i+1 << " n -i -1 " << n -i -1 << " str "<< str << std::endl;
+                    fmt_status = 1; //开始解析格式
                     fmt_begin = n;
                     ++n;
                     continue;
@@ -430,7 +437,7 @@ void LogFormatter::init(){//str, format, type
             } else if(fmt_status == 1) {
                 if(m_pattern[n] == '}') {
                     fmt = m_pattern.substr(fmt_begin + 1, n - fmt_begin - 1);
-                    //std::cout << "#" << fmt << std::endl;
+                    std::cout << "fmt_status == 1 fmt = " << fmt << std::endl;
                     fmt_status = 0;
                     ++n;
                     break;
@@ -443,12 +450,16 @@ void LogFormatter::init(){//str, format, type
                 }
             }
         }
-
+        std::cout << "nstr "<<nstr << std::endl;
         if(fmt_status == 0) {
             if(!nstr.empty()) {
+                //元组string string int
+                std::cout << "nstr not empty "<< nstr << std::endl;
                 vec.push_back(std::make_tuple(nstr, std::string(), 0));
                 nstr.clear();
             }
+            std::cout << "str =" <<str << std::endl;
+            std::cout << "fmt = " << fmt << std::endl;
             vec.push_back(std::make_tuple(str, fmt, 1));
             i = n - 1;
         } else if(fmt_status == 1) {
@@ -482,13 +493,18 @@ void LogFormatter::init(){//str, format, type
 
     for(auto& i : vec) {
         if(std::get<2>(i) == 0) {
+            std::cout << "std::get<2>(i) == 0" <<std::endl;
+            std::cout << "std::get<0>(i)" << std::get<0>(i) << std::endl;
             m_items.push_back(FormatItem::ptr(new StringFormatItem(std::get<0>(i))));
         } else {
+            std::cout << "std::get<2>(i) != 0" <<std::endl;
+            std::cout << "std::get<0>(i)" << std::get<0>(i) << std::endl;
             auto it = s_format_items.find(std::get<0>(i));
             if(it == s_format_items.end()) {
                 m_items.push_back(FormatItem::ptr(new StringFormatItem("<<error_format %" + std::get<0>(i) + ">>")));
                 m_error = true;
             } else {
+            std::cout << "std::get<1>(i)" << std::get<1>(i) << std::endl;
                 m_items.push_back(it->second(std::get<1>(i)));
             }
         }

@@ -21,10 +21,10 @@ int main(int argc, char** argv) {
     logger->addAppender(std_appender);
 
     SYLAR_LOG_INFO(logger) << "test macro1";
-    SYLAR_LOG_WARN(logger) << "test macro2";
-    SYLAR_LOG_DEBUG(logger) << "test macro3";
-    SYLAR_LOG_FATAL(logger) << "test macro4";
-    SYLAR_LOG_ERROR(logger) << "test macro5";
+    // SYLAR_LOG_WARN(logger) << "test macro2";
+    // SYLAR_LOG_DEBUG(logger) << "test macro3";
+    // SYLAR_LOG_FATAL(logger) << "test macro4";
+    // SYLAR_LOG_ERROR(logger) << "test macro5";
     //SYLAR_LOG_FMT_ERROR(logger, "test macro fmt error %s", "aa");
 
     //auto l = sylar::LoggerMgr::GetInstance()->getLogger("aa");
