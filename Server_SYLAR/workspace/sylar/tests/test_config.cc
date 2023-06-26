@@ -6,7 +6,7 @@
 
 // sylar::ConfigVar<int>::ptr g_int_value_config = 
 //     sylar::Config::Lookup("system.port",(int)8080,"system port");
-#if 1
+//#if 1
 sylar::ConfigVar<float>::ptr g_int_valuex_config = 
     sylar::Config::Lookup("system.port",(float)8080,"system port");
 
@@ -199,7 +199,7 @@ void test_class(){
 }
 
 void test_log(){
-    static sylar::Loggerptr system_log = SYLAR_LOG_NAME("system");
+    static sylar::Logger::ptr system_log = SYLAR_LOG_NAME("system");
     SYLAR_LOG_INFO(system_log) << "hello system" << std::endl; 
     std::cout << sylar::LoggerMgr::GetInstance()->toYamlString() << std::endl;
     YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");

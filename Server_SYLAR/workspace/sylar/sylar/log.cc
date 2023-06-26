@@ -537,7 +537,7 @@ struct LogDefine{
     std::string formatter;
     std::vector<LogAppenderDefine> appenders;
 
-    bool operator==(const LogDefine& oth){
+    bool operator==(const LogDefine& oth) const{
         return name == oth.name 
             && level == oth.level   
             && formatter == oth.formatter
@@ -548,7 +548,7 @@ struct LogDefine{
         return name < oth.name;
     }
 };
-template<class T>
+template<>
 class LexicalCast<std::string,std::set<LogDefine>>{
 public:
     std::set<LogDefine> operator()(const std::string& v){
@@ -557,7 +557,7 @@ public:
         std::set<LogDefine>vec;
 
        for(size_t i = 0; i < node.size(); ++i){
-           auto& n =node[i];
+           auto n =node[i];
            if(!n["name"].IsDefined()){
                 std::cout << "log config error: name is null," << n
                         <<std::endl;
@@ -595,7 +595,7 @@ public:
                     }else if(type == "StdoutLogAppender"){
                         lad.type = 2;
                     }else{
-                        std::cout << "log config error: apppender type is invalid, " <<
+                        std::cout << "log config error: apppender type is invalid, " 
                                 << std::endl;
                         continue;
                     }
@@ -649,14 +649,14 @@ public:
 };
 
 
-sylar::ConfigVar<std::set<LogDefine> >g_log_defines = 
-    sylar::Config::Lookup("logs", std::vector<LogDefine>(), "logs config");
+sylar::ConfigVar<std::set<LogDefine> >::ptr g_log_defines = 
+    sylar::Config::Lookup("logs", std::set<LogDefine>(), "logs config");
 
 struct LogIniter {
     LogIniter(){
         g_log_defines->addListener(0xF1E231,[](const std::set<LogDefine>& old_value,
                     const std::set<LogDefine>& new_value){
-            SYLAR_LOG_NAME(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
+            SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
             //新增
             for(auto& i : new_value){
                 auto it = old_value.find(i);
@@ -678,7 +678,7 @@ struct LogIniter {
                     for(auto& a : i.appenders){
                         sylar::LogAppender::ptr ap;
                         if(a.type == 1){
-                            ap.reset(new FileLogAppender(i.file));
+                            ap.reset(new FileLogAppender(a.file));
                         } else if(a.type == 2){
                             ap.reset(new StdoutLogAppender);
                         }
@@ -713,7 +713,7 @@ static LogIniter __log_init;
 std::string LoggerManager::toYamlString(){
     YAML::Node node;
     for(auto& i : m_loggers){
-        node.push_back(YAML::Load(i.second->toYAMLString()));
+        node.push_back(YAML::Load(i.second->toYamlString()));
     }
     std::stringstream ss;
     ss << node;
