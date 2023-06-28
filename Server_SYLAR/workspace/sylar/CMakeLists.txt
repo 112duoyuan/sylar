@@ -18,21 +18,30 @@ set(LIB_SRC
     sylar/log.cc
     sylar/util.cc
     sylar/config.cc
+    sylar/thread.cc
 )
+
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
 force_redefine_file_macro_for_sources(test1) #__FILE__ 重定义file相对路径
+set(
+    LIB_LIB
+    sylar
+    pthread
+)
 
 add_executable(test1 tests/test.cc)
 add_dependencies(test1 sylar)
-
-target_link_libraries(test1 sylar -lyaml-cpp)
+target_link_libraries(test1 sylar -lyaml-cpp pthread)
 
 add_executable(test_config tests/test_config.cc)
 force_redefine_file_macro_for_sources(test_config) #__FILE__ 重定义file相对路径
 
 add_dependencies(test_config sylar)
+target_link_libraries(test_config sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
-target_link_libraries(test_config sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp)
+add_executable(test_thread tests/test_thread.cc)
+add_dependencies(test_thread sylar)
+target_link_libraries(test_thread sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib) #库文件的输出路径

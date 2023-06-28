@@ -1,4 +1,3 @@
-//P17 21:09
 #include "log.h"
 #include <map>
 #include<functional>
@@ -228,7 +227,6 @@ Logger::Logger(const std::string& name)
 }
 void Logger::setFormatter(LogFormatter::ptr val){
     m_formatter = val;
-
     for(auto& i : m_appenders){
         if(!i->m_hasFormatter){
             i->m_formatter = m_formatter;
@@ -677,7 +675,7 @@ struct LogIniter {
                     const std::set<LogDefine>& new_value){
             SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "on_logger_conf_changed";
             //新增
-            for(auto& i : new_value){
+            for(auto &i : new_value){
                 auto it = old_value.find(i);
                 sylar::Logger::ptr logger;
                 if(it == old_value.end()){
@@ -686,7 +684,6 @@ struct LogIniter {
                     if(!(i == *it)){
                         //修改的logger
                         logger = SYLAR_LOG_NAME(i.name);
-                       
                         }
                     }
                     logger->setLevel(i.level);
