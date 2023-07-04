@@ -9,7 +9,7 @@
 #include <atomic>
 
 namespace sylar{
-
+//–≈∫≈¡ø
 class Semaphore{
 public:
     Semaphore(uint32_t count = 0);
@@ -228,7 +228,7 @@ public:
     static void SetName(const std::string& name);
 private:
     Thread(const Thread&) =delete;
-    Thread(const Thread&) =delete;
+    Thread(const Thread&&) =delete;
     Thread& operator= (const Thread&) = delete;
 
     static void * run(void * arg);

@@ -281,7 +281,7 @@ void Logger::addAppender(LogAppender::ptr appender){
     MutexType::Lock lock(m_mutex);
     if(!appender->getFormatter()){
         MutexType::Lock ll(appender->m_mutex);
-        appender->setFormatter(m_formatter);
+        appender->m_formatter = m_formatter;
     }
     m_appenders.push_back(appender);
 }
@@ -439,6 +439,8 @@ void LogFormatter::init(){//str, format, type
         std::string str;
         std::string fmt;
         while(n < m_pattern.size()) {
+            //isalpha 判断是否为字母
+            //if条件 fmt_status不为1 不是字母 字符不是{ 和 }
             if(!fmt_status && (!isalpha(m_pattern[n]) && m_pattern[n] != '{'
                     && m_pattern[n] != '}')) {
                 str = m_pattern.substr(i + 1, n - i - 1);
@@ -529,7 +531,6 @@ void LogFormatter::init(){//str, format, type
 
         //std::cout << "(" << std::get<0>(i) << ") - (" << std::get<1>(i) << ") - (" << std::get<2>(i) << ")" << std::endl;
     }
-    //std::cout << m_items.size() << std::endl;
 }
 
 

@@ -2,7 +2,7 @@
 #记得安装yaml
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 project(sylar) #声明cmake工程
-include (cmake/utils.cmake)
+#include (cmake/utils.cmake)
 
 set(CMAKE_VERBOSE_MAKEFILE ON)  #编译过程打印编译信息
 set(CMAKE_CXX_CFLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -ggdb -std=c++11 c++0x -Wall -Who-deprecated -Werror -Wno-unused-function")
@@ -22,11 +22,11 @@ set(LIB_SRC
 )
 
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
-force_redefine_file_macro_for_sources(test1) #__FILE__ 重定义file相对路径
+#force_redefine_file_macro_for_sources(test1) #__FILE__ 重定义file相对路径
 set(
     LIB_LIB
     sylar
-    pthread
+    pthread 
 )
 
 add_executable(test1 tests/test.cc)
@@ -34,7 +34,7 @@ add_dependencies(test1 sylar)
 target_link_libraries(test1 sylar -lyaml-cpp pthread)
 
 add_executable(test_config tests/test_config.cc)
-force_redefine_file_macro_for_sources(test_config) #__FILE__ 重定义file相对路径
+#force_redefine_file_macro_for_sources(test_config) #__FILE__ 重定义file相对路径
 
 add_dependencies(test_config sylar)
 target_link_libraries(test_config sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)

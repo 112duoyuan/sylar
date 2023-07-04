@@ -57,7 +57,7 @@ void print_yaml(const YAML::Node& node, int level){
 }
 void test_yaml(){
     std::cout << "enter test_yaml " << std::endl;
-    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/test.yml");
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
     print_yaml(root,0);
     SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << root.Scalar();
     std::cout << "exit test_yaml " << std::endl;
@@ -92,7 +92,7 @@ void test_config(){
     XX_M(g_str_int_map_value_config,str_int_map,before);
     XX_M(g_str_int_umap_value_config,str_int_umap,before);
 
-    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/test.yml");
+    YAML::Node root = YAML::LoadFile("/home/xu/Server_SYLAR/sylar/bin/conf/log.yml");
     sylar::Config::LoadFromYaml(root);
 
     // SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "after:"<<g_int_value_config->getValue();
@@ -209,7 +209,7 @@ void test_log(){
     // std::cout << "========================" <<std::endl;
     // std::cout << root << std::endl;
     // SYLAR_LOG_INFO(system_log) << "hello system" << std::endl;
-    
+
     system_log->setFormatter("%d - %m%n"); 
     SYLAR_LOG_INFO(system_log) << "hello system" << std::endl;
 
@@ -219,7 +219,6 @@ int main(int argc,char ** argv){
     //test_yaml();
     //test_class();
     test_log();
-
      sylar::Config::Visit([](sylar::ConfigVarBase::ptr var){
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "name="<<var->getName()
                     << " description=" << var->getDescription()

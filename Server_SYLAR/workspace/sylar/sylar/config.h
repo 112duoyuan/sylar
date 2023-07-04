@@ -247,6 +247,7 @@ template<class T, class FromStr = LexicalCast<std::string,T>
 class ConfigVar :public ConfigVarBase{
 public:
     typedef RWMutex RWMutexType;
+    //对象实例on_change_cb包装 函数指针、函数、模板函数、函数对象、模板对象函数
     typedef std::function<void (const T& old_value,const T& new_value)> on_change_cb;
     typedef std::shared_ptr<ConfigVar> ptr;
     
@@ -304,9 +305,9 @@ public:
 
     uint64_t addListener(on_change_cb cb){
         static uint64_t s_fun_id = 0;
-        RWMutexType::WriteLock(m_mutex);
+        RWMutexType::WriteLock lock(m_mutex);
         ++s_fun_id;
-        m_cbs[key] = cb;
+        m_cbs[s_fun_id] = cb;
         return s_fun_id;
     }
 
