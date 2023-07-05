@@ -140,7 +140,7 @@ private:
 class LogAppender{
 friend class Logger;
 public:
-    typedef Spinlock MutexType;
+    typedef CASLock MutexType;
     typedef std::shared_ptr<LogAppender>ptr;
     virtual ~LogAppender(){}
     virtual std::string toYamlString() = 0;
@@ -172,7 +172,7 @@ class Logger:public std::enable_shared_from_this<Logger>{
 friend class LoggerManager;
 public:
     typedef std::shared_ptr<Logger>ptr;
-    typedef Spinlock MutexType;
+    typedef CASLock MutexType;
 
     Logger(const std::string& name = "root");
     void log(LogLevel::Level level, LogEvent::ptr event);
@@ -230,7 +230,7 @@ private:
 
 class LoggerManager {
 public:
-    typedef Spinlock MutexType;
+    typedef CASLock MutexType;
     LoggerManager();
     Logger::ptr getLogger(const std::string& name);
 

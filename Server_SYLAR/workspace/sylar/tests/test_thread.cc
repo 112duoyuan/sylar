@@ -32,7 +32,6 @@ int main(int argc,char ** argv){
     std::vector<sylar::Thread::ptr> thrs;
     for(int i = 0; i < 1;++i){
         sylar::Thread::ptr thr(new sylar::Thread(&func2, "name_" + std::to_string(i * 2)));
-        std::cout << "done !!!!! " << std::endl;
         sylar::Thread::ptr thr2(new sylar::Thread(&func3, "name_" + std::to_string(i * 2 + 1)));
         thrs.push_back(thr);
         thrs.push_back(thr2);

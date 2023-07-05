@@ -18,7 +18,8 @@ Semaphore::~Semaphore(){
 }
 void Semaphore::wait(){
     //将信号量的值减1  申请资源
-    if(!sem_wait(&m_semaphore)){
+    int ret = sem_wait(&m_semaphore);
+    if(ret == -1){
         throw std::logic_error("sem_wait error");
     }
     
