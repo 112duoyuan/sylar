@@ -115,7 +115,7 @@ void Fiber::swapIn(){
 void Fiber::swapOut(){
     SetThis(t_threadFiber.get());
 
-    if(swapcontext(&t_threadFiber->m_ctx, &m_ctx)){
+    if(swapcontext( &m_ctx,&t_threadFiber->m_ctx)){
         SYLAR_ASSERT2(false,"swapcontext");
     }
 }
@@ -165,5 +165,10 @@ void Fiber::MainFunc(){
             cur->m_state = EXCEPT;
             SYLAR_LOG_ERROR(g_logger) << "Fiber Except";
     }
+    auto raw_ptr = cur.get();
+    cur.reset();
+    raw_ptr->swapOut();
+
+    SYLAR_ASSERT2(false,"never ever");
 }
 }

@@ -39,8 +39,10 @@ const std::string& Thread::GetName(){
 }
 void Thread::SetName(const std::string& name){
     if(t_thread){
-        t_thread_name = name;
+        t_thread->m_name = name;
     }
+    t_thread_name = name;
+
 }
 Thread::Thread(std::function<void()> cb, const std::string&name)
         :m_cb(cb),m_name(name){
