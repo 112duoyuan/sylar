@@ -370,7 +370,8 @@ bool FileLogAppender::reopen(){
         m_filestream.close();
     }
     m_filestream.open(m_filename);
-    return !!m_filestream;
+    return m_filestream;
+    //return !!m_filestream;
 }
 
 void StdoutLogAppender::log(std::shared_ptr<Logger> logger,LogLevel::Level level,LogEvent::ptr event){

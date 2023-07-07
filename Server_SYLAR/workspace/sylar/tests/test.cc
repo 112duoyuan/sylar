@@ -11,21 +11,22 @@ int main(int argc, char** argv) {
     std_appender->setFormatter(fmt);
     std_appender->setLevel(sylar::LogLevel::UNKNOW);    
 
-    //sylar::FileLogAppender::ptr file_appender(new sylar::FileLogAppender("/home/xu/Server_SYLAR/sylar/bin/log.txt"));
-    //file_appender->setFormatter(fmt);
-    //file_appender->setLevel(sylar::LogLevel::WARN);
+    sylar::FileLogAppender::ptr file_appender(new sylar::FileLogAppender("/home/xu/Server_SYLAR/sylar/bin/log.txt"));
+    file_appender->setFormatter(fmt);
+    file_appender->setLevel(sylar::LogLevel::WARN);
 
     logger->addAppender(std_appender);
+    logger->addAppender(file_appender);
     SYLAR_LOG_INFO(logger) << "test macro1";
 
-    // SYLAR_LOG_WARN(logger) << "test macro2";
-    // SYLAR_LOG_DEBUG(logger) << "test macro3";
-    // SYLAR_LOG_FATAL(logger) << "test macro4";
-    // SYLAR_LOG_ERROR(logger) << "test macro5";
-    //SYLAR_LOG_FMT_ERROR(logger, "test macro fmt error %s", "aa");
+    SYLAR_LOG_WARN(logger) << "test macro2";
+    SYLAR_LOG_DEBUG(logger) << "test macro3";
+    SYLAR_LOG_FATAL(logger) << "test macro4";
+    SYLAR_LOG_ERROR(logger) << "test macro5";
+    SYLAR_LOG_FMT_ERROR(logger, "test macro fmt error %s", "aa");
 
-    //auto l = sylar::LoggerMgr::GetInstance()->getLogger("aa");
-    //std::cout << "l get name"<<l->getName() << std::endl;
-    //SYLAR_LOG_INFO(l) << "xxx";
+    auto l = sylar::LoggerMgr::GetInstance()->getLogger("aa");
+    std::cout << "l get name"<<l->getName() << std::endl;
+    SYLAR_LOG_INFO(l) << "xxx";
     return 0;
 }
