@@ -31,8 +31,6 @@ sylar::ConfigVar<std::set<int>>::ptr g_int_set_value_config =
 sylar::ConfigVar<std::unordered_set<int>>::ptr g_int_uset_value_config = 
     sylar::Config::Lookup("system.int_uset",std::unordered_set<int>{1,2},"system int uset");//2
 
-
-
 void print_yaml(const YAML::Node& node, int level){
     if(node.IsScalar()){
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << std::string(level * 4, ' ')

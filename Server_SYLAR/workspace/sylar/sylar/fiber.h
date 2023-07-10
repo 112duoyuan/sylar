@@ -6,8 +6,10 @@
 #include "thread.h"
 #include <functional>
 
+class Scheduler;
 namespace sylar{
 class Fiber : public std::enable_shared_from_this<Fiber>{
+friend class Scheduler;
 public:
     typedef std::shared_ptr<Fiber> ptr;
 
@@ -32,7 +34,11 @@ public:
     void swapIn();// 切换到当前协程执行
     void swapOut();//当前切换到后台
 
+    void call();
+
     uint64_t getId() const {return m_id;}
+    State getState() const {return m_state;}
+
 public:
     static void SetThis(Fiber* f);//设置当前协程
     static Fiber::ptr GetThis();//返回当前协程

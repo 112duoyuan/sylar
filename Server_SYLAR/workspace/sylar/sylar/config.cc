@@ -1,6 +1,5 @@
 #include "config.h"
 
-
 namespace sylar{
 Config::ConfigVarMap m_datas;
 
