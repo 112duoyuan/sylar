@@ -1,0 +1,4 @@
+2023-07-06 16:00:36	14597	0	[WARN]	[root]	/home/xu/Server_SYLAR/sylar/tests/test.cc:22	test macro2
+2023-07-06 16:00:36	14597	0	[FATAL]	[root]	/home/xu/Server_SYLAR/sylar/tests/test.cc:24	test macro4
+2023-07-06 16:00:36	14597	0	[ERROR]	[root]	/home/xu/Server_SYLAR/sylar/tests/test.cc:25	test macro5
+2023-07-06 16:00:36	14597	0	[ERROR]	[root]	/home/xu/Server_SYLAR/sylar/tests/test.cc:26	test macro fmt error aa
