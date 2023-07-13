@@ -22,6 +22,7 @@ set(LIB_SRC
     sylar/thread.cc
     sylar/scheduler.cc
     sylar/iomanager.cc
+    sylar/timer.cc
 )
 
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库

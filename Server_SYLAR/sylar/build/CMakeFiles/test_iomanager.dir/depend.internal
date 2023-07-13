@@ -11,6 +11,7 @@ CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o
  /home/xu/Server_SYLAR/sylar/sylar/singleton.h
  /home/xu/Server_SYLAR/sylar/sylar/sylar.h
  /home/xu/Server_SYLAR/sylar/sylar/thread.h
+ /home/xu/Server_SYLAR/sylar/sylar/timer.h
  /home/xu/Server_SYLAR/sylar/sylar/util.h
  /home/xu/Server_SYLAR/sylar/tests/test_iomanager.cc
  /home/xu/yaml/yaml-cpp-master/include/yaml-cpp/binary.h

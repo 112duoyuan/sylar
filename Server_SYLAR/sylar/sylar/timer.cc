@@ -1,5 +1,6 @@
-#include "time.h"
 #include "util.h"
+#include "timer.h"
+
 namespace sylar{
 bool Timer::Comparator::operator()(const Timer::ptr& lhs
             ,const Timer::ptr& rhs)const {
@@ -13,7 +14,7 @@ bool Timer::Comparator::operator()(const Timer::ptr& lhs
         return true;
     if(rhs->m_next < lhs->m_next)
         return false;
-    return lhs.get() << rhs.get();
+    return lhs.get() < rhs.get();
 }
 Timer::Timer(uint64_t ms, std::function<void()>cb,
                 bool recurring,TimerManager* manager)
@@ -36,7 +37,7 @@ TimerManager::~TimerManager(){
 }
 
 Timer::ptr TimerManager::addTimer(uint64_t ms,std::function<void()>cb,
-                                bool recurring = false){
+                                bool recurring){
     Timer::ptr timer(new Timer(ms,cb,recurring,this));
     RWMutexType::WriteLock lock(m_mutex);
     addTimer(timer,lock);
@@ -80,7 +81,7 @@ void TimerManager::listExpiredCb(std::vector<std::function<void()>> & cbs){
     }
     RWMutexType::WriteLock lock(m_mutex);
     bool rollover = detectClockRollover(now_ms);
-    if(!rollover && (*m_timers.begin()->m_next > now_ms)){
+    if(!rollover && ((*m_timers.begin())->m_next > now_ms)){
         return;
     }
 
@@ -172,6 +173,10 @@ bool TimerManager::detectClockRollover(uint64_t now_ms){
     }
     m_previouseTime = now_ms;
     return rollover;
+}
+bool TimerManager::hasTimer(){
+    RWMutexType::ReadLock lock(m_mutex);
+    return !m_timers.empty();
 }
 
 

@@ -51,6 +51,8 @@ functional
 /home/xu/Server_SYLAR/sylar/sylar/iomanager.h
 scheduler.h
 /home/xu/Server_SYLAR/sylar/sylar/scheduler.h
+timer.h
+/home/xu/Server_SYLAR/sylar/sylar/timer.h
 
 /home/xu/Server_SYLAR/sylar/sylar/log.h
 string
@@ -130,6 +132,16 @@ pthread.h
 semaphore.h
 -
 atomic
+-
+
+/home/xu/Server_SYLAR/sylar/sylar/timer.h
+memory
+-
+thread.h
+/home/xu/Server_SYLAR/sylar/sylar/thread.h
+set
+-
+vector
 -
 
 /home/xu/Server_SYLAR/sylar/sylar/util.h
