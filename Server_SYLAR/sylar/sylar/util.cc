@@ -19,8 +19,10 @@ uint32_t GetFiberId(){
 
 void Backtrace(std::vector<std::string>& bt , int size, int skip){
     void** array = (void**)malloc((sizeof(void*) * size));
+    //用来获取程序中当前函数的回溯信息，即一系列的函数调用关系，
     size_t s = ::backtrace(array,size);
-
+    //将其中的返回地址都对应到具体的函数名，
+    //需显式释放strings
     char** strings = backtrace_symbols(array,s);
     if(strings == NULL){
         SYLAR_LOG_ERROR(g_logger) << "backtrace_synbols error";
@@ -41,11 +43,14 @@ std::string BackTraceToString(int size,int skip, const std::string& prefix){
     }
     return ss.str();
 }
+//查看当前时间函数
+//毫秒级别
 uint64_t GetCurrentMS(){
     struct timeval tv;
     gettimeofday(&tv,NULL);
     return tv.tv_sec * 1000ul + tv.tv_usec / 1000;
 }
+//微秒级别
 uint64_t GetCurrentUS(){
     struct timeval tv;
     gettimeofday(&tv,NULL);

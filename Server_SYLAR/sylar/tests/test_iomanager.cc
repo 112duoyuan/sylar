@@ -60,5 +60,6 @@ void test_timer(){
 
 int main(int argc,char ** argv){
     test();
+    test_timer();
     return 0;
 }

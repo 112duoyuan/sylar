@@ -1,14 +1,14 @@
 #include "scheduler.h"
 #include "log.h"
 #include "macro.h"
-
+#include "hook.h"
 
 
 namespace sylar{
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 static thread_local Scheduler* t_scheduler = nullptr;
-static thread_local Fiber * t_fiber =nullptr;
+static thread_local Fiber * t_fiber =nullptr;   //一线程上运行的协程
 
 Scheduler::Scheduler(size_t threads, bool use_caller , const std::string& name)
     :m_name(name){
@@ -57,18 +57,14 @@ void Scheduler::start(){
 
     m_threads.resize(m_threadCount);
     for(size_t i = 0; i < m_threadCount;++i){
+        //线程一旦创建就会去执行&Scheduler::run 函数
         m_threads[i].reset(new Thread(std::bind(&Scheduler::run,this)
             ,m_name + "_" + std::to_string(i)));
         m_threadIds.push_back(m_threads[i]->getId());
     }
-    lock.unlock();
-    // if(m_rootFiber){
-    //     m_rootFiber->swapIn();
-    //     m_rootFiber->call();
-    //     SYLAR_LOG_INFO(g_logger) << "call out" << m_rootFiber->getState();
-    // }
 }
 void Scheduler::stop(){
+    SYLAR_LOG_INFO(g_logger) << "stop";
     m_autoStop = true;
     if(m_rootFiber
             && m_threadCount == 0
@@ -97,16 +93,7 @@ void Scheduler::stop(){
     if(m_rootFiber){
         tickle();
     }
-    if(m_rootFiber){
-        // while (!stopping()){
-        //     if(m_rootFiber->getState() == Fiber::TERM
-        //             || m_rootFiber->getState() == Fiber::EXCEPT){
-        //         m_rootFiber.reset(new Fiber(std::bind(&Scheduler::run,this),0,true));
-        //         SYLAR_LOG_INFO(g_logger) << "root fiber is term,reset";
-        //         t_fiber = m_rootFiber.get();
-        //     }
-        //     m_rootFiber->call();
-        // }        
+    if(m_rootFiber){  
         if(!stopping()){
             m_rootFiber->call();
         }
@@ -127,10 +114,12 @@ void Scheduler::setThis(){
 
 void Scheduler::run(){
     SYLAR_LOG_INFO(g_logger) << "run";
+    set_hook_enable(true);
     setThis();
     if(sylar::GetThreadId() != m_rootThread){
         t_fiber = Fiber::GetThis().get();
     }
+    //创建协程 idle意为空闲的
 
     Fiber::ptr idle_fiber(new Fiber(std::bind(&Scheduler::idle,this)));
     Fiber::ptr cb_fiber;
@@ -181,10 +170,10 @@ void Scheduler::run(){
             if(cb_fiber){
                 cb_fiber->reset(ft.cb);
             } else {
+                SYLAR_LOG_INFO(g_logger) << "new Fiber";
                 cb_fiber.reset(new Fiber(ft.cb));
             }
             ft.reset();
-            ++m_activeThreadCount;
             cb_fiber->swapIn();
             --m_activeThreadCount;
             if(cb_fiber->getState() == Fiber::READY){
@@ -224,6 +213,7 @@ void Scheduler::tickle(){
 bool Scheduler::stopping(){
     return m_autoStop && m_stopping 
         && m_fibers.empty() && m_activeThreadCount == 0;
+
 }
 void Scheduler::idle(){
     SYLAR_LOG_INFO(g_logger) << "idle";

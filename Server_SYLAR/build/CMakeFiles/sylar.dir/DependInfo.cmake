@@ -6,10 +6,12 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/xu/Server_SYLAR/sylar/sylar/config.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/config.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/fiber.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/fiber.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/hook.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/hook.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/iomanager.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/iomanager.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/log.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/log.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/scheduler.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/scheduler.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/thread.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/thread.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/timer.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/timer.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/util.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/util.cc.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")

@@ -194,6 +194,7 @@ public:
 
 class CASLock{
 public:
+    //注明是一种类型！！
     typedef ScopedLockImpl<CASLock>Lock;
     CASLock(){
         m_mutex.clear();
@@ -243,13 +244,5 @@ private:
 
 
 }
-
-
-
-//pthread_xxx
-//std::thread,pthread
-
-
-
 
 #endif

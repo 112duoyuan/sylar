@@ -23,6 +23,7 @@ set(LIB_SRC
     sylar/scheduler.cc
     sylar/iomanager.cc
     sylar/timer.cc
+    sylar/hook.cc
 )
 
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
@@ -31,6 +32,7 @@ set(
     LIB_LIB
     sylar
     pthread 
+    dl
 )
 
 add_executable(test1 tests/test.cc)
@@ -67,6 +69,12 @@ add_executable(test_iomanager tests/test_iomanager.cc)
 add_dependencies(test_iomanager sylar)
 #force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
 target_link_libraries(test_iomanager sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+
+add_executable(test_hook tests/test_hook.cc)
+add_dependencies(test_hook sylar)
+#force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
+target_link_libraries(test_hook sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+
 
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径

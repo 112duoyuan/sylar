@@ -495,7 +495,7 @@ void LogFormatter::init(){
             vec.push_back(std::make_tuple("<<pattern_error>>", fmt, 0));
         }
     }
-
+//"%d{%Y-%m-%d %H:%M:%S}%T%t%T%N%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"
     if(!nstr.empty()) {
         vec.push_back(std::make_tuple(nstr, "", 0));
     }

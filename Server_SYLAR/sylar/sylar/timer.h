@@ -25,7 +25,7 @@ private:
 private:
     bool m_recurring  = false;  //是否循环定时器
     uint64_t m_ms = 0; //时间周期
-    uint64_t m_next = 0; //精确的执行时间
+    uint64_t m_next = 0; //精确的执行时间，到期时间
     std::function<void()>m_cb;
     TimerManager* m_manager = nullptr;
 private:
@@ -60,7 +60,7 @@ private:
     RWMutexType m_mutex;
     std::set<Timer::ptr,Timer::Comparator>m_timers;
     bool m_tickled = false;
-    uint64_t m_previouseTime;
+    uint64_t m_previouseTime;//先前时间
 };
 }
 

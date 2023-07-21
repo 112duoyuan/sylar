@@ -70,8 +70,10 @@ Fiber::Fiber(std::function<void()>cb ,size_t stacksize, bool use_caller)
     m_ctx.uc_stack.ss_size = m_stacksize;
 
     if(use_caller){
+        //会执行MainFunc函数
         makecontext(&m_ctx, &Fiber::MainFunc,0);
     }else{
+        SYLAR_LOG_INFO(g_logger) << "makecontext!!";
         makecontext(&m_ctx, &Fiber::CallerMainFunc,0);
     }
 

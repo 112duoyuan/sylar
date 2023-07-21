@@ -30,6 +30,8 @@ void IOManager::FdContext::resetContext(EventContext& ctx){
 
 void IOManager::FdContext::triggerEvent(IOManager::Event event){
     SYLAR_ASSERT(events & event);
+    //与(&)运算
+    //非(~)运算
     events = (Event)(events & ~event);
     EventContext& ctx = getContext(event);
     if(ctx.cb){
@@ -45,9 +47,10 @@ void IOManager::FdContext::triggerEvent(IOManager::Event event){
 
 IOManager::IOManager(size_t threads ,bool use_caller ,const std::string& name)
     :Scheduler(threads,use_caller,name){
+    //监听最大数组 5000
     m_epfd = epoll_create(5000);
     SYLAR_ASSERT(m_epfd > 0);
-
+    // fd参数返回两个文件描述符,fd[0]指向管道的读端,fd[1]指向管道的写端。fd[1]的输出是fd[0]的输入。
     int rt = pipe(m_tickleFds);
     SYLAR_ASSERT(!rt);
 
@@ -55,10 +58,12 @@ IOManager::IOManager(size_t threads ,bool use_caller ,const std::string& name)
     memset(&event,0,sizeof(epoll_event));
     event.events = EPOLLIN || EPOLLET;
     event.data.fd = m_tickleFds[0];
-
+    //F_SETFL 将文件描述符标志设置为 arg 指定的值。
+    //设置了 O_NONBLOCK 标志，read 和 write 的行为是不同的 ，如果进程没有数据就绪时调用了 read ，
+         // 或者在缓冲区没有空间时调用了 write ，系统只是简单的返回 -EAGAIN，而不会阻塞进程
     rt = fcntl(m_tickleFds[0],F_SETFL,O_NONBLOCK);
     SYLAR_ASSERT(!rt);
-
+    //添加管道m_tickleFds到监听队列中
     rt = epoll_ctl(m_epfd,EPOLL_CTL_ADD,m_tickleFds[0],&event);
 
     contextResize(32);
@@ -84,6 +89,7 @@ void IOManager::contextResize(size_t size){
 
     for(size_t i = 0; i < m_fdContexts.size(); ++i){
         if(!m_fdContexts[i]){
+            //创建事件协程
             m_fdContexts[i] = new FdContext;
             m_fdContexts[i]->fd = i;
         }

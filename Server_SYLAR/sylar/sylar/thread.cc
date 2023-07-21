@@ -22,8 +22,7 @@ void Semaphore::wait(){
     int ret = sem_wait(&m_semaphore);
     if(ret == -1){
         throw std::logic_error("sem_wait error");
-    }
-    
+    }   
 }
 void Semaphore::notify(){
     //将信号量的值加1 释放资源
@@ -50,6 +49,7 @@ Thread::Thread(std::function<void()> cb, const std::string&name)
     if(name.empty()){
         m_name = "UNKNOW";
     }
+    //&Thread::run 是新建的线程需要执行的函数
     int rt = pthread_create(&m_thread,nullptr,&Thread::run,this);
     if(rt){
         SYLAR_LOG_ERROR(g_logger) << "pthread_create thread fail, rt=" <<rt
@@ -88,7 +88,9 @@ void * Thread::run(void * arg){
     // 第二个参数：要设置/获取 名称的buffer；
 
     // 同样的，要求name 的buffer 空间不能超过16个字节，不然会报错 ERANGE。
-    pthread_setname_np(pthread_self(),thread->m_name.substr(0,15).c_str());
+    // pthread_setname_np(pthread_self(),thread->m_name.substr(0,15).c_str());
+    t_thread->SetName(t_thread->m_name);
+
     std::function<void()> cb;
     //获取函数
     cb.swap(thread->m_cb);

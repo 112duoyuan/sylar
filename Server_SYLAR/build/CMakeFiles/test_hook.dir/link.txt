@@ -1,0 +1,1 @@
+/usr/bin/g++    -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   CMakeFiles/test_hook.dir/tests/test_hook.cc.o  -o /home/xu/Server_SYLAR/sylar/bin/test_hook -rdynamic /home/xu/Server_SYLAR/sylar/lib/libsylar.so -L/Server_SYLAR/sylar/lib -lyaml-cpp -lpthread -Wl,-rpath,/home/xu/Server_SYLAR/sylar/lib 

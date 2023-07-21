@@ -79,7 +79,6 @@ private:
 
         FiberAndThread(Fiber::ptr f,int thr)
             :fiber(f),thread(thr){
-
         }
         FiberAndThread(Fiber::ptr* f,int thr)
             :thread(thr){
@@ -88,7 +87,6 @@ private:
 
         FiberAndThread(std::function<void()> f, int thr)
             :cb(f),thread(thr){
-
         }
         FiberAndThread(std::function<void()>* f, int thr)
             :thread(thr){
@@ -97,7 +95,6 @@ private:
 
         FiberAndThread()
             :thread(-1){
-
         }
 
         void reset(){
@@ -111,20 +108,17 @@ private:
     std::vector<Thread::ptr> m_threads;
     std::list<FiberAndThread>m_fibers;
 
-    Fiber::ptr m_rootFiber;
+    Fiber::ptr m_rootFiber; //主协程
     std::string m_name;
-
 protected:
-    std::vector<int> m_threadIds;
+    std::vector<int> m_threadIds;//记录线程id
     size_t m_threadCount = 0;
     std::atomic<size_t> m_activeThreadCount = {0};
     std::atomic<size_t> m_idleThreadCount = {0};
-    bool m_stopping = true;
+    bool m_stopping = true;     //调用start 会改成false 调用stop时改成true
     bool m_autoStop = false;
     int m_rootThread = 0;
 };
 
 }
-
-
 #endif
