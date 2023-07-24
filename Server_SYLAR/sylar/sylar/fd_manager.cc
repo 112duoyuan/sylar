@@ -52,14 +52,14 @@ bool FdCtx::init(){
 }
 
 void FdCtx::setTimeout(int type,uint64_t v){
-    if(type == SO_RECVTIMEO){
+    if(type == SO_RCVTIMEO){
         m_recvTimeout = v;
     }else{
         m_sendTimeout =v;
     }
 }
 uint64_t FdCtx::getTimeout(int type){
-    if(type == SO_RECVTIMEO){
+    if(type == SO_RCVTIMEO){
         return m_recvTimeout;
     } else{
         return m_sendTimeout;
@@ -71,7 +71,7 @@ FdManager::FdManager(){
 }
 FdCtx::ptr FdManager::get(int fd,bool auto_create){
     RWMutexType::ReadLock lock(m_mutex);
-    if(m_datas.size() <= fd){
+    if((int)m_datas.size() <= fd){
         if(auto_create == false){
             return nullptr;
         }
@@ -89,13 +89,12 @@ FdCtx::ptr FdManager::get(int fd,bool auto_create){
 }
 void FdManager::del(int fd){
     RWMutexType::WriteLock lcok(m_mutex);
-    if(m_datas.size() <= fd){
+    if((int)m_datas.size() <= fd){
         return;
     }
     m_datas[fd].reset();
 
 }
-
 
 
 

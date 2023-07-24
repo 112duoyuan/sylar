@@ -5,6 +5,7 @@
 #include "thread.h"
 #include "iomanager.h"
 #include "singleton.h"
+#include <vector>
 
 namespace sylar
 {

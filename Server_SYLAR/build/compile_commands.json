@@ -21,6 +21,11 @@
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/fd_manager.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/fd_manager.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/fd_manager.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/log.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/log.cc",
   "file": "/home/xu/Server_SYLAR/sylar/sylar/log.cc"
 },

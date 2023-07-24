@@ -15,6 +15,7 @@ SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 include_directories(/home/xu/yaml/yaml-cpp-master/include)
 
 set(LIB_SRC
+    sylar/fd_manager.cc
     sylar/log.cc
     sylar/fiber.cc
     sylar/util.cc

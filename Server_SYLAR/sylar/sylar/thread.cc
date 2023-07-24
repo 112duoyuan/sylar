@@ -10,7 +10,7 @@ static thread_local std::string t_thread_name = "UNKNOW";
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 Semaphore::Semaphore(uint32_t count){
     //初始化一个信号量
-    if(sem_init(&m_semaphore,0,2)){
+    if(sem_init(&m_semaphore,0,count)){
         throw std::logic_error("sem_init error");
     }
 }
