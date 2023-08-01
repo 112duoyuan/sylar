@@ -14,6 +14,6 @@ thread.cc
 util.cc util.h
 test_scheduler.cc
 scheduler
-scheduler
+
 
 还差test_iomanager.cc 

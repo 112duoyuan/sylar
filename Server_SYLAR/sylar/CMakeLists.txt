@@ -77,6 +77,11 @@ add_dependencies(test_hook sylar)
 #force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
 target_link_libraries(test_hook sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
+add_executable(test_address tests/test_address.cc)
+add_dependencies(test_address sylar)
+#force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
+target_link_libraries(test_address sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+
 
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径

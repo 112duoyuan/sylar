@@ -6,6 +6,11 @@
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_thread.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_thread.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_util.dir/tests/test_util.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_util.cc",
   "file": "/home/xu/Server_SYLAR/sylar/tests/test_util.cc"
 },
@@ -71,6 +76,11 @@
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/address.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/address.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/address.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc",
   "file": "/home/xu/Server_SYLAR/sylar/tests/test_fiber.cc"
 },
@@ -81,12 +91,12 @@
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
-  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_thread.cc",
-  "file": "/home/xu/Server_SYLAR/sylar/tests/test_thread.cc"
+  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_iomanager.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_iomanager.cc"
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
-  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_iomanager.dir/tests/test_iomanager.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_iomanager.cc",
-  "file": "/home/xu/Server_SYLAR/sylar/tests/test_iomanager.cc"
+  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_address.dir/tests/test_address.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_address.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_address.cc"
 }
 ]
