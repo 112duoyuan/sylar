@@ -337,7 +337,7 @@ ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,const struct s
 }
 
 ssize_t sendmsg(int sockfd, const struct msghdr *msg, int flags){
-    return do_io(s,sendmsg_f,"send",sylar::IOManager::WRITE,SO_SNDTIMEO,msg,flags);
+    return do_io(sockfd,sendmsg_f,"send",sylar::IOManager::WRITE,SO_SNDTIMEO,msg,flags);
 }
 
 int close(int fd){

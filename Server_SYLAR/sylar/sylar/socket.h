@@ -12,6 +12,28 @@ public:
     typedef std::shared_ptr<Socket>ptr;
     typedef std::weak_ptr<Socket> weak_ptr;
 
+    enum Type{
+        TCP = SOCK_STREAM,
+        UDP = SOCK_DGRAM
+    };
+    enum Family{
+        IPv4 = AF_INET,
+        IPv6 = AF_INET6,
+        UNIX = AF_UNIX
+    };
+
+    static Socket::ptr CreateTCP(sylar::Address::ptr address);
+    static Socket::ptr CreateUDP(sylar::Address::ptr address);
+
+    static Socket::ptr CreateTCPScoket();
+    static Socket::ptr CreateUDPScoket();
+
+    static Socket::ptr CreateTCPScoket6();
+    static Socket::ptr CreateUDPScoket6();
+
+    static Socket::ptr CreateUnixTCPSocket();
+    static Socket::ptr CreateUnixUDPSocket();
+
     Socket(int family, int type,int protocol = 0);
     ~Socket();
 

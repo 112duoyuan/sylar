@@ -1,6 +1,7 @@
 /home/xu/Server_SYLAR/build/CMakeFiles/edit_cache.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test1.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/rebuild_cache.dir
+/home/xu/Server_SYLAR/build/CMakeFiles/test_socket.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test_thread.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test_util.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test_config.dir

@@ -6,6 +6,11 @@
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_socket.dir/tests/test_socket.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_socket.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_socket.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_thread.cc",
   "file": "/home/xu/Server_SYLAR/sylar/tests/test_thread.cc"
 },
@@ -78,6 +83,11 @@
   "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/address.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/address.cc",
   "file": "/home/xu/Server_SYLAR/sylar/sylar/address.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/socket.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/socket.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/socket.cc"
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
