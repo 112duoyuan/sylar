@@ -58,7 +58,8 @@
         "chrono": "cpp",
         "ratio": "cpp",
         "thread": "cpp",
-        "mutex": "cpp"
+        "mutex": "cpp",
+        "iomanip": "cpp"
     },
     "cmake.sourceDirectory": "/home/xu/Server_SYLAR/sylar"
 }

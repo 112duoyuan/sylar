@@ -4,6 +4,7 @@
 #include <fstream>
 #include "log.h"
 #include <sstream>
+#include <iomanip>
 
 namespace sylar{
 
@@ -11,14 +12,14 @@ static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 ByteArray::Node::Node(size_t s)
     :ptr(new char[s])
-    ,size(s)
-    ,next(nullptr){
+    ,next(nullptr)
+    ,size(s){
 
 }
 ByteArray::Node::Node()
     :ptr(nullptr)
-    ,size(0)
-    ,next(nullptr){
+    ,next(nullptr)
+    ,size(0){
 
 }
 ByteArray::Node::~Node(){
@@ -27,14 +28,14 @@ ByteArray::Node::~Node(){
     }
 }
 
-ByteArray::ByteArray(size_t base_size = 4096)
+ByteArray::ByteArray(size_t base_size)
    :m_baseSize(base_size)
    ,m_position(0)
    ,m_capacity(base_size)
    ,m_size(0)
+    ,m_endian(SYLAR_BIG_ENDIAN)
    ,m_root(new Node(base_size))
-   ,m_cur(m_root)
-   ,m_endian(SYLAR_BIG_ENDIAN){
+   ,m_cur(m_root){
 }
 ByteArray::~ByteArray(){
     Node* tmp = m_root;
@@ -258,25 +259,29 @@ double ByteArray::readdouble(){
 }
 std::string ByteArray::readStringF16(){
     uint16_t len = readFuint16();
-    std::string buff(len);
+    std::string buff;
+    buff.resize(len);
     read(&buff[0],len);
     return buff;
 }
 std::string ByteArray::readStringF32(){
     uint16_t len = readFuint32();
-    std::string buff(len);
+    std::string buff;
+    buff.resize(len);
     read(&buff[0],len);
     return buff;
 }
 std::string ByteArray::readStringF64(){
     uint16_t len = readFuint64();
-    std::string buff(len);
+    std::string buff;
+    buff.resize(len);
     read(&buff[0],len);
     return buff;
 }
 std::string ByteArray::readStringVint(){
     uint16_t len = readFuint64();
-    std::string buff(len);
+    std::string buff;
+    buff.resize(len);
     read(&buff[0],len);
     return buff;
 }
@@ -302,14 +307,14 @@ void ByteArray::write(const void*buf,size_t size){
 
     while(size > 0){
         if(ncap >= size){
-            memcpy(m_cur->ptr + npos, buf + bpos,size);
+            memcpy(m_cur->ptr + npos, (const char *)buf + bpos,size);
             if(m_cur->size == npos + size){
                 m_cur = m_cur->next;    
             }
             bpos += size;
             size = 0;
         }else{
-            memcpy(m_cur->ptr + npos,buf+ bpos,ncap);
+            memcpy(m_cur->ptr + npos,(const char *)buf+ bpos,ncap);
             m_position += ncap;
             bpos += ncap;
             size -= ncap;
@@ -331,7 +336,7 @@ void ByteArray::read(void * buf,size_t size){
     size_t bpos = 0;
     while(size > 0){
         if(ncap >= size){
-            memcpy(buf + bpos,m_cur->ptr + npos,size);
+            memcpy((char *)buf + bpos,m_cur->ptr + npos,size);
             if(m_cur->size == (npos + size)){
                 m_cur = m_cur->next;
             }
@@ -339,7 +344,7 @@ void ByteArray::read(void * buf,size_t size){
             bpos+= size;
             size =0;
         }else{
-            memcpy(buf+bpos,m_cur->ptr + npos,ncap);
+            memcpy((char *)buf+bpos,m_cur->ptr + npos,ncap);
             m_position += ncap;
             bpos += ncap;
             size -= ncap;
@@ -359,7 +364,7 @@ void ByteArray::read(void * buf,size_t size,size_t position) const{
     Node* cur =m_cur;
     while(size > 0){
         if(ncap >= size){
-            memcpy(buf + bpos,m_cur->ptr + npos,size);
+            memcpy((char *)buf + bpos,m_cur->ptr + npos,size);
             if(cur->size == (npos + size)){
                 cur = m_cur->next;
             }
@@ -367,7 +372,7 @@ void ByteArray::read(void * buf,size_t size,size_t position) const{
             bpos+= size;
             size =0;
         }else{
-            memcpy(buf+bpos,m_cur->ptr + npos,ncap);
+            memcpy((char *)buf+bpos,m_cur->ptr + npos,ncap);
             position += ncap;
             bpos += ncap;
             size -= ncap;
@@ -424,7 +429,7 @@ bool ByteArray::readFromFile(const std::string& name){
             <<" error,errno=" << errno << " errstr" << strerror(errno);
         return false;
     }
-    std::shared_ptr<char>buffer(new char([m_baseSize], [](char * ptr){delete []ptr;}));
+    std::shared_ptr<char>buffer(new char([m_baseSize],[](char * ptr){delete []ptr;}));
     while (!ifs.eof()){
         ifs.read(buffer.get(),m_baseSize);
         write(buffer.get(),ifs.gcount());
@@ -434,7 +439,7 @@ bool ByteArray::readFromFile(const std::string& name){
 void ByteArray::addCapacity(size_t size){
     if(size ==0)
         return;
-    int old_cap = getCapacity();
+    size_t old_cap = getCapacity();
     if(old_cap >= size){
         return;
     }
@@ -482,6 +487,100 @@ std::string ByteArray::toHexString() const{
     }
 
     return ss.str();
+}
+
+uint64_t ByteArray::getReadBuffers(std::vector<iovec>& buffers,uint64_t len) const{
+    len = len > getReadSize() ? getReadSize() : len;
+    if(len == 0){
+        return 0;
+    }
+    uint64_t size = len;
+    size_t npos = m_position % m_baseSize;
+    size_t ncap = m_cur->size - npos;
+    struct iovec iov;
+    Node * cur =m_cur;
+    while(len > 0){
+        if(ncap >= len){
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = len;
+            len = 0;
+        }else{
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = ncap;
+            len -= ncap;
+            cur = cur->next;
+            ncap = cur->size;
+            npos =0;
+        }
+        buffers.push_back(iov);
+    }
+    return size;
+}
+uint64_t ByteArray::getReadBuffers(std::vector<iovec>& buffers
+                    ,uint64_t len, uint64_t position) const{
+    len = len > getReadSize() ? getReadSize() : len;
+    if(len == 0){
+        return 0;
+    }
+    uint64_t size = len;
+
+    size_t npos = m_position % m_baseSize;
+
+    size_t count = position / m_baseSize;
+    Node * cur =m_root;
+    while(count > 0){
+        cur = cur->next;
+        --count;
+    }
+
+    size_t ncap = m_cur->size - npos;
+    struct iovec iov;
+
+    while(len > 0){
+        if(ncap >= len){
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = len;
+            len = 0;
+        }else{
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = ncap;
+            len -= ncap;
+            cur = cur->next;
+            ncap = cur->size;
+            npos =0;
+        }
+        buffers.push_back(iov);
+    }
+    return size;
+
+}
+uint64_t ByteArray::getWriteBuffers(std::vector<iovec>& buffers,uint64_t len){
+    if(len == 0)
+        return 0;
+    addCapacity(len);
+    uint64_t size = len;
+
+    size_t npos = m_position % m_baseSize;
+    size_t ncap = m_cur->size - npos;
+    struct iovec iov;
+    Node* cur = m_cur;
+    while(len > 0){
+        if(ncap >= len){
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = len;
+            len = 0;
+        }else{
+            iov.iov_base = cur->ptr + npos;
+            iov.iov_len = ncap;
+
+            len-= ncap;
+            cur = cur->next;
+            ncap = cur->size;
+            npos = 0;
+        }
+        buffers.push_back(iov);
+    }
+    return size;
 }
 
 
