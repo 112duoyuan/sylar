@@ -5,10 +5,15 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/xu/Server_SYLAR/sylar/sylar/address.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/address.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/bytearray.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/bytearray.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/config.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/config.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/fd_manager.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/fd_manager.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/fiber.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/fiber.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/hook.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/hook.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/http/http.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/http/http.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/http/http11_parser.rl.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/http/http11_parser.rl.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/http/http_parser.cc.o"
+  "/home/xu/Server_SYLAR/sylar/sylar/http/httpclient_parser.rl.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/http/httpclient_parser.rl.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/iomanager.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/iomanager.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/log.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/log.cc.o"
   "/home/xu/Server_SYLAR/sylar/sylar/scheduler.cc" "/home/xu/Server_SYLAR/build/CMakeFiles/sylar.dir/sylar/scheduler.cc.o"

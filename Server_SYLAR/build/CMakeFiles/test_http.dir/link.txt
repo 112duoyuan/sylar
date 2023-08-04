@@ -1,0 +1,1 @@
+/usr/bin/g++    -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   CMakeFiles/test_http.dir/tests/test_http.cc.o  -o /home/xu/Server_SYLAR/sylar/bin/test_http -rdynamic /home/xu/Server_SYLAR/sylar/lib/libsylar.so -L/Server_SYLAR/sylar/lib -lyaml-cpp -lpthread -Wl,-rpath,/home/xu/Server_SYLAR/sylar/lib 
