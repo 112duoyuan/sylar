@@ -239,8 +239,8 @@ public:
     T getCookieAs(const std::string& key,const T& def = T()){
         return getAs(m_headers,key,def);
     }
-    std::ostream& dump(std::ostream& os);
-
+    std::ostream& dump(std::ostream& os) const;
+    std::string toString() const;
 private:
    
 private:
@@ -292,8 +292,10 @@ public:
     T getHeaderAs(const std::string& key,const T& def = T()){
         return getAs(m_headers,key,def);
     }
+//const 放成员函数后面，常成员函数，不允许修改对象内的任何数据成员
+    std::ostream& dump(std::ostream& os)const ;
+    std::string toString() const;
 
-    std::ostream& dump(std::ostream& os);
 private:
     HttpStatus m_status;
     uint8_t m_version;
