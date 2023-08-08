@@ -384,10 +384,13 @@ void ByteArray::read(void * buf,size_t size,size_t position) const{
 }
 
 void ByteArray::setPosition(size_t v){
-    if(v > m_size){
+    if(v > m_capacity){
         throw std::out_of_range("set_position out of range");
     }
     m_position = v;
+    if(m_position > m_size){
+        m_size = m_position;
+    }
     m_cur = m_root;
     while(v > m_cur->size){
         v -= m_cur->size;
@@ -397,6 +400,8 @@ void ByteArray::setPosition(size_t v){
         m_cur = m_cur->next;
     }
 }
+
+
 bool ByteArray::writeToFile(const std::string& name)const{
     std::ofstream ofs;
     ofs.open(name,std::ios::trunc | std::ios::binary);
@@ -429,7 +434,7 @@ bool ByteArray::readFromFile(const std::string& name){
             <<" error,errno=" << errno << " errstr" << strerror(errno);
         return false;
     }
-    std::shared_ptr<char>buffer(new char([m_baseSize],[](char * ptr){delete []ptr;}));
+    std::shared_ptr<char>buffer(new char[m_baseSize],[](char * ptr){delete []ptr;});
     while (!ifs.eof()){
         ifs.read(buffer.get(),m_baseSize);
         write(buffer.get(),ifs.gcount());

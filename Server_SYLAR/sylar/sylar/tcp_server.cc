@@ -12,7 +12,7 @@ TcpServer::TcpServer(sylar::IOManager * worker,
                     sylar::IOManager* accept_worker)
     :m_worker(worker)
     ,m_acceptWorker(accept_worker)
-    ,m_readTimeout(g_tcp_server_read_timeout->getValue())
+    ,m_recvTimeout(g_tcp_server_read_timeout->getValue())
     ,m_name("sylar/1.0.0")
     ,m_isStop(true){
 }
@@ -61,6 +61,7 @@ void TcpServer::startAccept(Socket::ptr sock){
     while(!m_isStop){
         Socket::ptr client = sock->accept();
         if(client){
+            client->setRecvTimeout(m_recvTimeout);
             m_worker->schedule(std::bind(&TcpServer::handleClient,
                     shared_from_this(),client));
         }else{

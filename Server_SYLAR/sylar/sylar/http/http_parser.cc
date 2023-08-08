@@ -15,12 +15,19 @@ static sylar::ConfigVar<uint64_t>::ptr g_http_request_max_body_size =
                     , (uint64_t)(64 * 1024 * 1024),"http request max body_size");
 
 static uint64_t s_http_request_buffer_size = 0;
-static uint64_t s_http_request_max_body_size() = 0;
+static uint64_t s_http_request_max_body_size = 0;
 
+uint64_t HttpRequestParser::GetHttpRequestBufferSize(){
+    return s_http_request_buffer_size;
+}
+uint64_t HttpRequestParser::GetHttpRequestMaxBodySize(){
+    return s_http_request_max_body_size;
+}
+namespace{
 static _RequestSizeIniter{
-    _RequestSizeIniter(){
-static uint64_t s_http_request_buffer_size = g_http_request_buffer_size->getValue();
-static uint64_t s_http_request_max_body_size() = g_http_request_max_body_size->getValue();
+        _RequestSizeIniter(){
+        static uint64_t s_http_request_buffer_size = g_http_request_buffer_size->getValue();
+        static uint64_t s_http_request_max_body_size = g_http_request_max_body_size->getValue();
 
         g_http_request_buffer_size->addListener(
             [](const uint64_t& ov,const uint64_t& nv){
@@ -33,6 +40,8 @@ static uint64_t s_http_request_max_body_size() = g_http_request_max_body_size->g
     }
 };
 static _RequestSizeIniter _init;
+}
+
 void on_request_method(void *data,const char * at,size_t length){
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
     HttpMethod m = CharsToHttpMethod(at);

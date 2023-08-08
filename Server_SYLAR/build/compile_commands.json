@@ -1,6 +1,11 @@
 [
 {
   "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_http_parser.dir/tests/test_http_parser.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_http_parser.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_http_parser.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++    -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb   -o CMakeFiles/test_http.dir/tests/test_http.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_http.cc",
   "file": "/home/xu/Server_SYLAR/sylar/tests/test_http.cc"
 },
@@ -123,6 +128,11 @@
   "directory": "/home/xu/Server_SYLAR/build",
   "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http_parser.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc",
   "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -I/home/xu/yaml/yaml-cpp-master/include   -Wall -std=gnu++0x   -O0 -Wall -g2 -ggdb -fPIC   -o CMakeFiles/sylar.dir/sylar/tcp_server.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/tcp_server.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/tcp_server.cc"
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",
