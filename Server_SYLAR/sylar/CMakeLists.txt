@@ -41,6 +41,11 @@ set(LIB_SRC
     sylar/http/http_connection.cc
 )
 
+ragelmaker(sylar/http/http11_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/sylar/http)
+ragelmaker(sylar/http/httpclient_parser.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/sylar/http)
+ragelmaker(sylar/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/sylar)
+
+
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
 #force_redefine_file_macro_for_sources(sylar) #__FILE__ 重定义file相对路径
 set(
@@ -125,15 +130,20 @@ add_dependencies(echo_server sylar)
 #force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
 target_link_libraries(echo_server sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
-add_executable(test_http_server test/test_http_server.cc)
+add_executable(test_http_server tests/test_http_server.cc)
 add_dependencies(test_http_server sylar)
 #force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
 target_link_libraries(test_http_server sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
-add_executable(test_http_connection test/test_http_connection.cc)
+add_executable(test_http_connection tests/test_http_connection.cc)
 add_dependencies(test_http_connection sylar)
 #force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
 target_link_libraries(test_http_connection sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+
+add_executable(test_uri tests/test_uri.cc)
+add_dependencies(test_uri sylar)
+#force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
+target_link_libraries(test_uri sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
 
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径
