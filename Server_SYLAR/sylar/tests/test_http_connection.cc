@@ -35,6 +35,13 @@ void run(){
         << *rsp;
     std::ofstream ofs("rsp.dat");
     ofs << *rsp;
+
+    SYLAR_LOG_INFO(g_logger) << "------------------------";
+
+    auto r = sylar::http::HttpConnection::DoGet("https://www.sylar.top/",300); \
+    SYLAR_LOG_INFO(g_logger) << "result=" << r->_result
+        << " error=" << r->_error
+        << " rsp=" << (r->response ? r->response->toString() : "");
 }
 int main(int argc,char ** argv){
     sylar::IOManager iom(2);
