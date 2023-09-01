@@ -63,15 +63,15 @@ include CMakeFiles/test_fiber.dir/flags.make
 CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o: CMakeFiles/test_fiber.dir/flags.make
 CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o: /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test_fiber.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc
 
 CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc > CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_fiber.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc > CMakeFiles/test_fiber.dir/tests/test_fiber.cc.i
 
 CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_fiber.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_fiber.cc -o CMakeFiles/test_fiber.dir/tests/test_fiber.cc.s
 
 CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o.requires:
 

@@ -56,7 +56,7 @@ typedef ssize_t (*write_fun)(int fd, const void *buf, size_t count);
 extern write_fun write_f;
 
 typedef ssize_t (*writev_fun)(int fd, const struct iovec *iov, int iovcnt);
-extern write_fun write_f;
+extern writev_fun writev_f;
 
 typedef ssize_t (*send_fun)(int sockfd, const void *buf, size_t len, int flags);
 extern send_fun send_f;

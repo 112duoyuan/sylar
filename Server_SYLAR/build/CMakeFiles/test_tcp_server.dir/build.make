@@ -63,15 +63,15 @@ include CMakeFiles/test_tcp_server.dir/flags.make
 CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o: CMakeFiles/test_tcp_server.dir/flags.make
 CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o: /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test_tcp_server.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc
 
 CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc > CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_tcp_server.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc > CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.i
 
 CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc -o CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_tcp_server.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_tcp_server.cc -o CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.s
 
 CMakeFiles/test_tcp_server.dir/tests/test_tcp_server.cc.o.requires:
 

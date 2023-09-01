@@ -6,13 +6,13 @@
 #include "fiber.h"
 #include "fd_manager.h"
 #include "log.h"
+static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 namespace sylar{
 
 static sylar::ConfigVar<int>::ptr g_tcp_connect_timeout = 
     sylar::Config::Lookup("tcp.connect.timeout", 5000,"tcp connect timeout");
 
-sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
 static thread_local bool t_hook_enable = false;
 #define HOOK_FUN(XX) \
@@ -42,6 +42,12 @@ void hook_init(){
     if(is_inited){
         return;
     }
+    
+//RTLD_NEXT表示在当前库以后按默认的顺序搜索共享库中符号symbol第一次出现的地址
+// ## 将两个宏变量拼接在一起
+// dlsym 通常用于获取函数符号地址
+
+// writev_f = (writev_fun)dlsym(RTLD_NEXT,writev)
 #define XX(name) name ## _f = (name ## _fun)dlsym(RTLD_NEXT,#name);
     HOOK_FUN(XX);
 #undef XX
@@ -78,13 +84,14 @@ extern "C" {
 
 struct timer_info{
     int cancelled = 0;
-
+};
 }
 //P45最后几分钟有讲解这个模板
 template<typename OriginFun,typename ... Args>
 static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
         uint32_t event,int timeout_so, Args&&... args){
     if(!sylar::t_hook_enable){
+        //forward
         return fun(fd,std::forward<Args>(args)...);
     }
 
@@ -103,7 +110,7 @@ static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
     }
 
     uint64_t to = ctx->getTimeout(timeout_so);
-    std::shard_ptr<timer_info> tinfo(new timer_info);
+    std::shared_ptr<timer_info> tinfo(new timer_info);
 
 retry:
     ssize_t n =fun(fd,std::forward<Args>(args)...);
@@ -115,7 +122,7 @@ retry:
         sylar::IOManager * iom = sylar::IOManager::GetThis();
         sylar::Timer::ptr timer;
         //条件变量
-        std::weak_ptr<time_info> winfo(tinfo);
+        std::weak_ptr<timer_info> winfo(tinfo);
 
         if(to != (uint64_t)-1){
             timer = iom->addConditionTimer(to,[winfo,fd,iom,event](){
@@ -127,7 +134,6 @@ retry:
                 iom->cancelEvent(fd,(sylar::IOManager::Event)(event));
             },winfo);
         }
-        uint64_t now =0;
 
         int rt = iom->addEvent(fd,(sylar::IOManager::Event)(event));
         if(rt){
@@ -143,7 +149,7 @@ retry:
                 timer->cancel();
             }
             if(tinfo->cancelled){
-                errno = tinfo->cancalled;
+                errno = tinfo->cancelled;
                 return -1;
             }
             goto retry;
@@ -160,9 +166,9 @@ unsigned int sleep(unsigned int seconds){
     sylar::Fiber::ptr fiber = sylar::Fiber::GetThis();
     sylar::IOManager* iom = sylar::IOManager::GetThis();
     //iom->addTimer(seconds * 1000,std::bind(&sylar::IOManager::schedule,iom,fiber));
-    iom->addTimer(seconds * 1000, std::bind(void(sylar::Scheduler::*)
-            sylar::Fiber::ptr, int thread)&sylar::IOManager::schedule
-            ,iom,fiber,-1);
+    iom->addTimer(seconds * 1000, std::bind((void(sylar::Scheduler::*)
+            (sylar::Fiber::ptr, int thread))&sylar::IOManager::schedule
+            ,iom,fiber,-1));
     sylar::Fiber::YieldToHold();
     return 0;
 }
@@ -312,7 +318,7 @@ ssize_t recv(int sockfd,void *buf,size_t len, int flags){
 }
 
 ssize_t recvfrom(int sockfd, void *buf, size_t len, int flags,struct sockaddr *src_addr, socklen_t *addrlen){
-    return do_io(sockfd,recvfrom_f,"recvfrom",sylar::IOManager::READ,SO_RCVTIMEO,buf,len,flags,src_addr,addrlen)
+    return do_io(sockfd,recvfrom_f,"recvfrom",sylar::IOManager::READ,SO_RCVTIMEO,buf,len,flags,src_addr,addrlen);
 }
 
 ssize_t recvmsg(int sockfd, struct msghdr *msg, int flags){
@@ -356,7 +362,7 @@ int close(int fd){
     return close_f(fd);
 }
 
-int fcntl(int fd, int cmd){
+int fcntl(int fd, int cmd,...){
     // if(!sylar::t_hook_enable){
     //     return fcntl_f(fd,cmd);
     // }
@@ -373,7 +379,7 @@ int fcntl(int fd, int cmd){
             }
             ctx->setSysNonblock(arg & O_NONBLOCK);
             if(ctx->getUserNonblock()){
-                arg != O_NONBLOCK;
+                arg |= O_NONBLOCK;
             } else{
                 arg &= ~O_NONBLOCK;
             } 
@@ -418,7 +424,7 @@ int fcntl(int fd, int cmd){
         case F_GETLEASE:
         case F_GETPIPE_SZ:
             {
-                va_end(va)
+                va_end(va);
                 return fcntl_f(fd,cmd);
             }
             break;
@@ -483,5 +489,4 @@ int setsockopt(int sockfd, int level, int optname,const void *optval, socklen_t 
     return setsockopt_f(sockfd,level,optname,optval,optlen);
 }
 
-}
 

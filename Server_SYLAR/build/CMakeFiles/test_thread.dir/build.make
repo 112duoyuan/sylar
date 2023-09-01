@@ -63,15 +63,15 @@ include CMakeFiles/test_thread.dir/flags.make
 CMakeFiles/test_thread.dir/tests/test_thread.cc.o: CMakeFiles/test_thread.dir/flags.make
 CMakeFiles/test_thread.dir/tests/test_thread.cc.o: /home/xu/Server_SYLAR/sylar/tests/test_thread.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_thread.dir/tests/test_thread.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_thread.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test_thread.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_thread.dir/tests/test_thread.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_thread.cc
 
 CMakeFiles/test_thread.dir/tests/test_thread.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_thread.dir/tests/test_thread.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_thread.cc > CMakeFiles/test_thread.dir/tests/test_thread.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_thread.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_thread.cc > CMakeFiles/test_thread.dir/tests/test_thread.cc.i
 
 CMakeFiles/test_thread.dir/tests/test_thread.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_thread.dir/tests/test_thread.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_thread.cc -o CMakeFiles/test_thread.dir/tests/test_thread.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_thread.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_thread.cc -o CMakeFiles/test_thread.dir/tests/test_thread.cc.s
 
 CMakeFiles/test_thread.dir/tests/test_thread.cc.o.requires:
 

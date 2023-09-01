@@ -63,15 +63,15 @@ include CMakeFiles/test_bytearray.dir/flags.make
 CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o: CMakeFiles/test_bytearray.dir/flags.make
 CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o: /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test_bytearray.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc
 
 CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc > CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_bytearray.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc > CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.i
 
 CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc -o CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_bytearray.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_bytearray.cc -o CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.s
 
 CMakeFiles/test_bytearray.dir/tests/test_bytearray.cc.o.requires:
 

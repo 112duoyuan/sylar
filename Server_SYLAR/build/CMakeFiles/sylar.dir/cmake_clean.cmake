@@ -1,4 +1,7 @@
 file(REMOVE_RECURSE
+  "/home/xu/Server_SYLAR/sylar/sylar/http/http11_parser.rl.cc"
+  "/home/xu/Server_SYLAR/sylar/sylar/http/httpclient_parser.rl.cc"
+  "/home/xu/Server_SYLAR/sylar/sylar/uri.rl.cc"
   "CMakeFiles/sylar.dir/sylar/fd_manager.cc.o"
   "CMakeFiles/sylar.dir/sylar/log.cc.o"
   "CMakeFiles/sylar.dir/sylar/fiber.cc.o"
@@ -23,6 +26,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/sylar.dir/sylar/http/http_server.cc.o"
   "CMakeFiles/sylar.dir/sylar/http/servlet.cc.o"
   "CMakeFiles/sylar.dir/sylar/http/http_connection.cc.o"
+  "CMakeFiles/sylar.dir/sylar/uri.rl.cc.o"
   "/home/xu/Server_SYLAR/sylar/lib/libsylar.pdb"
   "/home/xu/Server_SYLAR/sylar/lib/libsylar.so"
 )

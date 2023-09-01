@@ -1,3 +1,4 @@
+/home/xu/Server_SYLAR/build/CMakeFiles/test_uri.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test_tcp_server.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/edit_cache.dir
 /home/xu/Server_SYLAR/build/CMakeFiles/test_http_parser.dir

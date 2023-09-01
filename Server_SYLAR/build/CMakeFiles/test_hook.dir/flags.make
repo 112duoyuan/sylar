@@ -8,3 +8,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/xu/yaml/yaml-cpp-master/include 
 
+# Custom defines: CMakeFiles/test_hook.dir/tests/test_hook.cc.o_DEFINES = __FILE__="tests/test_hook.cc"
+

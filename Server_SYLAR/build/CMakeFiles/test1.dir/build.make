@@ -63,15 +63,15 @@ include CMakeFiles/test1.dir/flags.make
 CMakeFiles/test1.dir/tests/test.cc.o: CMakeFiles/test1.dir/flags.make
 CMakeFiles/test1.dir/tests/test.cc.o: /home/xu/Server_SYLAR/sylar/tests/test.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test1.dir/tests/test.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test1.dir/tests/test.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test1.dir/tests/test.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test.cc
 
 CMakeFiles/test1.dir/tests/test.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test1.dir/tests/test.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test.cc > CMakeFiles/test1.dir/tests/test.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test.cc > CMakeFiles/test1.dir/tests/test.cc.i
 
 CMakeFiles/test1.dir/tests/test.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test1.dir/tests/test.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test.cc -o CMakeFiles/test1.dir/tests/test.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test.cc -o CMakeFiles/test1.dir/tests/test.cc.s
 
 CMakeFiles/test1.dir/tests/test.cc.o.requires:
 

@@ -11,6 +11,7 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/3.6.2/CMakeCXXCompiler.cmake"
   "CMakeFiles/3.6.2/CMakeSystem.cmake"
   "/home/xu/Server_SYLAR/sylar/CMakeLists.txt"
+  "/home/xu/Server_SYLAR/sylar/cmake/utils.cmake"
   "/usr/local/share/cmake-3.6/Modules/CMakeCInformation.cmake"
   "/usr/local/share/cmake-3.6/Modules/CMakeCXXInformation.cmake"
   "/usr/local/share/cmake-3.6/Modules/CMakeCommonLanguageInclude.cmake"
@@ -41,6 +42,7 @@ set(CMAKE_MAKEFILE_PRODUCTS
 
 # Dependency information for all targets:
 set(CMAKE_DEPEND_INFO_FILES
+  "CMakeFiles/test_uri.dir/DependInfo.cmake"
   "CMakeFiles/test_tcp_server.dir/DependInfo.cmake"
   "CMakeFiles/test_http_parser.dir/DependInfo.cmake"
   "CMakeFiles/test_http.dir/DependInfo.cmake"

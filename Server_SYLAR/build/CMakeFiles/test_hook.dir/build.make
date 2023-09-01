@@ -63,15 +63,15 @@ include CMakeFiles/test_hook.dir/flags.make
 CMakeFiles/test_hook.dir/tests/test_hook.cc.o: CMakeFiles/test_hook.dir/flags.make
 CMakeFiles/test_hook.dir/tests/test_hook.cc.o: /home/xu/Server_SYLAR/sylar/tests/test_hook.cc
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/test_hook.dir/tests/test_hook.cc.o"
-	/usr/bin/g++   $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_hook.dir/tests/test_hook.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_hook.cc
+	/usr/bin/g++   $(CXX_DEFINES) -D__FILE__=\"tests/test_hook.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/test_hook.dir/tests/test_hook.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_hook.cc
 
 CMakeFiles/test_hook.dir/tests/test_hook.cc.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/test_hook.dir/tests/test_hook.cc.i"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_hook.cc > CMakeFiles/test_hook.dir/tests/test_hook.cc.i
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_hook.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/xu/Server_SYLAR/sylar/tests/test_hook.cc > CMakeFiles/test_hook.dir/tests/test_hook.cc.i
 
 CMakeFiles/test_hook.dir/tests/test_hook.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/test_hook.dir/tests/test_hook.cc.s"
-	/usr/bin/g++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_hook.cc -o CMakeFiles/test_hook.dir/tests/test_hook.cc.s
+	/usr/bin/g++  $(CXX_DEFINES) -D__FILE__=\"tests/test_hook.cc\" $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/xu/Server_SYLAR/sylar/tests/test_hook.cc -o CMakeFiles/test_hook.dir/tests/test_hook.cc.s
 
 CMakeFiles/test_hook.dir/tests/test_hook.cc.o.requires:
 

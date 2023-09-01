@@ -8,3 +8,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I/home/xu/yaml/yaml-cpp-master/include 
 
+# Custom defines: CMakeFiles/test_socket.dir/tests/test_socket.cc.o_DEFINES = __FILE__="tests/test_socket.cc"
+
