@@ -173,7 +173,7 @@ bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
             return false;
         }
     } else{
-        if(::connect_with_timeout(m_sock,addr->getAddrLen(),timeout_ms)){
+        if(::connect_with_timeout(m_sock,addr->getAddr(),addr->getAddrLen(),timeout_ms)){
             SYLAR_LOG_ERROR(g_logger) << "sock=" << m_sock 
                 << " connect(" << addr->toString() << ") timeout="
                 << timeout_ms << ") error errno=" << errno << "errstr=" 
@@ -227,7 +227,7 @@ int Socket::send(const iovec* buffers,size_t length,int flags){
     }
     return -1;
 }
-int Socket::sendTo(const iovec* buffer,size_t length,const Address::ptr to,int flags){
+int Socket::sendTo(const void* buffer,size_t length,const Address::ptr to,int flags){
     if(!isConnected()){
         return ::sendto(m_sock,buffer,length,flags,to->getAddr(),to->getAddrLen());
     }
@@ -395,7 +395,7 @@ void Socket::initSock(){
         setOption(IPPROTO_TCP,TCP_NODELAY,val);
 }
 void Socket::newSock(){
-    m_sock - socket(m_family,m_type,m_protocol);
+    m_sock = socket(m_family,m_type,m_protocol);
     if(SYLAR_LICKLY(m_sock != -1)){
         initSock();
     }else{

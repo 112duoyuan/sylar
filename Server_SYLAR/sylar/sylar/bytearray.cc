@@ -127,7 +127,7 @@ void ByteArray::writeUint32( uint32_t value){
     //
     while(value>= 0x80){
         tmp[i++] = (value& 0x7F) | 0x80;
-        value >> 7;
+        value >>= 7;
     }
     tmp[i++] = value;
     write(tmp,i);
@@ -190,7 +190,7 @@ uint8_t  ByteArray::readFuint8(){
     if(m_endian == SYLAR_BYTE_ORDER){ \
         return v;\
     }else{ \
-        return byteswap(v); \ 
+        return byteswap(v); \
     }
 
 int16_t  ByteArray::readFint16(){

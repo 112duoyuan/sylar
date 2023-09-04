@@ -51,7 +51,7 @@ bool CaseInsensitiveLess::operator()(const std::string& lhs
     return strcasecmp(lhs.c_str(),rhs.c_str()) < 0;
 }
 
-HttpRequest::HttpRequest(uint8_t version = 0x11,bool close = true)
+HttpRequest::HttpRequest(uint8_t version ,bool close)
     :m_method(HttpMethod::GET)
     ,m_version(version)
     ,m_close(close){
@@ -96,7 +96,7 @@ void HttpRequest::delCookie(const std::string& key){
     m_cookies.erase(key);
 }
 bool HttpRequest::hasHeader(const std::string& key
-    , std::string* val = nullptr){
+    , std::string* val){
     auto it = m_headers.find(key);
     if(it == m_headers.end())
         return false;
@@ -105,7 +105,7 @@ bool HttpRequest::hasHeader(const std::string& key
     return true;
 }
 bool HttpRequest::hasParam(const std::string& key
-    ,std::string* val = nullptr){
+    ,std::string* val){
     auto it = m_params.find(key);
     if(it == m_params.end())
         return false;
@@ -113,7 +113,7 @@ bool HttpRequest::hasParam(const std::string& key
         *val = it->second;
     return true;}
 bool HttpRequest::hasCookie(const std::string& key
-    ,std::string* val = nullptr){
+    ,std::string* val){
     auto it = m_cookies.find(key);
     if(it == m_cookies.end())
         return false;
@@ -157,13 +157,13 @@ std::ostream& HttpRequest::dump(std::ostream& os)const{
     }
     return os;
 }
-HttpResponse::HttpResponse(uint8_t version = 0x11,bool close = true)
+HttpResponse::HttpResponse(uint8_t version ,bool close)
     :m_status(HttpStatus::OK)
     ,m_version(version)
     ,m_close(close){
 
 }
-std::string HttpResponse::getHeader(const std::string& key,const std::string& def ="") const{
+std::string HttpResponse::getHeader(const std::string& key,const std::string& def) const{
     auto it = m_headers.find(key);
     return it == m_headers.end() ? def : it->second;
 }

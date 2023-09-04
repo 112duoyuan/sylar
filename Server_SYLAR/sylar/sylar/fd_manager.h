@@ -30,11 +30,12 @@ public:
     uint64_t getTimeout(int type);
 
 private:
-    bool m_isInit: 1;
-    bool m_isSocket: 1;
-    bool m_sysNonblock: 1;
-    bool m_isClosed: 1;
-    bool m_userNonblock: 1;
+//虽然声明自己是个bool(8bit)，但我可以只占1bit的空间
+    bool m_isInit : 1;
+    bool m_isSocket : 1;
+    bool m_sysNonblock : 1;
+    bool m_isClosed : 1;
+    bool m_userNonblock : 1;
 
     int m_fd;
     uint64_t m_recvTimeout;

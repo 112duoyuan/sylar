@@ -1,6 +1,5 @@
 #include "hook.h"
 #include <dlfcn.h>
-
 #include "config.h"
 #include "iomanager.h"
 #include "fiber.h"
@@ -91,11 +90,11 @@ template<typename OriginFun,typename ... Args>
 static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
         uint32_t event,int timeout_so, Args&&... args){
     if(!sylar::t_hook_enable){
-        //forward
+        //forward完美转换传右值 为了避免不必要的拷贝
         return fun(fd,std::forward<Args>(args)...);
     }
 
-    SYLAR_LOG_DEBUG(g_logger) << "do_io" << hook_fun_name << ">";
+    SYLAR_LOG_DEBUG(g_logger) << "do_io <" << hook_fun_name << ">";
 
     sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
     if(!ctx){
@@ -335,7 +334,7 @@ ssize_t writev(int fd, const struct iovec *iov, int iovcnt){
 }
 
 ssize_t send(int sockfd, const void *buf, size_t len, int flags){
-    return do_io(sockfd,send_f,"send",sylar::IOManager::WRITE,SO_SNDTIMEO,len,flags);
+    return do_io(sockfd,send_f,"send",sylar::IOManager::WRITE,SO_SNDTIMEO,buf,len,flags);
 }
 
 ssize_t sendto(int sockfd, const void *buf, size_t len, int flags,const struct sockaddr *dest_addr, socklen_t addrlen){

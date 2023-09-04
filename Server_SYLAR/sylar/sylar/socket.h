@@ -53,7 +53,7 @@ public:
     bool setOption(int level,int option,const void * result,size_t len);
     template<class T>
     bool setOption(int level,int option,const T& value){
-        return setOption(level,option,)
+        return setOption(level,option,value);
     }
 
     Socket::ptr accept();
@@ -65,7 +65,7 @@ public:
 
     int send(const void* buffer,size_t length,int flags = 0);
     int send(const iovec* buffers,size_t length,int flags = 0);
-    int sendTo(const iovec* buffer,size_t length,const Address::ptr to,int flags = 0);
+    int sendTo(const void* buffer,size_t length,const Address::ptr to,int flags = 0);
     int sendTo(const iovec* buffers,size_t length,const Address::ptr to,int flags = 0);
 
     int recv(void * buffer,size_t length,int flags= 0);

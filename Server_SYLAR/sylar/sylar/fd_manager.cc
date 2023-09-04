@@ -5,13 +5,13 @@
 #include "hook.h"
 
 namespace sylar{
-
+//-Werror=reorder 按顺序赋值！！！
 FdCtx::FdCtx(int fd)
     :m_isInit(false)
     ,m_isSocket(false)
     ,m_sysNonblock(false)
-    ,m_userNonblock(false)
     ,m_isClosed(false)
+    ,m_userNonblock(false)
     ,m_fd(fd)
     ,m_recvTimeout(-1)
     ,m_sendTimeout(-1){

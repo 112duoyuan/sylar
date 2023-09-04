@@ -2,18 +2,26 @@
 #记得安装yaml
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 project(sylar) #声明cmake工程
-#include (cmake/utils.cmake)
+
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
 include (cmake/utils.cmake)
-set(CMAKE_VERBOSE_MAKEFILE ON)  #编译过程打印编译信息
-#set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O0 -ggdb -std=c++11 c++0x -Wall  -Werror -Wno-unused-function")
-#-Who-builtin-macor-redefined 可以试着添加到上面
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x ")
-SET(CMAKE_BUILD_TYPE "Debug")
-SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
-SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
 
+#set(CMAKE_VERBOSE_MAKEFILE ON)  #编译过程打印编译信息
+#SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x ")
+#SET(CMAKE_BUILD_TYPE "Debug")
+#SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g2 -ggdb")
+#SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+
+set(CMAKE_VERBOSE_MAKEFILE ON)
+set(CMAKE_CXX_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
+set(CMAKE_C_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -fPIC -ggdb -std=c11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations")
+
+include_directories(.)
 include_directories(/home/xu/yaml/yaml-cpp-master/include)
+link_directories(/home/xu/Server_SYLAR/sylar/lib)
+
+option(BUILD_TEST "ON for complile test" OFF)
+
 
 set(LIB_SRC
     sylar/fd_manager.cc
@@ -48,102 +56,51 @@ ragelmaker(sylar/uri.rl LIB_SRC ${CMAKE_CURRENT_SOURCE_DIR}/sylar)
 
 add_library(sylar SHARED ${LIB_SRC}) #SHARED是动态库
 force_redefine_file_macro_for_sources(sylar) #__FILE__ 重定义file相对路径
-set(
-    LIB_LIB
+find_library(pthread NAMES pthread PATHS ./pthread)
+#find_library(PTHREAD pthread)
+set(LIBS
     sylar
-    pthread 
-    dl
+    /usr/local/boost/include/boost/thread/pthread
+    /usr/local/include/yaml-cpp
+    #dl
 )
 
-add_executable(test1 tests/test.cc)
-add_dependencies(test1 sylar)
-force_redefine_file_macro_for_sources(test1) #__FILE__ 重定义file相对路径
-target_link_libraries(test1 sylar -lyaml-cpp pthread)
+sylar_add_executable(test1 tests/test.cc sylar "${LIBS}")
 
-add_executable(test_config tests/test_config.cc)
-add_dependencies(test_config sylar)
-force_redefine_file_macro_for_sources(test_config) #__FILE__ 重定义file相对路径
-target_link_libraries(test_config sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_config tests/test_config.cc sylar "${LIBS}")
 
-add_executable(test_thread tests/test_thread.cc)
-add_dependencies(test_thread sylar)
-force_redefine_file_macro_for_sources(test_thread) #__FILE__ 重定义file相对路径
-target_link_libraries(test_thread sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_thread tests/test_thread.cc sylar "${LIBS}")
 
-add_executable(test_util tests/test_util.cc)
-add_dependencies(test_util sylar)
-force_redefine_file_macro_for_sources(test_util) #__FILE__ 重定义file相对路径
-target_link_libraries(test_util sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_util tests/test_util.cc sylar "${LIBS}")
 
-add_executable(test_fiber tests/test_fiber.cc)
-add_dependencies(test_fiber sylar)
-force_redefine_file_macro_for_sources(test_fiber) #__FILE__ 重定义file相对路径
-target_link_libraries(test_fiber sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_fiber tests/test_fiber.cc sylar "${LIBS}")
 
-add_executable(test_scheduler tests/test_scheduler.cc)
-add_dependencies(test_scheduler sylar)
-force_redefine_file_macro_for_sources(test_scheduler) #__FILE__ 重定义file相对路径
-target_link_libraries(test_scheduler sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_scheduler tests/test_scheduler.cc sylar "${LIBS}")
 
-add_executable(test_iomanager tests/test_iomanager.cc)
-add_dependencies(test_iomanager sylar)
-force_redefine_file_macro_for_sources(test_iomanager) #__FILE__ 重定义file相对路径
-target_link_libraries(test_iomanager sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_iomanager tests/test_iomanager.cc sylar "${LIBS}")
 
-add_executable(test_hook tests/test_hook.cc)
-add_dependencies(test_hook sylar)
-force_redefine_file_macro_for_sources(test_hook) #__FILE__ 重定义file相对路径
-target_link_libraries(test_hook sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_hook tests/test_hook.cc sylar "${LIBS}")
 
-add_executable(test_address tests/test_address.cc)
-add_dependencies(test_address sylar)
-force_redefine_file_macro_for_sources(test_address) #__FILE__ 重定义file相对路径
-target_link_libraries(test_address sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_address tests/test_address.cc sylar "${LIBS}")
 
-add_executable(test_socket tests/test_socket.cc)
-add_dependencies(test_socket sylar)
-force_redefine_file_macro_for_sources(test_socket) #__FILE__ 重定义file相对路径
-target_link_libraries(test_socket sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_socket tests/test_socket.cc sylar "${LIBS}")
 
-add_executable(test_bytearray tests/test_bytearray.cc)
-add_dependencies(test_bytearray sylar)
-force_redefine_file_macro_for_sources(test_bytearray) #__FILE__ 重定义file相对路径
-target_link_libraries(test_bytearray sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_bytearray tests/test_bytearray.cc sylar "${LIBS}")
 
-add_executable(test_http tests/test_http.cc)
-add_dependencies(test_http sylar)
-force_redefine_file_macro_for_sources(test_http) #__FILE__ 重定义file相对路径
-target_link_libraries(test_http sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_http tests/test_http.cc sylar "${LIBS}")
 
-add_executable(test_http_parser tests/test_http_parser.cc)
-add_dependencies(test_http_parser sylar)
-force_redefine_file_macro_for_sources(test_http_parser) #__FILE__ 重定义file相对路径
-target_link_libraries(test_http_parser sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_http_parser tests/test_http_parser.cc sylar "${LIBS}")
 
-add_executable(test_tcp_server tests/test_tcp_server.cc)
-add_dependencies(test_tcp_server sylar)
-force_redefine_file_macro_for_sources(test_tcp_server) #__FILE__ 重定义file相对路径
-target_link_libraries(test_tcp_server sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_tcp_server tests/test_tcp_server.cc sylar "${LIBS}")
 
-add_executable(echo_server sylar/examples/echo_server.cc)
-add_dependencies(echo_server sylar)
-force_redefine_file_macro_for_sources(echo_server) #__FILE__ 重定义file相对路径
-target_link_libraries(echo_server sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(echo_server sylar/examples/echo_server.cc sylar "${LIBS}")
 
-add_executable(test_http_server tests/test_http_server.cc)
-add_dependencies(test_http_server sylar)
-force_redefine_file_macro_for_sources(test_http_server) #__FILE__ 重定义file相对路径
-target_link_libraries(test_http_server sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_http_server tests/test_http_server.cc sylar "${LIBS}")
 
-add_executable(test_http_connection tests/test_http_connection.cc)
-add_dependencies(test_http_connection sylar)
-force_redefine_file_macro_for_sources(test_http_connection) #__FILE__ 重定义file相对路径
-target_link_libraries(test_http_connection sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_http_connection tests/test_http_connection.cc sylar "${LIBS}")
 
-add_executable(test_uri tests/test_uri.cc)
-add_dependencies(test_uri sylar)
-force_redefine_file_macro_for_sources(test_uri) #__FILE__ 重定义file相对路径
-target_link_libraries(test_uri sylar -L/Server_SYLAR/sylar/lib -lyaml-cpp pthread)
+sylar_add_executable(test_uri tests/test_uri.cc sylar "${LIBS}")
+
 
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径

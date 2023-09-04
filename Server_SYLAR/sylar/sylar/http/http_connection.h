@@ -1,10 +1,10 @@
 #ifndef __SYLAR_HTTP_CONNECTION_H__
 #define __SYLAR_HTTP_CONNECTION_H__
 
-#include "sylar/socket_steram.h"
+#include "../socket_steram.h"
 #include "http.h"
-#include "sylar/uri.h"
-#include "thread.h"
+#include "../uri.h"
+#include "../thread.h"
 #include <list>
 
 namespace sylar{
@@ -17,6 +17,30 @@ struct HttpResult{
             :result(_result)
             ,response(_response)
             ,error(_error){}
+    typedef std::shared_ptr<HttpResult> ptr;
+    enum class Error {
+    /// 正常
+    OK = 0,
+    /// 非法URL
+    INVALID_URL = 1,
+    /// 无法解析HOST
+    INVALID_HOST = 2,
+    /// 连接失败
+    CONNECT_FAIL = 3,
+    /// 连接被对端关闭
+    SEND_CLOSE_BY_PEER = 4,
+    /// 发送请求产生Socket错误
+    SEND_SOCKET_ERROR = 5,
+    /// 超时
+    TIMEOUT = 6,
+    /// 创建Socket失败
+    CREATE_SOCKET_ERROR = 7,
+    /// 从连接池中取连接失败
+    POOL_GET_CONNECTION = 8,
+    /// 无效的连接
+    POOL_INVALID_CONNECTION = 9,
+};
+
     int result;
     HttpResponse::ptr response;
     std::string error;
@@ -88,7 +112,7 @@ private:
 };   
 class HttpConnectionPool{
 public:
-    typedef std::share_ptr<HttpConnectionPool>ptr;
+    typedef std::shared_ptr<HttpConnectionPool>ptr;
     typedef Mutex MutexType;
 
     HttpConnectionPool(const std::string& host
@@ -101,6 +125,10 @@ public:
     HttpConnection::ptr getConnection();
 
     HttpResult::ptr doGet(const std::string& uri
+                 , uint64_t timeout_ms
+                 , const std::map<std::string,std::string>&headers ={}
+                 , const std::string& body = "");
+    HttpResult::ptr doGet(Uri::ptr uri
                  , uint64_t timeout_ms
                  , const std::map<std::string,std::string>&headers ={}
                  , const std::string& body = "");

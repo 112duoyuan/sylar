@@ -16,7 +16,7 @@ public:
     typedef std::shared_ptr<TcpServer> ptr;
     TcpServer(sylar::IOManager * worker = sylar::IOManager::GetThis(),
                 sylar::IOManager * accept_worker = sylar::IOManager::GetThis());
-    virtual ~TcpServer(){}
+    virtual ~TcpServer();
 
     virtual bool bind(sylar::Address::ptr addr);
     virtual bool bind(const std::vector<Address::ptr>& addrs

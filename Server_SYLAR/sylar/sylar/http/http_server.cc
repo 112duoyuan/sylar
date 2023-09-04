@@ -1,5 +1,5 @@
 #include "http_server.h"
-#include "log.h"
+#include "../log.h"
 
 
 namespace sylar{

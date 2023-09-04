@@ -1,4 +1,4 @@
-#include "http/http_connection.h"
+#include "http_connection.h"
 #include "http_parser.h"
 #include "../log.h"
 namespace sylar{
@@ -8,7 +8,7 @@ static sylar::Logger::ptr g_logger =  SYLAR_LOG_NAME("system");
 
 std::string HttpResult::toString()const{
     std::stringstream ss;
-    ss << "[HttpResult result=" << HttpResult
+    ss << "[HttpResult result=" << result
         << " error=" << error
         << " response=" << (response ? response->toString() : "nullptr")
         << "]";
@@ -112,7 +112,7 @@ HttpResponse::ptr HttpConnection::recvResponse(){
             std::string body;
             body.resize(length);
             int len = 0;
-            if(length >=  offset){
+            if((int)length >=  offset){
                 memcpy(&body[0],data,offset);
                 len = offset;
             }else{
@@ -136,19 +136,19 @@ int HttpConnection::sendRequest(HttpRequest::ptr rsp){
     std::stringstream ss;
     ss << *rsp;
     std::string data = ss.str();
-    writeFixSize(data.c_str(),data.size());
+    return writeFixSize(data.c_str(),data.size());
 }
 
 HttpResult::ptr HttpConnection::DoGet(const std::string& uri
             , uint64_t timeout_ms
             , const std::map<std::string,std::string>&headers 
             , const std::string& body){
-    Uri::ptr uri = Uri::Create(uri);
-    if(!uri){
+    Uri::ptr URI = Uri::Create(uri);
+    if(!URI){
         return std::make_shared<HttpResult>((int)HttpConnection::Error::INVALID_URL
-            , nullptr,"invalid url: "+ url);
+            , nullptr,"invalid url: "+ uri);
     }
-    return DoPoGet(uri,timeout_ms,headers,body);
+    return DoGet(URI,timeout_ms,headers,body);
 }
 
 HttpResult::ptr HttpConnection::DoGet(Uri::ptr uri
@@ -162,12 +162,12 @@ HttpResult::ptr HttpConnection::DoPost(const std::string& uri
             , uint64_t timeout_ms
             , const std::map<std::string,std::string>&headers 
             , const std::string& body){
-    Uri::ptr uri = Uri::Create(uri);
-    if(!uri){
+    Uri::ptr Uri = Uri::Create(uri);
+    if(!Uri){
         return std::make_shared<HttpResult>((int)HttpConnection::Error::INVALID_URL
-            , nullptr,"invalid url: "+ url);
+            , nullptr,"invalid url: "+ uri);
     }
-    return DoPost(uri,timeout_ms,headers,body);
+    return DoPost(Uri,timeout_ms,headers,body);
 }
 
 HttpResult::ptr HttpConnection::DoPost(Uri::ptr uri
@@ -182,10 +182,10 @@ HttpResult::ptr HttpConnection::DoRequest(HttpMethod method
             , uint64_t timeout_ms
             , const std::map<std::string,std::string>&headers
             , const std::string& body){
-    Uri::ptr uri = Uri::Create(uri);
-    if(!uri){
+    Uri::ptr URI = Uri::Create(uri);
+    if(!URI){
         return std::make_shared<HttpResult>((int)HttpConnection::Error::INVALID_URL
-            , nullptr,"invalid url: "+ url);
+            , nullptr,"invalid url: "+ uri);
     }
     return DoRequest(method,uri,timeout_ms,headers,body);
 }
@@ -197,13 +197,13 @@ HttpResult::ptr HttpConnection::DoRequest(HttpMethod method
             , const std::string& body){
     HttpRequest::ptr req = std::make_shared<HttpRequest>();
     req->setPath(uri->getPath());
-    requ->setQuery(uri->getQuery());
+    req->setQuery(uri->getQuery());
     req->setFragment(uri->getFragment());
     req->setMethod(method);
     bool has_host = false;
     for(auto& i : headers){
         if(strcasecmp(i.first.c_str(),"connection") == 0){
-            if(strcasecmp(i.second().c_str(),"keep_alive") == 0){
+            if(strcasecmp(i.second.c_str(),"keep_alive") == 0){
                 req->setClose(false);
             }
             continue;
@@ -242,7 +242,7 @@ HttpResult::ptr HttpConnection::DoRequest(HttpRequest::ptr req
     }
 
     sock->setRecvTimeout(timeout_ms);
-    HttpConnect::ptr conn = std::make_shared<HttpConnection>(sock);
+    HttpConnection::ptr conn = std::make_shared<HttpConnection>(sock);
     int rt = conn->sendRequest(req);
     if(rt == 0){
         return std::make_shared<HttpResult>((int)HttpConnection::Error::SEND_CLOSE_BY_PEER
@@ -272,7 +272,7 @@ HttpConnectionPool::HttpConnectionPool(const std::string& host
         ,m_vhost(vhost)
         ,m_port(port)
         ,m_maxSize(max_size)
-        ,m_maxAliverTimer(max_alive_time)
+        ,m_maxAliveTime(max_alive_time)
         ,m_maxRequest(max_request){
 
 
@@ -302,7 +302,7 @@ HttpConnection::ptr HttpConnectionPool::getConnection(){
     }
     m_total -= invalid_conns.size();
     if(!ptr){
-        IPAddress::ptr addr = Address::LookupAddress(m_host);
+        IPAddress::ptr addr = Address::LookupAnyIPAddress(m_host);
         if(!addr){
             SYLAR_LOG_ERROR(g_logger) << "get addr fail: " << m_host;
             return nullptr;
@@ -321,14 +321,14 @@ HttpConnection::ptr HttpConnectionPool::getConnection(){
         ptr = new HttpConnection(sock);
         m_total++;
     }
-    return HttpConnection::ptr(ptr,std::bind(&HttpConnctionPool::ReleasePtr
+    return HttpConnection::ptr(ptr,std::bind(&HttpConnectionPool::ReleasePtr
                         ,std::placeholders::_1,this));
 }
 HttpResult::ptr HttpConnectionPool::doGet(const std::string& uri
              , uint64_t timeout_ms
              , const std::map<std::string,std::string>&headers
              , const std::string& body){
-    return doRequest(HttpMethod::GET,url,timeout_ms,headers,body);
+    return doRequest(HttpMethod::GET,uri,timeout_ms,headers,body);
 }
 
 HttpResult::ptr HttpConnectionPool::doGet(Uri::ptr uri
@@ -337,7 +337,7 @@ HttpResult::ptr HttpConnectionPool::doGet(Uri::ptr uri
              , const std::string& body){
     std::stringstream ss;
     ss << uri->getPath()
-        << (uri->getQuery() : "" : "?")
+        << (uri->getQuery().empty() ? "" : "?")
         << uri->getQuery()
         << (uri->getFragment().empty() ? "" : "#")
         << uri->getFragment();
@@ -349,7 +349,7 @@ HttpResult::ptr HttpConnectionPool::doPost(const std::string& uri
              , uint64_t timeout_ms
              , const std::map<std::string,std::string>&headers
              , const std::string& body){
-    return doRequest(HttpMethod::POST,url,timeout_ms,headers,body);
+    return doRequest(HttpMethod::POST,uri,timeout_ms,headers,body);
 }
 HttpResult::ptr HttpConnectionPool::doPost(Uri::ptr uri
              , uint64_t timeout_ms
@@ -357,7 +357,7 @@ HttpResult::ptr HttpConnectionPool::doPost(Uri::ptr uri
              , const std::string& body){
     std::stringstream ss;
     ss << uri->getPath()
-        << (uri->getQuery() : "" : "?")
+        << (uri->getQuery().empty() ? "" : "?")
         << uri->getQuery()
         << (uri->getFragment().empty() ? "" : "#")
         << uri->getFragment();
@@ -368,7 +368,7 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpMethod method
              , const std::string& uri
              , uint64_t timeout_ms
              , const std::map<std::string,std::string>&headers
-             , const std::string& body = ""){
+             , const std::string& body){
 HttpRequest::ptr req = std::make_shared<HttpRequest>();
     req->setPath(uri);
     req->setMethod(method);
@@ -376,7 +376,7 @@ HttpRequest::ptr req = std::make_shared<HttpRequest>();
     bool has_host = false;
     for(auto& i : headers){
         if(strcasecmp(i.first.c_str(),"connection") == 0){
-            if(strcasecmp(i.second().c_str(),"keep_alive") == 0){
+            if(strcasecmp(i.second.c_str(),"keep_alive") == 0){
                 req->setClose(false);
             }
             continue;
@@ -401,10 +401,10 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpMethod method
              , Uri::ptr uri
              , uint64_t timeout_ms
              , const std::map<std::string,std::string>&headers
-             , const std::string& body = ""){
+             , const std::string& body){
     std::stringstream ss;
     ss << uri->getPath()
-        << (uri->getQuery() : "" : "?")
+        << (uri->getQuery().empty() ? "" : "?")
         << uri->getQuery()
         << (uri->getFragment().empty() ? "" : "#")
         << uri->getFragment();
@@ -412,7 +412,7 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpMethod method
 }
 HttpResult::ptr HttpConnectionPool::doRequest(HttpRequest::ptr req
                     , uint64_t timeout_ms){
-    auto conn = getCommection();
+    auto conn = getConnection();
     if(!conn){
         return std::make_shared<HttpResult>((int)HttpResult::Error::POOL_GET_CONNECTION
                 , nullptr, "pool host:" + m_host + "post: " + std::to_string(m_port));
@@ -447,8 +447,8 @@ HttpResult::ptr HttpConnectionPool::doRequest(HttpRequest::ptr req
 void HttpConnectionPool::ReleasePtr(HttpConnection* ptr,HttpConnectionPool * pool){
     ++ptr->m_request;
     if(!ptr->isConnected()
-            || ((ptr->m_createTime + pool->m_maxAliveTimer) >= sylar::GetCurrentMS())
-            || (ptr->m_request >= pool->m_maxRequest)) {
+            || ((ptr->m_createTime + pool->m_maxAliveTime) >= sylar::GetCurrentMS())
+            || ((int32_t)ptr->m_request >= pool->m_maxRequest)) {
         delete ptr;
         --pool->m_total;
         return;

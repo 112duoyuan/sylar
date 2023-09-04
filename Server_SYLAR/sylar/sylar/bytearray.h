@@ -91,7 +91,6 @@ public:
 
     void write(const void*buf,size_t size);
     void read(void * buf,size_t size);
-    void read(void * buf,size_t size);
     void read(void * buf,size_t size,size_t position) const;
 
     size_t getPosition() const {return m_position;}

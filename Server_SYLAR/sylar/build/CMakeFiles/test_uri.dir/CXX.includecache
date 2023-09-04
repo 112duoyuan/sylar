@@ -1,0 +1,46 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/xu/Server_SYLAR/sylar/sylar/address.h
+memory
+-
+string
+-
+iostream
+-
+sys/types.h
+-
+sys/socket.h
+-
+arpa/inet.h
+-
+unistd.h
+-
+sys/un.h
+-
+vector
+-
+map
+-
+
+/home/xu/Server_SYLAR/sylar/sylar/uri.h
+memory
+-
+string
+-
+stdint.h
+-
+address.h
+/home/xu/Server_SYLAR/sylar/sylar/address.h
+
+/home/xu/Server_SYLAR/sylar/tests/test_uri.cc
+../sylar/uri.h
+/home/xu/Server_SYLAR/sylar/sylar/uri.h
+iostream
+-
+

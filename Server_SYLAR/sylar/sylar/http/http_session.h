@@ -1,7 +1,7 @@
 #ifndef __SYLAR_HTTP_SESSION_H__
 #define __SYLAR_HTTP_SESSION_H__
 
-#include "sylar/socket_steram.h"
+#include "../socket_steram.h"
 #include "http.h"
 
 namespace sylar{

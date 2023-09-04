@@ -46,7 +46,7 @@ HttpRequest::ptr HttpSession::recvRequest(){
         std::string body;
         body.resize(length);
         int len = 0;
-        if(length >=  offset){
+        if((int)length >=  offset){
             memcpy(&body[0],data,offset);
             len = offset;
         }else{
@@ -68,7 +68,7 @@ int HttpSession::sendResponse(HttpResponse::ptr rsp){
     std::stringstream ss;
     ss << *rsp;
     std::string data = ss.str();
-    writeFixSize(data.c_str(),data.size());
+    return writeFixSize(data.c_str(),data.size());
 }
 
 

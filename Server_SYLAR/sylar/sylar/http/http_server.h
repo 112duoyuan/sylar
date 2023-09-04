@@ -1,7 +1,7 @@
 #ifndef __HTTP_SERVER_H__
 #define __HTTP_SERVER_H__
 
-#include "sylar/tcp_server.h"
+#include "../tcp_server.h"
 #include "http_session.h"
 #include "servlet.h"
 

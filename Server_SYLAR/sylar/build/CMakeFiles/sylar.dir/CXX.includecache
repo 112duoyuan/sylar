@@ -41,6 +41,10 @@ unistd.h
 -
 sys/un.h
 -
+vector
+-
+map
+-
 
 /home/xu/Server_SYLAR/sylar/sylar/bytearray.cc
 bytearray.h
@@ -235,24 +239,34 @@ ctype.h
 -
 string.h
 -
-dbg.h
--
 
 /home/xu/Server_SYLAR/sylar/sylar/http/http_connection.cc
-http/http_connection.h
-/home/xu/Server_SYLAR/sylar/sylar/http/http/http_connection.h
+http_connection.h
+/home/xu/Server_SYLAR/sylar/sylar/http/http_connection.h
 http_parser.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.h
 ../log.h
 /home/xu/Server_SYLAR/sylar/sylar/log.h
 
+/home/xu/Server_SYLAR/sylar/sylar/http/http_connection.h
+../socket_steram.h
+/home/xu/Server_SYLAR/sylar/sylar/socket_steram.h
+http.h
+/home/xu/Server_SYLAR/sylar/sylar/http/http.h
+../uri.h
+/home/xu/Server_SYLAR/sylar/sylar/uri.h
+../thread.h
+/home/xu/Server_SYLAR/sylar/sylar/thread.h
+list
+-
+
 /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc
 http_parser.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.h
-sylar/log.h
-/home/xu/Server_SYLAR/sylar/sylar/http/sylar/log.h
-sylar/config.h
-/home/xu/Server_SYLAR/sylar/sylar/http/sylar/config.h
+../log.h
+/home/xu/Server_SYLAR/sylar/sylar/log.h
+../config.h
+/home/xu/Server_SYLAR/sylar/sylar/config.h
 string.h
 -
 
@@ -267,12 +281,12 @@ http.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_server.cc
 http_server.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_server.h
-log.h
-/home/xu/Server_SYLAR/sylar/sylar/http/log.h
+../log.h
+/home/xu/Server_SYLAR/sylar/sylar/log.h
 
 /home/xu/Server_SYLAR/sylar/sylar/http/http_server.h
-sylar/tcp_server.h
-/home/xu/Server_SYLAR/sylar/sylar/http/sylar/tcp_server.h
+../tcp_server.h
+/home/xu/Server_SYLAR/sylar/sylar/tcp_server.h
 http_session.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_session.h
 servlet.h
@@ -285,8 +299,8 @@ http_parser.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.h
 
 /home/xu/Server_SYLAR/sylar/sylar/http/http_session.h
-sylar/socket_steram.h
-/home/xu/Server_SYLAR/sylar/sylar/http/sylar/socket_steram.h
+../socket_steram.h
+/home/xu/Server_SYLAR/sylar/sylar/socket_steram.h
 http.h
 /home/xu/Server_SYLAR/sylar/sylar/http/http.h
 
@@ -307,8 +321,8 @@ ctype.h
 -
 string.h
 -
-dbg.h
-/home/xu/Server_SYLAR/sylar/sylar/http/dbg.h
+cerrno
+-
 
 /home/xu/Server_SYLAR/sylar/sylar/http/servlet.cc
 servlet.h
@@ -331,8 +345,8 @@ vector
 -
 unordered_map
 -
-sylar/thread.h
-/home/xu/Server_SYLAR/sylar/sylar/http/sylar/thread.h
+../thread.h
+/home/xu/Server_SYLAR/sylar/sylar/thread.h
 
 /home/xu/Server_SYLAR/sylar/sylar/iomanager.cc
 iomanager.h

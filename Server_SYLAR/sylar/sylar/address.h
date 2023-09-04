@@ -10,6 +10,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 #include <sys/un.h>
+#include <vector>
+#include <map>
 
 
 namespace sylar
@@ -68,7 +70,7 @@ public:
     static IPv4Address::ptr Create(const char * address,uint16_t port = 0);
 
     IPv4Address(uint32_t address= INADDR_ANY,uint16_t port = 0);
-    IPv4Address::IPv4Address(const sockaddr_in& address);
+    IPv4Address(const sockaddr_in& address);
     const sockaddr* getAddr() const override;
     sockaddr* getAddr() override;
     socklen_t getAddrLen() const override;
@@ -114,7 +116,7 @@ private:
 class UnixAddress : public Address{
 public:
     typedef std::shared_ptr<UnixAddress>ptr;
-    UnixAddress::UnixAddress();
+    UnixAddress();
     UnixAddress(const std::string& path);
     sockaddr* getAddr() override;
     const sockaddr* getAddr() const override;

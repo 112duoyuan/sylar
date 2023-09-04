@@ -40,7 +40,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <string.h>
-#include <dbg.h>
+//#include <dbg.h>
 
 #define LEN(AT, FPC) (FPC - buffer - parser->AT)
 #define MARK(M,FPC) (parser->M = (FPC) - buffer)

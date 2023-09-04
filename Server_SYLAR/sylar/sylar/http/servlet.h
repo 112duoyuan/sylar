@@ -8,7 +8,7 @@
 #include "http.h"
 #include <vector>
 #include <unordered_map>
-#include "sylar/thread.h"
+#include "../thread.h"
 
 namespace sylar{
 namespace http{

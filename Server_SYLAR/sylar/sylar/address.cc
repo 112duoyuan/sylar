@@ -256,7 +256,7 @@ IPAddress::ptr IPAddress::Create(const char * address,uint16_t port){
 }
 
 
-IPv4Address::ptr IPv4Address::Create(const char * address,uint16_t port = 0){
+IPv4Address::ptr IPv4Address::Create(const char * address,uint16_t port){
     IPv4Address::ptr rt(new IPv4Address);
     rt->m_addr.sin_port = byteswapOnLittleEndian(port);
     int result = inet_pton(AF_INET,address,&rt->m_addr.sin_addr);

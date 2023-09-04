@@ -1,6 +1,6 @@
 #include "http_parser.h"
-#include "sylar/log.h"
-#include "sylar/config.h"
+#include "../log.h"
+#include "../config.h"
 #include <string.h>
 
 namespace sylar{
@@ -40,38 +40,38 @@ uint64_t HttpResponseParser::GetHttpResponseMaxBodySize(){
     return s_http_response_max_body_size;
 }
 namespace{
-static _RequestSizeIniter{
-        _RequestSizeIniter(){
-        s_http_request_buffer_size = g_http_request_buffer_size->getValue();
-        s_http_request_max_body_size = g_http_request_max_body_size->getValue();
+struct _RequestSizeIniter{
+    _RequestSizeIniter(){
+    s_http_request_buffer_size = g_http_request_buffer_size->getValue();
+    s_http_request_max_body_size = g_http_request_max_body_size->getValue();
 
-        s_http_response_buffer_size = s_http_response_buffer_size->getValue();
-        s_http_response_max_body_size = s_http_response_max_body_size->getValue();
+    s_http_response_buffer_size = g_http_response_buffer_size->getValue();
+    s_http_response_max_body_size = g_http_response_max_body_size->getValue();
 
-        g_http_request_buffer_size->addListener(
-            [](const uint64_t& ov,const uint64_t& nv){
-                s_http_request_buffer_size =nv;
-        });
-        g_http_request_max_body_size->addListener(
-            [](const uint64_t& ov,const uint64_t&nv){
-                s_http_request_max_body_size = nv;
-        });
+    g_http_request_buffer_size->addListener(
+        [](const uint64_t& ov,const uint64_t& nv){
+            s_http_request_buffer_size =nv;
+    });
+    g_http_request_max_body_size->addListener(
+        [](const uint64_t& ov,const uint64_t&nv){
+            s_http_request_max_body_size = nv;
+    });
 
-        s_http_response_buffer_size->addListener(
-            [](const uint64_t& ov,const uint64_t& nv){
-                s_http_response_buffer_size =nv;
-        });
-        s_http_response_max_body_size->addListener(
-            [](const uint64_t& ov,const uint64_t&nv){
-                s_http_response_max_body_size = nv;
-        });
-    }
+    g_http_response_buffer_size->addListener(
+        [](const uint64_t& ov,const uint64_t& nv){
+            s_http_response_buffer_size =nv;
+    });
+    g_http_response_max_body_size->addListener(
+        [](const uint64_t& ov,const uint64_t&nv){
+            s_http_response_max_body_size = nv;
+    });
+}
 };
 static _RequestSizeIniter _init;
 }
 
 void on_request_method(void *data,const char * at,size_t length){
-    HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
+    HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     HttpMethod m = CharsToHttpMethod(at);
 
     if(m == HttpMethod::INVALID_METHOD){
@@ -86,19 +86,20 @@ void on_request_uri(void *data,const char * at,size_t length){
     
 }
 void on_request_path(void *data,const char * at,size_t length){
-    HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
+    HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setPath(std::string(at,length));
 }
 void on_request_fragment(void *data,const char * at,size_t length){
-    HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
+    HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setFragment(std::string(at,length));
 }
 void on_request_query(void *data,const char * at,size_t length){
-    HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
+    HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setQuery(std::string(at,length));
 }
 void on_request_version(void *data,const char * at,size_t length){
     uint8_t v= 0;
+    HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     if(strncmp(at,"HTTP/1.1",length) == 0){
         v = 0x11;
     }else if(strncmp(at,"HTTP/1.0",length) == 0){
@@ -109,7 +110,6 @@ void on_request_version(void *data,const char * at,size_t length){
         parser->setError(1001);
         return;
     }
-    HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
     parser->getData()->setVerion(v);
 }
 void on_request_header_done(void *data,const char * at,size_t length){
@@ -117,6 +117,7 @@ void on_request_header_done(void *data,const char * at,size_t length){
 }
 void on_request_http_field(void *data,const char * field,size_t flen,const char *value
         ,size_t vlen){
+    HttpRequestParser* parser = static_cast<HttpRequestParser*>(data);
     if(flen == 0){
         SYLAR_LOG_WARN(g_logger) << "invalid http request field length == 0";
         parser->setError(1002);
@@ -170,7 +171,6 @@ void on_response_status(void * data,const char* at,size_t length){
     parser->getData()->setStatus(status);
 }
 void on_response_chunk(void * data,const char* at,size_t length){
-    HttpResponseParser* parser = static_cast<HttpResponseParser*>(data);
     uint8_t v = 0;
     if(strncmp(at,"HTTP/1.1",length) == 0){
         v = 0x11;
@@ -178,10 +178,10 @@ void on_response_chunk(void * data,const char* at,size_t length){
         v = 0x10;
     }else
         return;
-
 }
+
 void on_response_version(void * data,const char* at,size_t length){
-    HttpResponseParser * parser = static_cast<HttpResponseParser*>(date);
+    HttpResponseParser * parser = static_cast<HttpResponseParser*>(data);
     uint8_t v= 0;
     if(strncmp(at,"HTTP/1.1",length) == 0){
         v = 0x11;
@@ -193,7 +193,7 @@ void on_response_version(void * data,const char* at,size_t length){
         parser->setError(1001);
         return;
     }
-    parser->getData()->setVerion(v);
+    parser->getData()->setVersion(v);
 }
 void on_response_header_done(void * data,const char* at,size_t length){
 
@@ -235,7 +235,7 @@ size_t HttpResponseParser::execute(char * data,size_t len,bool chunk){
     return offset;
 }
 int HttpResponseParser::isFinished(){
-    return http_client_parser_finish(&m_parser); 
+    return httpclient_parser_finish(&m_parser); 
 }
 int HttpResponseParser::hasError(){
     return m_error || httpclient_parser_has_error(&m_parser);
