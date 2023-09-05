@@ -348,6 +348,19 @@ test_iomanager/fast:
 .PHONY : test_iomanager/fast
 
 #=============================================================================
+# Target rules for targets named test_yml
+
+# Build rule for target.
+test_yml: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_yml
+.PHONY : test_yml
+
+# fast build rule for target.
+test_yml/fast:
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/build
+.PHONY : test_yml/fast
+
+#=============================================================================
 # Target rules for targets named test_address
 
 # Build rule for target.
@@ -1521,6 +1534,33 @@ tests/test_util.cc.s:
 	$(MAKE) -f CMakeFiles/test_util.dir/build.make CMakeFiles/test_util.dir/tests/test_util.cc.s
 .PHONY : tests/test_util.cc.s
 
+tests/test_yml.o: tests/test_yml.cc.o
+
+.PHONY : tests/test_yml.o
+
+# target to build an object file
+tests/test_yml.cc.o:
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/tests/test_yml.cc.o
+.PHONY : tests/test_yml.cc.o
+
+tests/test_yml.i: tests/test_yml.cc.i
+
+.PHONY : tests/test_yml.i
+
+# target to preprocess a source file
+tests/test_yml.cc.i:
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/tests/test_yml.cc.i
+.PHONY : tests/test_yml.cc.i
+
+tests/test_yml.s: tests/test_yml.cc.s
+
+.PHONY : tests/test_yml.s
+
+# target to generate assembly for a file
+tests/test_yml.cc.s:
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/tests/test_yml.cc.s
+.PHONY : tests/test_yml.cc.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -1547,6 +1587,7 @@ help:
 	@echo "... test_http_connection"
 	@echo "... test_scheduler"
 	@echo "... test_iomanager"
+	@echo "... test_yml"
 	@echo "... test_address"
 	@echo "... sylar/address.o"
 	@echo "... sylar/address.i"
@@ -1677,6 +1718,9 @@ help:
 	@echo "... tests/test_util.o"
 	@echo "... tests/test_util.i"
 	@echo "... tests/test_util.s"
+	@echo "... tests/test_yml.o"
+	@echo "... tests/test_yml.i"
+	@echo "... tests/test_yml.s"
 .PHONY : help
 
 

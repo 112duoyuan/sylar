@@ -7,18 +7,19 @@ namespace sylar{
 namespace http{
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
+
 static sylar::ConfigVar<uint64_t>::ptr g_http_request_buffer_size =
     sylar::Config::Lookup("http.request.buffer_size"
                     ,(uint64_t)(4 * 1024),"http request buffer size");
 static sylar::ConfigVar<uint64_t>::ptr g_http_request_max_body_size = 
-    sylar::Config::Lookup("http.request.buffer_size"
+    sylar::Config::Lookup("http.request.max_buffer_size"
                     , (uint64_t)(64 * 1024 * 1024),"http request max body_size");
 
 static sylar::ConfigVar<uint64_t>::ptr g_http_response_buffer_size =
     sylar::Config::Lookup("http.response.buffer_size"
                     ,(uint64_t)(4 * 1024),"http resonse buffer size");
 static sylar::ConfigVar<uint64_t>::ptr g_http_response_max_body_size = 
-    sylar::Config::Lookup("http.response.buffer_size"
+    sylar::Config::Lookup("http.max_response.buffer_size"
                     , (uint64_t)(64 * 1024 * 1024),"http resonse max body_size");
 
 static uint64_t s_http_response_buffer_size = 0;
@@ -172,6 +173,7 @@ void on_response_status(void * data,const char* at,size_t length){
 }
 void on_response_chunk(void * data,const char* at,size_t length){
     uint8_t v = 0;
+    v= v;
     if(strncmp(at,"HTTP/1.1",length) == 0){
         v = 0x11;
     }else if(strncmp(at,"HTTP/1.0",length) == 0){

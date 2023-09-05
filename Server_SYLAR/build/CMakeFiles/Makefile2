@@ -729,6 +729,43 @@ clean: CMakeFiles/test_iomanager.dir/clean
 .PHONY : clean
 
 #=============================================================================
+# Target rules for target CMakeFiles/test_yml.dir
+
+# All Build rule for target.
+CMakeFiles/test_yml.dir/all: CMakeFiles/sylar.dir/all
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/depend
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/build
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/xu/Server_SYLAR/build/CMakeFiles --progress-num=66,67 "Built target test_yml"
+.PHONY : CMakeFiles/test_yml.dir/all
+
+# Include target in all.
+all: CMakeFiles/test_yml.dir/all
+
+.PHONY : all
+
+# Build rule for subdir invocation for target.
+CMakeFiles/test_yml.dir/rule: cmake_check_build_system
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xu/Server_SYLAR/build/CMakeFiles 31
+	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/test_yml.dir/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/xu/Server_SYLAR/build/CMakeFiles 0
+.PHONY : CMakeFiles/test_yml.dir/rule
+
+# Convenience name for target.
+test_yml: CMakeFiles/test_yml.dir/rule
+
+.PHONY : test_yml
+
+# clean rule for target.
+CMakeFiles/test_yml.dir/clean:
+	$(MAKE) -f CMakeFiles/test_yml.dir/build.make CMakeFiles/test_yml.dir/clean
+.PHONY : CMakeFiles/test_yml.dir/clean
+
+# clean rule for target.
+clean: CMakeFiles/test_yml.dir/clean
+
+.PHONY : clean
+
+#=============================================================================
 # Target rules for target CMakeFiles/test_address.dir
 
 # All Build rule for target.

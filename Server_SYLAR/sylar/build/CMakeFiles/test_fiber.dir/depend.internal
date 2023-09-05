@@ -6,6 +6,7 @@ CMakeFiles/test_fiber.dir/tests/test_fiber.cc.o
  /home/xu/Server_SYLAR/sylar/sylar/fiber.h
  /home/xu/Server_SYLAR/sylar/sylar/log.h
  /home/xu/Server_SYLAR/sylar/sylar/macro.h
+ /home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
  /home/xu/Server_SYLAR/sylar/sylar/scheduler.h
  /home/xu/Server_SYLAR/sylar/sylar/singleton.h
  /home/xu/Server_SYLAR/sylar/sylar/sylar.h

@@ -1,7 +1,7 @@
 #include <iostream>
-#include "sylar/http/http_connection.h"
-#include "sylar/log.h"
-#include "sylar/iomanager.h"
+#include "../sylar/http/http_connection.h"
+#include "../sylar/log.h"
+#include "../sylar/iomanager.h"
 #include <fstream>
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
@@ -48,8 +48,8 @@ void run(){
     SYLAR_LOG_INFO(g_logger) << "------------------------";
 
     auto r = sylar::http::HttpConnection::DoGet("https://www.sylar.top/blog/",300); 
-    SYLAR_LOG_INFO(g_logger) << "result=" << r->_result
-        << " error=" << r->_error
+    SYLAR_LOG_INFO(g_logger) << "result=" << r->result
+        << " error=" << r->error
         << " rsp=" << (r->response ? r->response->toString() : "");
 }
 int main(int argc,char ** argv){

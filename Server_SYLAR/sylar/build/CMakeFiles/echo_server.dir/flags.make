@@ -6,7 +6,7 @@ CXX_FLAGS =  -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror 
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/xu/Server_SYLAR/sylar/. -I/home/xu/yaml/yaml-cpp-master/include 
+CXX_INCLUDES = -I/home/xu/yaml/yaml-cpp-master/include 
 
 # Custom defines: CMakeFiles/echo_server.dir/sylar/examples/echo_server.cc.o_DEFINES = __FILE__="sylar/examples/echo_server.cc"
 

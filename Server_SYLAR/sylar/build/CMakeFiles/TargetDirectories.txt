@@ -18,4 +18,5 @@
 /home/xu/Server_SYLAR/sylar/build/CMakeFiles/test_http_connection.dir
 /home/xu/Server_SYLAR/sylar/build/CMakeFiles/test_scheduler.dir
 /home/xu/Server_SYLAR/sylar/build/CMakeFiles/test_iomanager.dir
+/home/xu/Server_SYLAR/sylar/build/CMakeFiles/test_yml.dir
 /home/xu/Server_SYLAR/sylar/build/CMakeFiles/test_address.dir

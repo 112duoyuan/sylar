@@ -1,5 +1,5 @@
-#include "sylar/http/http_server.h"
-#include "sylar/log.h"
+#include "../sylar/http/http_server.h"
+#include "../sylar/log.h"
 
 void run(){
     sylar::http::HttpServer::ptr server(new sylar::http::HttpServer);

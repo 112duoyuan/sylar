@@ -1,6 +1,6 @@
-#include "sylar/tcp_server.h"
-#include "sylar/iomanager.h"
-#include "sylar/log.h"
+#include "../sylar/tcp_server.h"
+#include "../sylar/iomanager.h"
+#include "../sylar/log.h"
 #include <vector>
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
@@ -27,5 +27,5 @@ int main(int argc,char ** argv){
     sylar::IOManager iom(2);
     iom.schedule(run);
 
-    return;
+    return 0;
 }

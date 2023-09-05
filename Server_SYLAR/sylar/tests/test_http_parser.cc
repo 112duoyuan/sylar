@@ -1,5 +1,5 @@
-#include "sylar/http/http11_parser.h"
-#include "sylar/log.h"
+#include "../sylar/http/http_parser.h"
+#include "../sylar/log.h"
 
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
@@ -11,7 +11,7 @@ const char test_request_data[] = "POST / HTTP/1.1\r\n"
 void test_request(){
     sylar::http::HttpRequestParser parser;
     std::string tmp = test_request_data;
-    size_t s = parser.execute(tmp[0],tmp.size());
+    size_t s = parser.execute(&tmp[0],tmp.size());
     SYLAR_LOG_INFO(g_logger) << "execute rt =" << s 
         << "has error=" << parser.hasError()
         << "is_finished=" << parser.isFinished()
@@ -38,7 +38,7 @@ const char test_response_data[] = "HTTP/1.1 200 OK\r\n"
 void test_response(){
     sylar::http::HttpResponseParser parser;
     std::string tmp = test_response_data;
-    size_t s = parser.execute(&tmp[0],tmp.size());
+    size_t s = parser.execute(&tmp[0],tmp.size(),true);
     --s;
     SYLAR_LOG_ERROR(g_logger)<< "execute rt=" << s  
     << " has_error=" << parser.hasError()

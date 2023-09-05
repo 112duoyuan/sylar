@@ -80,6 +80,8 @@ assert.h
 util.h
 /home/xu/Server_SYLAR/sylar/sylar/util.h
 
+/home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
+
 /home/xu/Server_SYLAR/sylar/sylar/scheduler.h
 memory
 -
@@ -127,6 +129,8 @@ semaphore.h
 -
 atomic
 -
+noncopyable.h
+/home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
 
 /home/xu/Server_SYLAR/sylar/sylar/util.h
 pthread.h

@@ -349,20 +349,20 @@ public:
             //类型强制转换 智能指针转换
             auto tmp = std::dynamic_pointer_cast<ConfigVar<T>>(it->second);
             if(tmp){
-                SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists";
+                SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << " exists";
                 return tmp;
             } else{
                 std::cout << "name " << name << std::endl;
                 std::cout << typeid(T).name() << std::endl;
                 std::cout << it->second->getTypeName() << std::endl;
 
-                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name= " << name << "exists but type not"
+                SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name= " << name << " exists but type not"
                         << typeid(T).name() << " real_type = " << it->second->getTypeName()
                             <<" " << it->second->toString();
                 return nullptr;
             }
         }
-        if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._012345678") 
+        if(name.find_first_not_of("abcdefghijklmnopqrstuvwxyz._0123456789") 
             != std::string::npos) {
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name invalid " << name;
                 throw std::invalid_argument(name);

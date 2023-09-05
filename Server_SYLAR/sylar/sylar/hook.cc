@@ -25,6 +25,7 @@ static thread_local bool t_hook_enable = false;
     XX(readv) \
     XX(recv) \
     XX(recvfrom) \
+    XX(recvmsg) \
     XX(write) \
     XX(writev) \
     XX(send) \

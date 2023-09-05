@@ -4,6 +4,7 @@
 CMakeFiles/test_config.dir/tests/test_config.cc.o
  /home/xu/Server_SYLAR/sylar/sylar/config.h
  /home/xu/Server_SYLAR/sylar/sylar/log.h
+ /home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
  /home/xu/Server_SYLAR/sylar/sylar/singleton.h
  /home/xu/Server_SYLAR/sylar/sylar/thread.h
  /home/xu/Server_SYLAR/sylar/sylar/util.h

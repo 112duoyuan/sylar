@@ -3,8 +3,8 @@
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 void test(){
-#define XX(type,len,write_fun,read_fun,base_len) {\ 
-    std::vector<type> vec; \ 
+#define XX(type,len,write_fun,read_fun,base_len) { \
+    std::vector<type> vec; \
     for(int i = 0;i < len; ++i){\
         vec.push_back(rand()); \
     } \
@@ -35,8 +35,8 @@ void test(){
 
 #undef XX
 
-#define XX(type,len,write_fun,read_fun,base_len) {\ 
-    std::vector<type> vec; \ 
+#define XX(type,len,write_fun,read_fun,base_len) {\
+    std::vector<type> vec; \
     for(int i = 0;i < len; ++i){\
         vec.push_back(rand()); \
     } \

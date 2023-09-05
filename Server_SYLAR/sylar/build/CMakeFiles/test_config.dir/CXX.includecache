@@ -62,6 +62,8 @@ singleton.h
 thread.h
 /home/xu/Server_SYLAR/sylar/sylar/thread.h
 
+/home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
+
 /home/xu/Server_SYLAR/sylar/sylar/singleton.h
 memory
 -
@@ -79,6 +81,8 @@ semaphore.h
 -
 atomic
 -
+noncopyable.h
+/home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
 
 /home/xu/Server_SYLAR/sylar/sylar/util.h
 pthread.h

@@ -6,7 +6,7 @@ CXX_FLAGS =  -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror 
 
 CXX_DEFINES = -Dsylar_EXPORTS
 
-CXX_INCLUDES = -I/home/xu/Server_SYLAR/sylar/. -I/home/xu/yaml/yaml-cpp-master/include 
+CXX_INCLUDES = -I/home/xu/yaml/yaml-cpp-master/include 
 
 # Custom defines: CMakeFiles/sylar.dir/sylar/fd_manager.cc.o_DEFINES = __FILE__="sylar/fd_manager.cc"
 

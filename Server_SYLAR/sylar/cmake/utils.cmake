@@ -1,10 +1,13 @@
 function(force_redefine_file_macro_for_sources targetname)
+    #get_target_property(<VAR> target property)
+    #从target获取属性
     get_target_property(source_files "${targetname}" SOURCES)
     foreach(sourcefile ${source_files})
         # Get source file's current list of compile definitions.
+        #获取属性值
         get_property(defs SOURCE "${sourcefile}"
             PROPERTY COMPILE_DEFINITIONS)
-        # Get the relative path of the source file in project directory
+        # 获取文件绝对路径
         get_filename_component(filepath "${sourcefile}" ABSOLUTE)
         string(REPLACE ${PROJECT_SOURCE_DIR}/ "" relpath ${filepath})
         list(APPEND defs "__FILE__=\"${relpath}\"")
@@ -19,17 +22,18 @@ endfunction()
 function(ragelmaker src_rl outputlist outputdir)
     #Create a custom build step that will call ragel on the provided src_rl file.
     #The output .cpp file will be appended to the variable name passed in outputlist.
-
     get_filename_component(src_file ${src_rl} NAME_WE)
 
     set(rl_out ${outputdir}/${src_file}.rl.cc)
 
     #adding to the list inside a function takes special care, we cannot use list(APPEND...)
     #because the results are local scope only
+    #复制
     set(${outputlist} ${${outputlist}} ${rl_out} PARENT_SCOPE)
 
     #Warning: The " -S -M -l -C -T0  --error-format=msvc" are added to match existing window invocation
     #we might want something different for mac and linux
+    #自定义命令
     add_custom_command(
         OUTPUT ${rl_out}
         COMMAND cd ${outputdir}

@@ -6,7 +6,7 @@ CXX_FLAGS =  -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror 
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -I/home/xu/Server_SYLAR/sylar/. -I/home/xu/yaml/yaml-cpp-master/include 
+CXX_INCLUDES = -I/home/xu/yaml/yaml-cpp-master/include 
 
 # Custom defines: CMakeFiles/test_http_server.dir/tests/test_http_server.cc.o_DEFINES = __FILE__="tests/test_http_server.cc"
 

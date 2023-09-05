@@ -46,6 +46,7 @@ HttpRequest::ptr HttpSession::recvRequest(){
         std::string body;
         body.resize(length);
         int len = 0;
+        len = len;
         if((int)length >=  offset){
             memcpy(&body[0],data,offset);
             len = offset;
