@@ -4,6 +4,7 @@
 
 #include <time.h>
 
+
 int main(int argc, char** argv) {
     sylar::Logger::ptr logger(new sylar::Logger);
     sylar::LogFormatter::ptr fmt(new sylar::LogFormatter("%d{%Y-%m-%d %H:%M:%S}%T%t%T%F%T[%p]%T[%c]%T%f:%l%T%m%n"));

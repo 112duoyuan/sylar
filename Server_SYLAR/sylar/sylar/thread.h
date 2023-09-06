@@ -7,8 +7,10 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <atomic>
+#include <iostream>
 
 #include "noncopyable.h"
+
 
 namespace sylar{
 //信号量
@@ -18,6 +20,9 @@ public:
     ~Semaphore();
     void wait();
     void notify();
+    void getValue(int * val){
+        sem_getvalue(&m_semaphore,val);
+    }
 private:
 
     sem_t m_semaphore;
@@ -28,8 +33,8 @@ struct ScopedLockImpl{
 public:
     ScopedLockImpl(T &mutex)
         :m_mutex(mutex){
-            m_mutex.lock();
-            m_locked = true;
+            m_locked = false;
+            lock();
         }
         ~ScopedLockImpl(){
             unlock();
@@ -117,9 +122,11 @@ public:
     }
     void lock(){
         pthread_mutex_lock(&m_mutex);
+        std::cout << "lock" << std::endl;
     }
     void unlock(){
         pthread_mutex_unlock(&m_mutex);
+        std::cout << "unlock" << std::endl;
     }
 private:
     pthread_mutex_t m_mutex;

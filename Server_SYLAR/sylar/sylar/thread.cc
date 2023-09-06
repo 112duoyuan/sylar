@@ -57,6 +57,8 @@ Thread::Thread(std::function<void()> cb, const std::string&name)
         throw std::logic_error("pthread_create error");
     }
     m_semaphore.wait();
+    int num;
+    m_semaphore.getValue(&num);
 
 }
 

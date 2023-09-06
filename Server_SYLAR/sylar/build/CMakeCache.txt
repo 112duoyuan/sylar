@@ -17,8 +17,8 @@
 //The directory containing a CMake configuration file for /usr/local/bin/ragel.
 /usr/local/bin/ragel_DIR:PATH=/usr/local/bin/ragel_DIR-NOTFOUND
 
-//ON for complile test
-BUILD_TEST:BOOL=OFF
+//No help, variable specified on the command line.
+BUILD_TEST:UNINITIALIZED=OFF
 
 //Path to a program.
 CMAKE_AR:FILEPATH=/usr/bin/ar

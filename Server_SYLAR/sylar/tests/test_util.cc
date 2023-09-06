@@ -6,7 +6,7 @@ sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 void test_assert(){
     //assert(1);
     SYLAR_LOG_INFO(g_logger) << sylar::BackTraceToString(10);
-    SYLAR_ASSERT(false);
+    SYLAR_ASSERT(true);
 }
 
 

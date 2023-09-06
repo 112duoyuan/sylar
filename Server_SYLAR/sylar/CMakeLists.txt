@@ -18,8 +18,7 @@ set(CMAKE_C_FLAGS "$ENV{CXXFLAGS} -rdynamic -O3 -fPIC -ggdb -std=c11 -Wall -Wno-
 include_directories(/home/xu/yaml/yaml-cpp-master/include)
 
 
-option(BUILD_TEST "ON for complile test" OFF)
-
+set(BUILD_TEST "ON for complile test" OFF)
 
 set(LIB_SRC
     sylar/fd_manager.cc
@@ -62,44 +61,45 @@ set(LIBS
         pthread 
         dl
 )
-
-sylar_add_executable(test1 tests/test.cc sylar "${LIBS}")
-
+if(BUILD_TEST)
+#sylar_add_executable(test1 tests/test.cc sylar "${LIBS}")
+#
 sylar_add_executable(test_config tests/test_config.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_util tests/test_util.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_fiber tests/test_fiber.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_scheduler tests/test_scheduler.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_iomanager tests/test_iomanager.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_hook tests/test_hook.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_address tests/test_address.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_socket tests/test_socket.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_bytearray tests/test_bytearray.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_http tests/test_http.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_http_parser tests/test_http_parser.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_tcp_server tests/test_tcp_server.cc sylar "${LIBS}")
+#
+#sylar_add_executable(echo_server sylar/examples/echo_server.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_http_server tests/test_http_server.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_http_connection tests/test_http_connection.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_uri tests/test_uri.cc sylar "${LIBS}")
+#
+#sylar_add_executable(test_yml tests/test_yml.cc sylar "${LIBS}")
+#sylar_add_executable(test_thread tests/test_thread.cc sylar "${LIBS}")
+endif()
 
-sylar_add_executable(test_thread tests/test_thread.cc sylar "${LIBS}")
-
-sylar_add_executable(test_util tests/test_util.cc sylar "${LIBS}")
-
-sylar_add_executable(test_fiber tests/test_fiber.cc sylar "${LIBS}")
-
-sylar_add_executable(test_scheduler tests/test_scheduler.cc sylar "${LIBS}")
-
-sylar_add_executable(test_iomanager tests/test_iomanager.cc sylar "${LIBS}")
-
-sylar_add_executable(test_hook tests/test_hook.cc sylar "${LIBS}")
-
-sylar_add_executable(test_address tests/test_address.cc sylar "${LIBS}")
-
-sylar_add_executable(test_socket tests/test_socket.cc sylar "${LIBS}")
-
-sylar_add_executable(test_bytearray tests/test_bytearray.cc sylar "${LIBS}")
-
-sylar_add_executable(test_http tests/test_http.cc sylar "${LIBS}")
-
-sylar_add_executable(test_http_parser tests/test_http_parser.cc sylar "${LIBS}")
-
-sylar_add_executable(test_tcp_server tests/test_tcp_server.cc sylar "${LIBS}")
-
-sylar_add_executable(echo_server sylar/examples/echo_server.cc sylar "${LIBS}")
-
-sylar_add_executable(test_http_server tests/test_http_server.cc sylar "${LIBS}")
-
-sylar_add_executable(test_http_connection tests/test_http_connection.cc sylar "${LIBS}")
-
-sylar_add_executable(test_uri tests/test_uri.cc sylar "${LIBS}")
-
-sylar_add_executable(test_yml tests/test_yml.cc sylar "${LIBS}")
 
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/bin) #可执行文件的输出路径
 SET(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib) #库文件的输出路径

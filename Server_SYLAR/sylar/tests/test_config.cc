@@ -213,9 +213,9 @@ void test_log(){
 
 }
 int main(int argc,char ** argv){
-    //test_config();
+    test_config();
     //test_yaml();
-    //test_class();
+    test_class();
     test_log();
      sylar::Config::Visit([](sylar::ConfigVarBase::ptr var){
         SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "name="<<var->getName()

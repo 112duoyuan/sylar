@@ -195,6 +195,8 @@ semaphore.h
 -
 atomic
 -
+iostream
+-
 noncopyable.h
 /home/xu/Server_SYLAR/sylar/sylar/noncopyable.h
 
