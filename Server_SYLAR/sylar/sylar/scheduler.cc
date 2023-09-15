@@ -2,11 +2,13 @@
 #include "log.h"
 #include "macro.h"
 #include "hook.h"
+#include <iostream>
 
 
 namespace sylar{
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
+//运行的调度器
 static thread_local Scheduler* t_scheduler = nullptr;
 static thread_local Fiber * t_fiber =nullptr;   //一线程上运行的协程
 
@@ -15,6 +17,7 @@ Scheduler::Scheduler(size_t threads, bool use_caller , const std::string& name)
     SYLAR_ASSERT(threads > 0);
 
     if(use_caller){
+        //创建主协程
         sylar::Fiber::GetThis();
         --threads;
 
@@ -47,6 +50,7 @@ Fiber* Scheduler::GetMainFiber(){
 }
 
 void Scheduler::start(){
+    SYLAR_LOG_INFO(g_logger) << "start "; 
     MutexType::Lock lock(m_mutex);
     if(!m_stopping){
         return;
@@ -57,11 +61,12 @@ void Scheduler::start(){
 
     m_threads.resize(m_threadCount);
     for(size_t i = 0; i < m_threadCount;++i){
-        //线程一旦创建就会去执行&Scheduler::run 函数
+        SYLAR_LOG_INFO(g_logger) << "create thread !!! "; 
         m_threads[i].reset(new Thread(std::bind(&Scheduler::run,this)
             ,m_name + "_" + std::to_string(i)));
         m_threadIds.push_back(m_threads[i]->getId());
     }
+    SYLAR_LOG_INFO(g_logger) << "start done !! "; 
 }
 void Scheduler::stop(){
     SYLAR_LOG_INFO(g_logger) << "stop";
@@ -70,10 +75,11 @@ void Scheduler::stop(){
             && m_threadCount == 0
             && (m_rootFiber->getState() == Fiber::TERM
                 || m_rootFiber->getState() == Fiber::INIT)){
-        SYLAR_LOG_INFO(g_logger) << this << "stopped";
+        SYLAR_LOG_INFO(g_logger) << this << " stopped";
         m_stopping = true;
 
         if(stopping()){
+        SYLAR_LOG_INFO(g_logger) << "stop return now!";
             return;
         }
     }
@@ -88,8 +94,7 @@ void Scheduler::stop(){
     for(size_t i = 0; i < m_threadCount;++i){
         tickle();
     }
-    // if(exit_on_this_fiber){
-    // }
+
     if(m_rootFiber){
         tickle();
     }
@@ -103,8 +108,8 @@ void Scheduler::stop(){
         MutexType::Lock lock(m_mutex);
         thrs.swap(m_threads);
     }
-    for(auto& i :thrs){
-        i->join();
+        for(auto& i :thrs){
+            i->join();
     }
 
 }
@@ -113,13 +118,13 @@ void Scheduler::setThis(){
 }
 
 void Scheduler::run(){
-    SYLAR_LOG_INFO(g_logger) << "run";
+    SYLAR_LOG_INFO(g_logger) << "run ";
     set_hook_enable(true);
     setThis();
     if(sylar::GetThreadId() != m_rootThread){
-        t_fiber = Fiber::GetThis().get();
+        t_fiber = Fiber::GetThis().get();//创建主协程
     }
-    //创建协程 idle意为空闲的
+    //创建副协程 idle意为空闲的
 
     Fiber::ptr idle_fiber(new Fiber(std::bind(&Scheduler::idle,this)));
     Fiber::ptr cb_fiber;
@@ -156,6 +161,7 @@ void Scheduler::run(){
         }
         if(ft.fiber && (ft.fiber->getState() != Fiber::TERM
                         || ft.fiber->getState() != Fiber::EXCEPT)){
+            SYLAR_LOG_INFO(g_logger) << "swapin 1";
             ft.fiber->swapIn();
             --m_activeThreadCount;
 
@@ -165,7 +171,7 @@ void Scheduler::run(){
                     && ft.fiber->getState() != Fiber::EXCEPT){
                 ft.fiber->m_state = Fiber::HOLD;
             }
-            ft.reset();
+            ft.reset();//reset会释放之前new的空间
         }else if(ft.cb){
             if(cb_fiber){
                 cb_fiber->reset(ft.cb);
@@ -174,6 +180,7 @@ void Scheduler::run(){
                 cb_fiber.reset(new Fiber(ft.cb));
             }
             ft.reset();
+            SYLAR_LOG_INFO(g_logger) << "swapin 2";
             cb_fiber->swapIn();
             --m_activeThreadCount;
             if(cb_fiber->getState() == Fiber::READY){
@@ -195,8 +202,8 @@ void Scheduler::run(){
                 SYLAR_LOG_INFO(g_logger) << "idle fiber term";
                 break;
             }
-
             m_idleThreadCount++;
+            SYLAR_LOG_INFO(g_logger) << "swapin 3";
             idle_fiber->swapIn();
             --m_idleThreadCount;
             if(idle_fiber->getState() != Fiber::TERM

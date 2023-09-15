@@ -11,7 +11,7 @@
 sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 
 void test_sleep(){
-    sylar::IOManager iom(1);
+    sylar::IOManager iom(1,true,"xu");
     iom.schedule([](){
         sleep(2);
         SYLAR_LOG_INFO(g_logger) << "sleep 2";
@@ -32,11 +32,11 @@ void test_sock(){
     sockaddr_in addr;
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(80);
-    inet_pton(AF_INET,"192.168.182.142",&addr.sin_addr.s_addr);
+    addr.sin_port = htons(84);
+    inet_pton(AF_INET,"14.119.104.254",&addr.sin_addr.s_addr);
     SYLAR_LOG_INFO(g_logger) << "begin connect";
     int rt = connect(sock,(const sockaddr*)&addr,sizeof(addr));
-    SYLAR_LOG_INFO(g_logger) << "connect rt= " << rt << "errno=" << errno;
+    SYLAR_LOG_INFO(g_logger) << "connect rt= " << rt << " errno= " << errno << " strerror "   << strerror(errno); 
 
     if(rt){
         return;
@@ -65,8 +65,8 @@ void test_sock(){
 }
 
 int main(int argc,char ** argv){
-    //test_sleep();
-    test_sock();
+   // test_sleep();
+    //test_sock();
     sylar::IOManager iom;
     iom.schedule(test_sock);
     return 0;

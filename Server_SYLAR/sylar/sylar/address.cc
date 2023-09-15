@@ -232,6 +232,7 @@ IPAddress::ptr IPAddress::Create(const char * address,uint16_t port){
     memset(&hints,0,sizeof(addrinfo));
 //测试一个注释的、一个不注释的
     //hints.ai_flags = AI_NUMERICHOST;
+    //函数返回的是适用于指定主机名和服务名且适合协议族的地址
     hints.ai_family = AF_UNSPEC;
 
     int error = getaddrinfo(address,NULL,&hints,&results);
@@ -333,6 +334,7 @@ uint32_t IPv4Address::getPort() const{
     return byteswapOnLittleEndian(m_addr.sin_port);
 }
 void IPv4Address::setPort(uint16_t v){
+    SYLAR_LOG_INFO(g_logger) << "ipv4 set port";
     m_addr.sin_port = byteswapOnLittleEndian(v);
 }
 //解决明文网络地址Ipv4也是
@@ -435,6 +437,7 @@ uint32_t IPv6Address::getPort() const{
     return byteswapOnLittleEndian(m_addr.sin6_port);
 }
 void IPv6Address::setPort(uint16_t v){
+    SYLAR_LOG_INFO(g_logger)<< "ipv6 set port";
     m_addr.sin6_port = byteswapOnLittleEndian(v);
 }
 

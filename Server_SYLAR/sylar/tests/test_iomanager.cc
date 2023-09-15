@@ -16,12 +16,14 @@ void test_fiber(){
 
     sockaddr_in addr;
     memset(&addr,0,sizeof(addr));
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(80);
-    inet_pton(AF_INET,"192.168.182.142",&addr.sin_addr.s_addr);
-
-    if(!connect(sock,(const sockaddr *)&addr,sizeof(addr))){
-    }else if(errno == EINPROGRESS){
+    addr.sin_family = AF_INET;//IPv4 网络协议的套接字类型
+    addr.sin_port = htons(84);
+    // inet_pton - convert IPv4 and IPv6 addresses from text to binary form
+    inet_pton(AF_INET,"14.119.104.254",&addr.sin_addr.s_addr);
+    SYLAR_LOG_INFO(g_logger) << "connect!!!!!";
+    if(connect(sock,(const sockaddr *)&addr,sizeof(addr)) == 0){
+            SYLAR_LOG_INFO(g_logger) << "connect success!!!!";
+    }else if(errno == EINPROGRESS){//Operation now in progress 操作正在进行中
         SYLAR_LOG_INFO(g_logger) << "add event errno=" <<errno << " "
             << strerror(errno);
         sylar::IOManager::GetThis()->addEvent(sock,sylar::IOManager::READ, [](){
@@ -34,16 +36,15 @@ void test_fiber(){
             close(sock);
         });   
     }else{
-        SYLAR_LOG_INFO(g_logger) << "else" << errno << " "<< strerror(errno);
+        SYLAR_LOG_INFO(g_logger) << "else " << errno << " "<< strerror(errno);
     }
 }
 
 void test(){
     std::cout << "EPOLLIN=" <<EPOLLIN
-                << "EPOLLOUT" << EPOLLOUT <<std::endl;
-    sylar::IOManager iom(2,false);
+                << " EPOLLOUT" << EPOLLOUT <<std::endl;
+    sylar::IOManager iom(2,false,"XU");
     iom.schedule(&test_fiber);
-
 }
 sylar::Timer::ptr s_timer;
 void test_timer(){
@@ -52,14 +53,14 @@ void test_timer(){
         static int i= 0;
         SYLAR_LOG_INFO(g_logger) << "hello timer i= " << i;
         if(++i == 3){
-            //s_timer->cancel();
+            s_timer->cancel();
            s_timer->reset(2000,true);
         }
     },true);
 }
 
 int main(int argc,char ** argv){
-    test();
+    //test();
     test_timer();
     return 0;
 }

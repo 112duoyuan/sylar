@@ -56,10 +56,10 @@ protected:
 
     void contextResize(size_t size);
 private:
-    int m_epfd = 0;
+    int m_epfd = 0;//创建一个epoll句柄
     int m_tickleFds[2];
 
-    std::atomic<size_t> m_pendingEventCount = {0};
+    std::atomic<size_t> m_pendingEventCount = {0};// pending 待定的
     RWMutexType m_mutex;
     std::vector<FdContext*> m_fdContexts;
 };

@@ -64,7 +64,7 @@ set(LIBS
 if(BUILD_TEST)
 #sylar_add_executable(test1 tests/test.cc sylar "${LIBS}")
 #
-sylar_add_executable(test_config tests/test_config.cc sylar "${LIBS}")
+#sylar_add_executable(test_config tests/test_config.cc sylar "${LIBS}")
 #
 #sylar_add_executable(test_util tests/test_util.cc sylar "${LIBS}")
 #
@@ -76,7 +76,7 @@ sylar_add_executable(test_config tests/test_config.cc sylar "${LIBS}")
 #
 #sylar_add_executable(test_hook tests/test_hook.cc sylar "${LIBS}")
 #
-#sylar_add_executable(test_address tests/test_address.cc sylar "${LIBS}")
+sylar_add_executable(test_address tests/test_address.cc sylar "${LIBS}")
 #
 #sylar_add_executable(test_socket tests/test_socket.cc sylar "${LIBS}")
 #

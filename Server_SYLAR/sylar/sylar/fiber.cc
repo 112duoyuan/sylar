@@ -4,6 +4,7 @@
 #include "scheduler.h"
 #include "macro.h"
 #include "log.h"
+#include <iostream>
 namespace sylar{
 
 static Logger::ptr g_logger = SYLAR_LOG_NAME("system");
@@ -60,7 +61,6 @@ Fiber::Fiber(std::function<void()>cb ,size_t stacksize, bool use_caller)
     ,m_cb(cb) {
     ++s_fiber_count;
     m_stacksize = stacksize ? stacksize : g_fiber_statck_size->getValue();
-
     m_stack = StackAllocator::Alloc(m_stacksize);
     //初始化
     if(getcontext(&m_ctx)){
@@ -72,16 +72,15 @@ Fiber::Fiber(std::function<void()>cb ,size_t stacksize, bool use_caller)
     m_ctx.uc_stack.ss_size = m_stacksize;
 
     if(use_caller){
-        //会执行MainFunc函数
+        //会执行MainFunc函数 
+        SYLAR_LOG_INFO(g_logger) << "MainFunc!!";
         makecontext(&m_ctx, &Fiber::MainFunc,0);
     }else{
         //绑定执行函数
         SYLAR_LOG_INFO(g_logger) << "makecontext!!";
         makecontext(&m_ctx, &Fiber::CallerMainFunc,0);
     }
-
     SYLAR_LOG_DEBUG(g_logger) << "Fiber::Fiber id= " << m_id;
-
 }
 Fiber::~Fiber(){
     --s_fiber_count;
@@ -164,7 +163,7 @@ Fiber::ptr Fiber::GetThis(){
     Fiber::ptr main_fiber(new Fiber);
     
     SYLAR_ASSERT(t_fiber == main_fiber.get());
-    t_threadFiber = main_fiber;//Fiber指针
+    t_threadFiber = main_fiber;//设置该线程的主携程 状态为执行
     return t_fiber->shared_from_this();
 
 }
@@ -186,7 +185,7 @@ uint64_t Fiber::Totalfibers(){
 }
 
 void Fiber::MainFunc(){
-    std::cout << "MainFunc" << std::endl;
+    SYLAR_LOG_INFO(g_logger) << "MainFunc";
     Fiber::ptr cur = GetThis();
     SYLAR_ASSERT(cur);
     try{
@@ -211,7 +210,7 @@ void Fiber::MainFunc(){
     SYLAR_ASSERT2(false,"never reach fiber_id= " + std::to_string(raw_ptr->getId()));
 }
 void Fiber::CallerMainFunc(){
-Fiber::ptr cur = GetThis();
+    Fiber::ptr cur = GetThis();
     SYLAR_ASSERT(cur);
     try{
         cur->m_cb();

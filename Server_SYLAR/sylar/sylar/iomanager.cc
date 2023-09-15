@@ -7,6 +7,7 @@
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>
+#include <iostream>
 
 namespace sylar{
 
@@ -56,7 +57,7 @@ IOManager::IOManager(size_t threads ,bool use_caller ,const std::string& name)
 
     epoll_event event;
     memset(&event,0,sizeof(epoll_event));
-    event.events = EPOLLIN || EPOLLET;
+    event.events = EPOLLIN || EPOLLET;//epollin监听模式、读；ET模式有数据只通知一次
     event.data.fd = m_tickleFds[0];
     //F_SETFL 将文件描述符标志设置为 arg 指定的值。
     //设置了 O_NONBLOCK 标志，read 和 write 的行为是不同的 ，如果进程没有数据就绪时调用了 read ，
@@ -64,11 +65,14 @@ IOManager::IOManager(size_t threads ,bool use_caller ,const std::string& name)
     rt = fcntl(m_tickleFds[0],F_SETFL,O_NONBLOCK);
     SYLAR_ASSERT(!rt);
     //添加管道m_tickleFds到监听队列中
+    //如果你还关心某个事件或者不关心某个事件，就将该位置为 1 或者 0 即可
+    //m_epfd 是return
+    //参数4看61、62行
     rt = epoll_ctl(m_epfd,EPOLL_CTL_ADD,m_tickleFds[0],&event);
 
     contextResize(32);
     //m_fdContexts.resize(64);
-
+//start函数里面调用的是iomanager的idle函数
     start();
 }
 IOManager::~IOManager(){
@@ -110,6 +114,7 @@ int IOManager::addEvent(int fd,Event event,std::function<void()> cb){
     }
 
     FdContext::MutexType::Lock lock2(fd_ctx->mutex);
+    //&	 与	两个位都为1时，结果才为1
     if(fd_ctx->events & event){
         SYLAR_LOG_ERROR(g_logger) << "addEvent assert fd = " << fd
                     << " event=" << event
@@ -129,8 +134,8 @@ int IOManager::addEvent(int fd,Event event,std::function<void()> cb){
             << rt << "(" << errno << ") (" << strerror(errno) << ")";
         return -1;
     }
-    ++m_pendingEventCount;
-    fd_ctx->events = (Event)(fd_ctx->events | event);
+    ++m_pendingEventCount; 
+    fd_ctx->events = (Event)(fd_ctx->events | event); // | 或 两个位都为0时，结果才为0    EPOLLIN 置位为1，相当于 event.events |= EPOLLIN 要监听
     FdContext::EventContext& event_ctx = fd_ctx->getContext(event);
     SYLAR_ASSERT(!event_ctx.scheduler
                 && !event_ctx.fiber
@@ -246,11 +251,14 @@ bool IOManager::cancelAll(int fd){
     return true;
 }
 IOManager* IOManager::GetThis(){
-
+    //IOManager * ptr = nullptr;
+    //ptr = dynamic_cast<IOManager *>(Scheduler::GetThis());
     return dynamic_cast<IOManager*>(Scheduler::GetThis());
+    //return ptr;
 }
 void IOManager::tickle(){
-    if(hasIdleThreads()){
+    if(!hasIdleThreads()){
+        SYLAR_LOG_INFO(g_logger) << "no idleThread!!"; 
         return;
     }
     int rt = write(m_tickleFds[1],"T",1);
@@ -268,6 +276,7 @@ bool IOManager::stopping(){
     return stopping(timeout);
 }
 void IOManager::idle(){
+    SYLAR_LOG_INFO(g_logger) << "idle";
     epoll_event* events = new epoll_event[64]();
     //函数结束用来释放events，shared_events实际上不用到
     std::shared_ptr<epoll_event> shared_events(events,[](epoll_event* ptr){
@@ -289,6 +298,11 @@ void IOManager::idle(){
             }else{
                 next_timeout = MAX_TIMEDOUT;
             }
+            //wait for an I/O event on an epoll file descriptor
+            //returns the number of file descriptors ready for the requested I/O
+            // m_epfd指监听队列吧
+            //将就绪文件描述符传入events 
+            // next_timeout 0非阻塞指立即返回无论是否有就绪的文件描述符、-1阻塞
             rt = epoll_wait(m_epfd,events,64,(int)next_timeout);
             if(rt < 0 && errno == EINTR){
             }else{
@@ -310,6 +324,7 @@ void IOManager::idle(){
             epoll_event & event = events[i];
             if(event.data.fd == m_tickleFds[0]){
                 uint8_t dummy;
+                std::cout << "read read read ....." << std::endl;
                 while(read(m_tickleFds[0],&dummy,1) == 1);
                 continue;
             }
@@ -318,18 +333,18 @@ void IOManager::idle(){
             FdContext::MutexType::Lock lock(fd_ctx->mutex);
             if(event.events & (EPOLLERR | EPOLLHUP)){
                 event.events |= (EPOLLIN | EPOLLOUT) & fd_ctx->events;
-            }
+            }//有数据可读 & EPOLLIN 
             int real_events = NONE;
             if(event.events & EPOLLIN){
                 real_events |= READ;
             }
+            //有数据可写 & EPOLLOUT
             if(event.events & EPOLLOUT){
                 real_events |= WRITE;
             }
 
             if((fd_ctx->events & real_events) == NONE){
                 continue;
-
             }
 
             int left_events = (fd_ctx->events & ~real_events);
@@ -357,10 +372,11 @@ void IOManager::idle(){
         Fiber::ptr cur = Fiber::GetThis();
         auto raw_ptr = cur.get();
         cur.reset();
-
+        SYLAR_LOG_INFO(g_logger) << "swapout!";
         raw_ptr->swapOut();
 
     }
+    SYLAR_LOG_INFO(g_logger) << "jump idle!";
 }
 void IOManager::onTimerInsertedAtFront() {
     tickle();

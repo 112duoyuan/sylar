@@ -1,0 +1,132 @@
+[
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++    -D__FILE__=\\\"tests/test_hook.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g   -o CMakeFiles/test_hook.dir/tests/test_hook.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_hook.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_hook.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/fd_manager.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/fd_manager.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/fd_manager.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/fd_manager.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/log.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/log.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/log.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/log.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/fiber.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/fiber.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/fiber.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/fiber.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/util.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/util.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/util.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/util.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/config.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/config.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/config.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/config.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/thread.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/thread.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/thread.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/thread.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/scheduler.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/scheduler.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/scheduler.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/scheduler.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/iomanager.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/iomanager.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/iomanager.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/iomanager.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/timer.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/timer.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/timer.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/timer.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/hook.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/hook.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/hook.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/hook.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/address.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/address.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/address.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/address.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/socket.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/socket.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/socket.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/socket.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/bytearray.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/bytearray.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/bytearray.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/bytearray.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http11_parser.rl.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http11_parser.rl.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http11_parser.rl.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http11_parser.rl.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/httpclient_parser.rl.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/httpclient_parser.rl.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/httpclient_parser.rl.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/httpclient_parser.rl.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http_parser.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http_parser.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http_parser.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/tcp_server.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/tcp_server.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/tcp_server.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/tcp_server.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/stream.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/stream.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/stream.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/stream.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/socket_stream.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/socket_stream.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/socket_stream.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/socket_stream.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http_session.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http_session.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http_session.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http_session.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http_server.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http_server.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http_server.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http_server.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/servlet.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/servlet.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/servlet.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/servlet.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/http/http_connection.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/http/http_connection.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/http/http_connection.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/http/http_connection.cc"
+},
+{
+  "directory": "/home/xu/Server_SYLAR/build",
+  "command": "/usr/bin/g++   -Dsylar_EXPORTS -D__FILE__=\\\"sylar/uri.rl.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g -fPIC   -o CMakeFiles/sylar.dir/sylar/uri.rl.cc.o -c /home/xu/Server_SYLAR/sylar/sylar/uri.rl.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/sylar/uri.rl.cc"
+}
+]

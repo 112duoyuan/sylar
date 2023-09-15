@@ -5,6 +5,7 @@
 #include "thread.h"
 #include <vector>
 #include <list>
+#include <iostream>
 
 namespace sylar{
 
@@ -58,7 +59,9 @@ protected:
 
     void setThis();
 
-    bool hasIdleThreads(){return m_idleThreadCount > 0;}
+    bool hasIdleThreads(){
+        return m_idleThreadCount > 0;
+    }
 
 private:
     template<class FiberOrCb>
@@ -106,7 +109,7 @@ private:
 private:
     MutexType m_mutex;
     std::vector<Thread::ptr> m_threads;
-    std::list<FiberAndThread>m_fibers;
+    std::list<FiberAndThread>m_fibers;//装任务
 
     Fiber::ptr m_rootFiber; //主协程
     std::string m_name;

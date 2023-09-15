@@ -1,5 +1,6 @@
 #include "util.h"
 #include "timer.h"
+#include <iostream>
 
 namespace sylar{
 bool Timer::Comparator::operator()(const Timer::ptr& lhs
@@ -39,7 +40,7 @@ TimerManager::~TimerManager(){
 Timer::ptr TimerManager::addTimer(uint64_t ms,std::function<void()>cb,
                                 bool recurring){
     Timer::ptr timer(new Timer(ms,cb,recurring,this));
-    RWMutexType::WriteLock lock(m_mutex);
+    MutexType::Lock lock(m_mutex);
     addTimer(timer,lock);
     return timer;
 }
@@ -55,9 +56,10 @@ Timer::ptr TimerManager::addConditionTimer(uint64_t ms,std::function<void()>cb,
     return addTimer(ms,std::bind(&OnTimer,weak_cond,cb),recurring);
 }
 uint64_t TimerManager::getNextTimer(){
-    RWMutexType::ReadLock lock(m_mutex);
+    MutexType::Lock lock(m_mutex);
     m_tickled = false;
     if(m_timers.empty()){
+        //~ 取反
         return ~0ull;
     }
 
@@ -74,18 +76,19 @@ void TimerManager::listExpiredCb(std::vector<std::function<void()>> & cbs){
     uint64_t now_ms = sylar::GetCurrentMS();
     std::vector<Timer::ptr>expired;
     {
-        RWMutexType::ReadLock lock(m_mutex);
+        MutexType::Lock lock(m_mutex);
         if(m_timers.empty()){
             return;
         }
     }
-    RWMutexType::WriteLock lock(m_mutex);
+    MutexType::Lock lock(m_mutex);
     bool rollover = detectClockRollover(now_ms);
     if(!rollover && ((*m_timers.begin())->m_next > now_ms)){
         return;
     }
 
     Timer::ptr now_timer(new Timer(now_ms));
+    //lower_bound函数 指定区域内查找不小于目标值的第一个元素
     auto it = rollover ? m_timers.end() : m_timers.lower_bound(now_timer);
     while(it != m_timers.end() && (*it)->m_next ==  now_ms){
         ++it;
@@ -104,7 +107,7 @@ void TimerManager::listExpiredCb(std::vector<std::function<void()>> & cbs){
         }
     }
 }
-void TimerManager::addTimer(Timer::ptr val,RWMutexType::WriteLock& lock){
+void TimerManager::addTimer(Timer::ptr val,MutexType::Lock& lock){
     auto it = m_timers.insert(val).first;
     bool at_front = (it == m_timers.begin()) && !m_tickled;
     if(at_front){
@@ -118,7 +121,7 @@ void TimerManager::addTimer(Timer::ptr val,RWMutexType::WriteLock& lock){
 
 
 bool Timer::cancel(){
-    TimerManager::RWMutexType::WriteLock lock(m_manager->m_mutex);
+    TimerManager::MutexType::Lock lock(m_manager->m_mutex);
     if(m_cb){
         m_cb = nullptr;
         auto it = m_manager->m_timers.find(shared_from_this());
@@ -128,7 +131,7 @@ bool Timer::cancel(){
     return false;
 }
 bool Timer::refresh(){
-    TimerManager::RWMutexType::WriteLock lock(m_manager->m_mutex);
+    TimerManager::MutexType::Lock lock(m_manager->m_mutex);
     if(!m_cb){
         return false;
     }
@@ -142,7 +145,7 @@ bool Timer::refresh(){
     return true;
 }
 bool Timer::reset(uint64_t ms,bool from_now){
-    TimerManager::RWMutexType::WriteLock lock(m_manager->m_mutex);
+    TimerManager::MutexType::Lock lock(m_manager->m_mutex);
     if(ms == m_ms && !from_now){
         return false;
     }
@@ -175,7 +178,7 @@ bool TimerManager::detectClockRollover(uint64_t now_ms){
     return rollover;
 }
 bool TimerManager::hasTimer(){
-    RWMutexType::ReadLock lock(m_mutex);
+    MutexType::Lock lock(m_mutex);
     return !m_timers.empty();
 }
 

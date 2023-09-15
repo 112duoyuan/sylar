@@ -122,11 +122,9 @@ public:
     }
     void lock(){
         pthread_mutex_lock(&m_mutex);
-        std::cout << "lock" << std::endl;
     }
     void unlock(){
         pthread_mutex_unlock(&m_mutex);
-        std::cout << "unlock" << std::endl;
     }
 private:
     pthread_mutex_t m_mutex;

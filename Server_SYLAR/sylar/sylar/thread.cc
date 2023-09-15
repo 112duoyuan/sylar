@@ -83,6 +83,7 @@ void Thread::join(){
 void * Thread::run(void * arg){
     Thread* thread = (Thread*)arg;
     t_thread = thread;
+    SYLAR_LOG_INFO(g_logger) << "thread id is " << GetThreadId();
     thread->m_id = sylar::GetThreadId();
     //设置线程名称 
     // 第一个参数：需要设置/获取 名称的线程；
