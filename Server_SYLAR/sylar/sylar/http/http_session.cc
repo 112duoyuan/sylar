@@ -4,10 +4,12 @@
 namespace sylar{
 namespace http{
 
+//
 HttpSession::HttpSession(Socket::ptr sock,bool owner)
     :SocketStream(sock,owner){
 
 }
+//
 HttpRequest::ptr HttpSession::recvRequest(){
     HttpRequestParser::ptr parser(new HttpRequestParser);
     //uint64_t buff_size = HttpRequestParser::GetHttpRequestBufferSize();
@@ -65,6 +67,7 @@ HttpRequest::ptr HttpSession::recvRequest(){
     }
     return parser->getData();
 }
+//
 int HttpSession::sendResponse(HttpResponse::ptr rsp){
     std::stringstream ss;
     ss << *rsp;

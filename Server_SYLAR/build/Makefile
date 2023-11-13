@@ -114,17 +114,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_hook
+# Target rules for targets named test_socket
 
 # Build rule for target.
-test_hook: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_hook
-.PHONY : test_hook
+test_socket: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_socket
+.PHONY : test_socket
 
 # fast build rule for target.
-test_hook/fast:
-	$(MAKE) -f CMakeFiles/test_hook.dir/build.make CMakeFiles/test_hook.dir/build
-.PHONY : test_hook/fast
+test_socket/fast:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/build
+.PHONY : test_socket/fast
 
 #=============================================================================
 # Target rules for targets named sylar
@@ -814,32 +814,32 @@ sylar/util.cc.s:
 	$(MAKE) -f CMakeFiles/sylar.dir/build.make CMakeFiles/sylar.dir/sylar/util.cc.s
 .PHONY : sylar/util.cc.s
 
-tests/test_hook.o: tests/test_hook.cc.o
+tests/test_socket.o: tests/test_socket.cc.o
 
-.PHONY : tests/test_hook.o
+.PHONY : tests/test_socket.o
 
 # target to build an object file
-tests/test_hook.cc.o:
-	$(MAKE) -f CMakeFiles/test_hook.dir/build.make CMakeFiles/test_hook.dir/tests/test_hook.cc.o
-.PHONY : tests/test_hook.cc.o
+tests/test_socket.cc.o:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cc.o
+.PHONY : tests/test_socket.cc.o
 
-tests/test_hook.i: tests/test_hook.cc.i
+tests/test_socket.i: tests/test_socket.cc.i
 
-.PHONY : tests/test_hook.i
+.PHONY : tests/test_socket.i
 
 # target to preprocess a source file
-tests/test_hook.cc.i:
-	$(MAKE) -f CMakeFiles/test_hook.dir/build.make CMakeFiles/test_hook.dir/tests/test_hook.cc.i
-.PHONY : tests/test_hook.cc.i
+tests/test_socket.cc.i:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cc.i
+.PHONY : tests/test_socket.cc.i
 
-tests/test_hook.s: tests/test_hook.cc.s
+tests/test_socket.s: tests/test_socket.cc.s
 
-.PHONY : tests/test_hook.s
+.PHONY : tests/test_socket.s
 
 # target to generate assembly for a file
-tests/test_hook.cc.s:
-	$(MAKE) -f CMakeFiles/test_hook.dir/build.make CMakeFiles/test_hook.dir/tests/test_hook.cc.s
-.PHONY : tests/test_hook.cc.s
+tests/test_socket.cc.s:
+	$(MAKE) -f CMakeFiles/test_socket.dir/build.make CMakeFiles/test_socket.dir/tests/test_socket.cc.s
+.PHONY : tests/test_socket.cc.s
 
 # Help Target
 help:
@@ -849,7 +849,7 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... test_hook"
+	@echo "... test_socket"
 	@echo "... sylar"
 	@echo "... sylar/address.o"
 	@echo "... sylar/address.i"
@@ -926,9 +926,9 @@ help:
 	@echo "... sylar/util.o"
 	@echo "... sylar/util.i"
 	@echo "... sylar/util.s"
-	@echo "... tests/test_hook.o"
-	@echo "... tests/test_hook.i"
-	@echo "... tests/test_hook.s"
+	@echo "... tests/test_socket.o"
+	@echo "... tests/test_socket.i"
+	@echo "... tests/test_socket.s"
 .PHONY : help
 
 

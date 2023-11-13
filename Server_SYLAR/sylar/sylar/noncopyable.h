@@ -1,5 +1,8 @@
 #ifndef __SYLAR_NONCOPYABLE_H__
 #define __SYLAR_NONCOPYABLE_H__
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 namespace sylar
 {
 class Noncopyable{

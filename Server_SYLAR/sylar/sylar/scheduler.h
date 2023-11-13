@@ -25,6 +25,11 @@ public:
     void start();
     void stop();
 
+    /**
+     * @brief 调度协程
+     * @param[in] fc 协程或函数
+     * @param[in] thread 协程执行的线程id,-1标识任意线程
+     */
     template<class FiberOrCb>
     void schedule(FiberOrCb fc, int thread =-1){
         bool  need_tickle = false;
@@ -52,6 +57,7 @@ public:
         }
     }
 protected:
+    //通知协程调度器有任务了
     virtual void tickle();
     void run();
     virtual bool stopping();
@@ -64,6 +70,9 @@ protected:
     }
 
 private:
+    /**
+     * @brief 协程调度启动(无锁)
+     */
     template<class FiberOrCb>
     bool scheduleNoLock(FiberOrCb fc,int thread){
         bool need_tickle = m_fibers.empty();
@@ -109,14 +118,20 @@ private:
 private:
     MutexType m_mutex;
     std::vector<Thread::ptr> m_threads;
-    std::list<FiberAndThread>m_fibers;//装任务
 
-    Fiber::ptr m_rootFiber; //主协程
+    /// 待执行的协程队列
+    std::list<FiberAndThread>m_fibers;
+
+    /// use_caller为true时有效, 调度协程
+    Fiber::ptr m_rootFiber; 
     std::string m_name;
 protected:
     std::vector<int> m_threadIds;//记录线程id
+
+    /// 线程数量
     size_t m_threadCount = 0;
     std::atomic<size_t> m_activeThreadCount = {0};
+    //空闲线程的数量
     std::atomic<size_t> m_idleThreadCount = {0};
     bool m_stopping = true;     //调用start 会改成false 调用stop时改成true
     bool m_autoStop = false;

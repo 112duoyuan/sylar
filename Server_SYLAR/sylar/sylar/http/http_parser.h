@@ -11,8 +11,23 @@ public:
     typedef std::shared_ptr<HttpRequestParser>ptr;
     HttpRequestParser();
 
+    /**
+     * @brief 解析协议
+     * @param[in, out] data 协议文本内存
+     * @param[in] len 协议文本内存长度
+     * @return 返回实际解析的长度,并且将已解析的数据移除
+     */
     size_t execute(char * data,size_t len);
+
+        /**
+     * @brief 是否解析完成
+     * @return 是否解析完成
+     */
     int isFinished();
+        /**
+     * @brief 是否有错误
+     * @return 是否有错误
+     */
     int hasError();
 
     HttpRequest::ptr getData()const {return m_data;}
@@ -35,7 +50,15 @@ class HttpResponseParser{
 public:
     typedef std::shared_ptr<HttpResponseParser>ptr;
     HttpResponseParser();
+        /**
+     * @brief 解析HTTP响应协议
+     * @param[in, out] data 协议数据内存
+     * @param[in] len 协议数据内存大小
+     * @param[in] chunck 是否在解析chunck
+     * @return 返回实际解析的长度,并且移除已解析的数据
+     */
     size_t execute(char * data,size_t len,bool chunk);
+
     int isFinished();
     int hasError();
     HttpResponse::ptr getData()const {return m_data;}

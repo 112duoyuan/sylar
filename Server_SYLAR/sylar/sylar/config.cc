@@ -8,6 +8,9 @@ ConfigVarBase::ptr Config::LookupBase(const std::string& name){
     auto it = m_datas.find(name);
     return it == m_datas.end() ? nullptr : it->second;
 }
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 //"A.B", 10
 //A:
 //  B:10

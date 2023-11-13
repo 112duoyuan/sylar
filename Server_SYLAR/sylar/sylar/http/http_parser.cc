@@ -28,18 +28,23 @@ static uint64_t s_http_response_max_body_size = 0;
 static uint64_t s_http_request_buffer_size = 0;
 static uint64_t s_http_request_max_body_size = 0;
 
+//
 uint64_t HttpRequestParser::GetHttpRequestBufferSize(){
     return s_http_request_buffer_size;
 }
+//
 uint64_t HttpRequestParser::GetHttpRequestMaxBodySize(){
     return s_http_request_max_body_size;
 }
+//
 uint64_t HttpResponseParser::GetHttpResponseBufferSize(){
     return s_http_response_buffer_size;
 }
+//
 uint64_t HttpResponseParser::GetHttpResponseMaxBodySize(){
     return s_http_response_max_body_size;
 }
+//
 namespace{
 struct _RequestSizeIniter{
     _RequestSizeIniter(){
@@ -71,6 +76,7 @@ struct _RequestSizeIniter{
 static _RequestSizeIniter _init;
 }
 
+//
 void on_request_method(void *data,const char * at,size_t length){
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     HttpMethod m = CharsToHttpMethod(at);
@@ -83,21 +89,26 @@ void on_request_method(void *data,const char * at,size_t length){
     }
     parser->getData()->setMethod(m);
 }
+//
 void on_request_uri(void *data,const char * at,size_t length){
     
 }
+//
 void on_request_path(void *data,const char * at,size_t length){
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setPath(std::string(at,length));
 }
+//
 void on_request_fragment(void *data,const char * at,size_t length){
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setFragment(std::string(at,length));
 }
+//
 void on_request_query(void *data,const char * at,size_t length){
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
     parser->getData()->setQuery(std::string(at,length));
 }
+//
 void on_request_version(void *data,const char * at,size_t length){
     uint8_t v= 0;
     HttpRequestParser * parser = static_cast<HttpRequestParser*>(data);
@@ -113,9 +124,11 @@ void on_request_version(void *data,const char * at,size_t length){
     }
     parser->getData()->setVerion(v);
 }
+//
 void on_request_header_done(void *data,const char * at,size_t length){
     //HttpRequestParser * parser = static_cast<HttpRequestParser*>(date);
 }
+//
 void on_request_http_field(void *data,const char * field,size_t flen,const char *value
         ,size_t vlen){
     HttpRequestParser* parser = static_cast<HttpRequestParser*>(data);
@@ -128,6 +141,7 @@ void on_request_http_field(void *data,const char * field,size_t flen,const char 
             ,std::string(value,vlen));
 }
 
+//
 HttpRequestParser::HttpRequestParser()
     :m_error(0){
     m_data.reset(new sylar::http::HttpRequest);
@@ -142,7 +156,7 @@ HttpRequestParser::HttpRequestParser()
     m_parser.http_field =on_request_http_field;
     m_parser.data = this;
 }
-
+//
 uint64_t HttpRequestParser::getContentLength(){
     return m_data->getHeaderAs<uint64_t>("content-length",0);
 }
@@ -152,12 +166,16 @@ uint64_t HttpRequestParser::getContentLength(){
 //> 0 已处理字节数，且data有效数据为len - v;
 size_t HttpRequestParser::execute(char * data,size_t len){
     size_t offset = http_parser_execute(&m_parser,data,len,0);
+    //memmove() 能够保证源串在被覆盖之前将重叠区域的字节拷贝到目标区域中，
+    //复制后源区域的内容会被更改。如果目标区域与源区域没有重叠，则和 memcpy() 函数功能相同
     memmove(data,data + offset,(len- offset));
     return offset;
 }
+//
 int HttpRequestParser::isFinished() {
     return http_parser_finish(&m_parser);
 }
+//
 int HttpRequestParser::hasError() {
     return m_error || http_parser_has_error(&m_parser);
 }
@@ -197,9 +215,11 @@ void on_response_version(void * data,const char* at,size_t length){
     }
     parser->getData()->setVersion(v);
 }
+//
 void on_response_header_done(void * data,const char* at,size_t length){
 
 }
+//
 void on_response_last_chunk(void * data,const char* at,size_t length){
 
 }
@@ -214,6 +234,7 @@ void on_response_http_field(void * data,const char* field,size_t flen
     parser->getData()->setHeader(std::string(field,flen)
             ,std::string(value,vlen));
 }
+//
 HttpResponseParser::HttpResponseParser()
     :m_error(0) {
     m_data.reset(new sylar::http::HttpResponse);
@@ -228,6 +249,7 @@ HttpResponseParser::HttpResponseParser()
     m_parser.data = this;
 
 }
+//
 size_t HttpResponseParser::execute(char * data,size_t len,bool chunk){
     if(chunk){
         httpclient_parser_init(&m_parser);
@@ -236,12 +258,15 @@ size_t HttpResponseParser::execute(char * data,size_t len,bool chunk){
     memmove(data,data + offset,(len- offset));
     return offset;
 }
+//
 int HttpResponseParser::isFinished(){
     return httpclient_parser_finish(&m_parser); 
 }
+//
 int HttpResponseParser::hasError(){
     return m_error || httpclient_parser_has_error(&m_parser);
 }
+//
 uint64_t HttpResponseParser::getContentLength(){
     return m_data->getHeaderAs<uint64_t>("content-length",0);
 }

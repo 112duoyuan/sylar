@@ -6,6 +6,8 @@
 
 namespace sylar{
 //-Werror=reorder 按顺序赋值！！！
+
+//
 FdCtx::FdCtx(int fd)
     :m_isInit(false)
     ,m_isSocket(false)
@@ -17,9 +19,11 @@ FdCtx::FdCtx(int fd)
     ,m_sendTimeout(-1){
         init();
 }
+//
 FdCtx::~FdCtx(){
 
 }
+//
 bool FdCtx::init(){
     if(m_isInit){
         return true;
@@ -37,7 +41,9 @@ bool FdCtx::init(){
     }
 
     if(m_isSocket){
+        //这个函数就是返回argv[1]所表述的文件的文件标识符
         int flags = fcntl_f(m_fd,F_GETFL,0);
+        //判断是否为非阻塞
         if(!(flags & O_NONBLOCK)){
             fcntl_f(m_fd,F_SETFL,flags | O_NONBLOCK);
         }
@@ -50,7 +56,7 @@ bool FdCtx::init(){
     m_isClosed = false;
     return m_isInit; 
 }
-
+//
 void FdCtx::setTimeout(int type,uint64_t v){
     if(type == SO_RCVTIMEO){
         m_recvTimeout = v;
@@ -58,6 +64,7 @@ void FdCtx::setTimeout(int type,uint64_t v){
         m_sendTimeout =v;
     }
 }
+//
 uint64_t FdCtx::getTimeout(int type){
     if(type == SO_RCVTIMEO){
         return m_recvTimeout;
@@ -65,10 +72,11 @@ uint64_t FdCtx::getTimeout(int type){
         return m_sendTimeout;
     }
 }
-
+//
 FdManager::FdManager(){
     m_datas.resize(64);
 }
+
 FdCtx::ptr FdManager::get(int fd,bool auto_create){
     if(fd == -1){
         return nullptr;

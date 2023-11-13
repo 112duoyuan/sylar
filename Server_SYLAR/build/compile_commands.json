@@ -1,8 +1,8 @@
 [
 {
   "directory": "/home/xu/Server_SYLAR/build",
-  "command": "/usr/bin/g++    -D__FILE__=\\\"tests/test_hook.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g   -o CMakeFiles/test_hook.dir/tests/test_hook.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_hook.cc",
-  "file": "/home/xu/Server_SYLAR/sylar/tests/test_hook.cc"
+  "command": "/usr/bin/g++    -D__FILE__=\\\"tests/test_socket.cc\\\" -I/home/xu/yaml/yaml-cpp-master/include   -rdynamic -O3 -fPIC -ggdb -std=c++11 -Wall -Wno-deprecated -Werror -Wno-unused-function -Wno-builtin-macro-redefined -Wno-deprecated-declarations -g   -o CMakeFiles/test_socket.dir/tests/test_socket.cc.o -c /home/xu/Server_SYLAR/sylar/tests/test_socket.cc",
+  "file": "/home/xu/Server_SYLAR/sylar/tests/test_socket.cc"
 },
 {
   "directory": "/home/xu/Server_SYLAR/build",

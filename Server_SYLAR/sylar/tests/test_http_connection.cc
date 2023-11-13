@@ -16,7 +16,9 @@ void test_pool(){
 }
 
 void run(){
+    SYLAR_LOG_INFO(g_logger) << "fiber do run!!!";
     sylar::Address::ptr addr = sylar::Address::LookupAnyIPAddress("www.sylar.top:80");
+    SYLAR_LOG_INFO(g_logger)<< "address is "<<addr->toString();
     if(!addr){
         SYLAR_LOG_INFO(g_logger) << "get addr error";
         return;
@@ -56,7 +58,7 @@ int main(int argc,char ** argv){
     sylar::IOManager iom(2);
     iom.schedule(run);
 
-    test_pool();
+    //test_pool();
     return 0;
 
 }

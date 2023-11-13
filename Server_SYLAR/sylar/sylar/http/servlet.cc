@@ -3,20 +3,25 @@
 namespace sylar{
 namespace http{
 
+//
 FunctionServlet::FunctionServlet(callback cb)
     :Servlet("FunctionServlet")
     ,m_cb(cb){
 
 }
+//
 int32_t FunctionServlet::handle(sylar::http::HttpRequest::ptr request
                 ,sylar::http::HttpResponse::ptr response
                 ,sylar::http::HttpSession::ptr session){
     return m_cb(request,response,session);                    
 }
+//
 ServletDispatch::ServletDispatch()
     :Servlet("ServletDispatch"){
     m_default.reset(new NotFoundServlet());
 }
+
+//
 int32_t ServletDispatch::handle(sylar::http::HttpRequest::ptr request
                 ,sylar::http::HttpResponse::ptr response
                 ,sylar::http::HttpSession::ptr session){
@@ -26,18 +31,21 @@ int32_t ServletDispatch::handle(sylar::http::HttpRequest::ptr request
     }
     return 0;
 }
-
+//
 void ServletDispatch::addServlet(const std::string& uri,Servlet::ptr slt){
     RWMutexType::WriteLock lock(m_mutex);
     m_datas[uri] = slt;
 }
+//
 void ServletDispatch::addServlet(const std::string& uri,FunctionServlet::callback cb){
     RWMutexType::WriteLock lock(m_mutex);
     m_datas[uri].reset(new FunctionServlet(cb));
 }
+//
 void ServletDispatch::addGlobServlet(const std::string& uri,FunctionServlet::callback cb){
     return addGlobServlet(uri,FunctionServlet::ptr(new FunctionServlet(cb)));
 }
+//
 void ServletDispatch::addGlobServlet(const std::string& uri,Servlet::ptr slt){
 RWMutexType::WriteLock lock(m_mutex);
     for(auto it = m_globs.begin();
@@ -49,11 +57,12 @@ RWMutexType::WriteLock lock(m_mutex);
     }
     m_globs.push_back(std::make_pair(uri,slt));
 }
-
+//
 void ServletDispatch::delServlet(const std::string& uri){
     RWMutexType::WriteLock lock(m_mutex);
     m_datas.erase(uri);
 }
+//
 void ServletDispatch::delGlobServlet(const std::string& uri){
     RWMutexType::WriteLock lock(m_mutex);
     for(auto it = m_globs.begin();
@@ -65,11 +74,14 @@ void ServletDispatch::delGlobServlet(const std::string& uri){
     }
 }
 
+//
 Servlet::ptr ServletDispatch::getServlet(const std::string& uri){
     RWMutexType::ReadLock lock(m_mutex);
     auto it = m_datas.find(uri);
     return it == m_datas.end() ? nullptr : it->second;
 }
+
+//
 Servlet::ptr ServletDispatch::getGlobServlet(const std::string& uri){
     RWMutexType::ReadLock lock(m_mutex);
     for(auto it = m_globs.begin();
@@ -80,6 +92,7 @@ Servlet::ptr ServletDispatch::getGlobServlet(const std::string& uri){
     }
     return nullptr;
 }
+//
 Servlet::ptr ServletDispatch::getMatchedServlet(const std::string& uri){
     RWMutexType::ReadLock lock(m_mutex);
     auto it = m_datas.find(uri);
@@ -94,6 +107,7 @@ Servlet::ptr ServletDispatch::getMatchedServlet(const std::string& uri){
     }
     return m_default;
 }
+//
 NotFoundServlet::NotFoundServlet()
     :Servlet("NotFoundServlet"){
 

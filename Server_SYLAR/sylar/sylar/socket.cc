@@ -12,40 +12,51 @@ namespace sylar{
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
+//
 Socket::ptr Socket::CreateTCP(sylar::Address::ptr address){
     Socket::ptr sock(new Socket(address->getFamily(),TCP,0));
     return sock;
 }
+
+//
 Socket::ptr Socket::CreateUDP(sylar::Address::ptr address){
     Socket::ptr sock(new Socket(address->getFamily(),UDP,0));
     return sock;
 }
 
+//
 Socket::ptr Socket::CreateTCPScoket(){
     Socket::ptr sock(new Socket(IPv4,TCP,0));
     return sock;
 }
+//
 Socket::ptr Socket::CreateUDPScoket(){
     Socket::ptr sock(new Socket(IPv4,UDP,0));
     return sock;
 }
+//
 Socket::ptr Socket::CreateTCPScoket6(){
     Socket::ptr sock(new Socket(IPv6,TCP,0));
     return sock;
 }
+//
 Socket::ptr Socket::CreateUDPScoket6(){
     Socket::ptr sock(new Socket(IPv6,UDP,0));
     return sock;
 }
+//
 Socket::ptr Socket::CreateUnixTCPSocket(){
     Socket::ptr sock(new Socket(UNIX,TCP,0));
     return sock;
 }
+
+//
 Socket::ptr Socket::CreateUnixUDPSocket(){
     Socket::ptr sock(new Socket(UNIX,UDP,0));
     return sock;
 }
 
+//
 Socket::Socket(int family, int type,int protocol)
     :m_sock(-1)
     ,m_family(family)
@@ -54,10 +65,11 @@ Socket::Socket(int family, int type,int protocol)
     ,m_isConnected(false){
 
 }
+//
 Socket::~Socket(){
     close();
 }
-
+//
 int64_t Socket::getSendTimeout(){
     FdCtx::ptr ctx = FdMgr::GetInstance()->get(m_sock);
     if(ctx){
@@ -65,11 +77,12 @@ int64_t Socket::getSendTimeout(){
     }
     return -1;
 }
+//
 void Socket::setSendTimeout(int64_t v){
     struct timeval tv{int(v /1000),int(v % 1000*1000)};
     setOption(SOL_SOCKET,SO_SNDTIMEO,tv);
 }
-
+//
 int64_t Socket::getRecvTimeout(){
     FdCtx::ptr ctx = FdMgr::GetInstance()->get(m_sock);
     if(ctx){
@@ -77,12 +90,14 @@ int64_t Socket::getRecvTimeout(){
     }
     return -1;
 }
+//
 void Socket::setRecvTimeout(int64_t v){
     struct timeval tv{int(v/1000),int(v % 1000 * 1000)};
     setOption(SOL_SOCKET,SO_RCVTIMEO,tv);
 }
-
+//
 bool Socket::getOption(int level,int option,void* result,size_t * len){
+    //获取一个套接字
     int rt =getsockopt(m_sock,level,option,result,(socklen_t*)len);
     if(rt){
         SYLAR_LOG_DEBUG(g_logger) << "getOption sock=" << m_sock
@@ -92,6 +107,7 @@ bool Socket::getOption(int level,int option,void* result,size_t * len){
     }
     return true;
 }
+//
 bool Socket::setOption(int level,int option,const void * result,size_t len){
     if(setsockopt(m_sock,level,option,result,(socklen_t)len)){
         SYLAR_LOG_DEBUG(g_logger) << "setOption sock=" << m_sock
@@ -101,7 +117,7 @@ bool Socket::setOption(int level,int option,const void * result,size_t len){
     }
     return true;
 }
-
+//
 Socket::ptr Socket::accept(){
     Socket::ptr sock(new Socket(m_family,m_type,m_protocol));
     int newsock = ::accept(m_sock,nullptr,nullptr);
@@ -115,6 +131,7 @@ Socket::ptr Socket::accept(){
     }
     return nullptr;
 }
+//
 bool Socket::init(int sock){
     FdCtx::ptr ctx = FdMgr::GetInstance()->get(sock);
     if(ctx && ctx->isSocket() && !ctx->isClose()){
@@ -127,6 +144,7 @@ bool Socket::init(int sock){
     }
     return false;
 }
+//
 bool Socket::bind(const Address::ptr addr){
     if(!isValid()){
         newSock();
@@ -141,7 +159,7 @@ bool Socket::bind(const Address::ptr addr){
             << ") not equal, addr=" << addr->toString();
         return false;
     }
-
+    //用于通信的 socket 和服务端的 IP 地址和端口号。    用于通信的地址和端口绑定到 socket
     if(::bind(m_sock,addr->getAddr(),addr->getAddrLen())){
         SYLAR_LOG_ERROR(g_logger) << "bind error errno=" << errno
             << " errstr=" << strerror(errno);
@@ -150,6 +168,7 @@ bool Socket::bind(const Address::ptr addr){
     getLocalAddress();
     return true;
 }
+//
 bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
     if(isValid()){
         newSock();
@@ -187,6 +206,8 @@ bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
     getLocalAddress();
     return true;
 }
+
+//
 bool Socket::listen(int backlog){
     if(!isValid()){
         SYLAR_LOG_ERROR(g_logger) <<"listen error sock=-1";
@@ -199,6 +220,7 @@ bool Socket::listen(int backlog){
     }
     return true;
 }
+//
 bool Socket::close(){
     if(!m_isConnected && m_sock == -1){
         return true;
@@ -210,13 +232,14 @@ bool Socket::close(){
     }
     return false;
 }
-
+//
 int Socket::send(const void* buffer,size_t length,int flags){
     if(isConnected()){
         return ::send(m_sock,buffer,length,flags);
     }
     return -1;
 }
+//
 int Socket::send(const iovec* buffers,size_t length,int flags){
     if(isConnected()){
         msghdr msg;
@@ -227,12 +250,14 @@ int Socket::send(const iovec* buffers,size_t length,int flags){
     }
     return -1;
 }
+//
 int Socket::sendTo(const void* buffer,size_t length,const Address::ptr to,int flags){
     if(!isConnected()){
         return ::sendto(m_sock,buffer,length,flags,to->getAddr(),to->getAddrLen());
     }
     return -1;
 }
+//
 int Socket::sendTo(const iovec* buffers,size_t length,const Address::ptr to,int flags){
     if(isConnected()){
         msghdr msg;
@@ -245,13 +270,14 @@ int Socket::sendTo(const iovec* buffers,size_t length,const Address::ptr to,int 
     }
     return -1;
 }
-
+//
 int Socket::recv(void * buffer,size_t length,int flags){
     if(isConnected()){
         return ::recv(m_sock,buffer,length,flags);
     }
     return -1;
 }
+//
 int Socket::recv(iovec* buffers, size_t length,int flags){
     if(isConnected()){
         msghdr msg;
@@ -262,6 +288,7 @@ int Socket::recv(iovec* buffers, size_t length,int flags){
     }
     return -1;
 }
+//
 int Socket::recvFrom(void* buffers, size_t length,Address::ptr from,int flags){
     if(isConnected()){
         socklen_t len = from->getAddrLen();
@@ -269,6 +296,7 @@ int Socket::recvFrom(void* buffers, size_t length,Address::ptr from,int flags){
     }
     return -1;
 }
+//
 int Socket::recvFrom(iovec* buffers, size_t length,Address::ptr from ,int flags){
     if(isConnected()){
         msghdr msg;
@@ -302,6 +330,7 @@ Address::ptr Socket::getRemoteAddress(){
             break;
     }
     socklen_t addrlen = result->getAddrLen();
+    //用于获取与某个套接字关联的外地协议地址
     if(getpeername(m_sock,result->getAddr(),&addrlen)){
         SYLAR_LOG_ERROR(g_logger) << "getpeername error sock=" << m_sock
             << " errno=" << errno << " errstr=" << strerror(errno);
@@ -335,6 +364,7 @@ if(m_localAddress){
             break;
     }
     socklen_t addrlen = result->getAddrLen();
+    //可以获得一个与socket相关的地址
     if(getsockname(m_sock,result->getAddr(),&addrlen)){
         SYLAR_LOG_ERROR(g_logger) << "getsockname error sock=" << m_sock
             << " errno=" << errno << " errstr=" << strerror(errno);
@@ -348,10 +378,11 @@ if(m_localAddress){
     return m_localAddress;
 
 }
-
+//
 bool Socket::isValid() const{
     return m_sock!= -1;
 }
+//
 int Socket::getError(){
     int error = 0;
     size_t len = sizeof(error);
@@ -361,6 +392,7 @@ int Socket::getError(){
     return error;
 }
 
+//
 std::ostream& Socket::dump(std::ostream& os)const{
     os << "[Socket sock=" << m_sock
         << " is_connected=" << m_isConnected
@@ -376,24 +408,33 @@ std::ostream& Socket::dump(std::ostream& os)const{
     os << "]";
     return os;
 }
+
+//
 bool Socket::cancelRead(){
     return IOManager::GetThis()->cancelEvent(m_sock,sylar::IOManager::READ);
 }
+//
 bool Socket::cancelWrite(){
     return IOManager::GetThis()->cancelEvent(m_sock,sylar::IOManager::WRITE);
 }
+//
 bool Socket::cancelAccept(){
     return IOManager::GetThis()->cancelEvent(m_sock,sylar::IOManager::READ);
 }
+//
 bool Socket::cancelAll(){
     return IOManager::GetThis()->cancelAll(m_sock);
 }
+//
 void Socket::initSock(){
     int val =1;
+    //允许服务器bind一个地址，即使这个地址当前已经存在已建立的连接  SO_REUSEADDR
+    //启动TCP_NODELAY，就意味着禁用了Nagle算法，允许小包的发送  TCP_NODELAY
     setOption(SOL_SOCKET,SO_REUSEADDR,val);
     if(m_type == SOCK_STREAM)
         setOption(IPPROTO_TCP,TCP_NODELAY,val);
 }
+//
 void Socket::newSock(){
     m_sock = socket(m_family,m_type,m_protocol);
     if(SYLAR_LICKLY(m_sock != -1)){
@@ -404,6 +445,7 @@ void Socket::newSock(){
             <<errno <<" errstr=" << strerror(errno);  
     }
 }
+//
 std::ostream& operator<< (std::ostream& os,const Socket& sock){
     return sock.dump(os);
 }

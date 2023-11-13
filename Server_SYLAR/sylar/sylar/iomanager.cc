@@ -258,7 +258,7 @@ IOManager* IOManager::GetThis(){
 }
 void IOManager::tickle(){
     if(!hasIdleThreads()){
-        SYLAR_LOG_INFO(g_logger) << "no idleThread!!"; 
+        SYLAR_LOG_INFO(g_logger) << "no idle thread!!";
         return;
     }
     int rt = write(m_tickleFds[1],"T",1);
@@ -276,7 +276,6 @@ bool IOManager::stopping(){
     return stopping(timeout);
 }
 void IOManager::idle(){
-    SYLAR_LOG_INFO(g_logger) << "idle";
     epoll_event* events = new epoll_event[64]();
     //函数结束用来释放events，shared_events实际上不用到
     std::shared_ptr<epoll_event> shared_events(events,[](epoll_event* ptr){
@@ -312,19 +311,18 @@ void IOManager::idle(){
 
         std::vector<std::function<void()>> cbs;
         listExpiredCb(cbs);
-        if(cbs.empty()){
+        if(!cbs.empty()){
             schedule(cbs.begin(),cbs.end());
             // for(auto& i:cbs){
             //     schedule(i);
             // }
             cbs.clear();
         }
-
+        //异步信号是通过计时器获取的
         for(int i = 0; i < rt;++i){
             epoll_event & event = events[i];
             if(event.data.fd == m_tickleFds[0]){
                 uint8_t dummy;
-                std::cout << "read read read ....." << std::endl;
                 while(read(m_tickleFds[0],&dummy,1) == 1);
                 continue;
             }
@@ -364,17 +362,16 @@ void IOManager::idle(){
                 --m_pendingEventCount;
             }
             if(real_events & WRITE){
+                //触发写事件
                 fd_ctx->triggerEvent(WRITE);
                 --m_pendingEventCount;
             }
         }
-
         Fiber::ptr cur = Fiber::GetThis();
         auto raw_ptr = cur.get();
         cur.reset();
-        SYLAR_LOG_INFO(g_logger) << "swapout!";
+        SYLAR_LOG_INFO(g_logger) << "swapOut "; 
         raw_ptr->swapOut();
-
     }
     SYLAR_LOG_INFO(g_logger) << "jump idle!";
 }

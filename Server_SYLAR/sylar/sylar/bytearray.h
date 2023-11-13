@@ -8,22 +8,28 @@
 #include <sys/uio.h>
 #include <vector>
 #include <sys/socket.h>
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 
 namespace sylar{
-
+    //二进制数组，提供基础序列化和反序列化
 class ByteArray{
 public:
     typedef std::shared_ptr<ByteArray>ptr;
-
+    // bytearray存储节点
     struct Node{
+        //内存块字节数 s
         Node(size_t s);
-        Node();
-        ~Node();
 
-        char * ptr;
-        Node* next;
-        size_t size;
+        Node();
+        ~Node();//析构释放内存
+
+        char * ptr;//内存块地址指针
+        Node* next;//下一个内存块指针
+        size_t size;//内存块大小
     };
+    //base_size 内存块大小
     ByteArray(size_t base_size = 4096);//4k
     ~ByteArray();
 
@@ -100,6 +106,9 @@ public:
     bool readFromFile(const std::string& name);
 
     size_t getBaseSize() const {return m_baseSize;}
+        /**
+     * @brief 返回可读取数据大小
+     */
     size_t getReadSize() const {return m_size - m_position;}
  
     bool isLittleEndian() const;
@@ -115,16 +124,25 @@ public:
 
     size_t getSize()const {return m_size;}
 private:
+    
     void addCapacity(size_t size);
+    //获取剩余容量
     size_t getCapacity() const {return m_capacity - m_position;}
    
 private:
+    //内存块大小
     size_t m_baseSize;
+    //当前操作位置
     size_t m_position;
+    //当前总容量
     size_t m_capacity;
+    //当前数据的大小
     size_t m_size;
+    //字节序 默认大端
     int8_t m_endian;
+    //第一个内存块指针
     Node* m_root;
+    //当前操作的内存块指针
     Node* m_cur;
 };
 }

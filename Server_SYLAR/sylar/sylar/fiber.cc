@@ -5,6 +5,9 @@
 #include "macro.h"
 #include "log.h"
 #include <iostream>
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 namespace sylar{
 
 static Logger::ptr g_logger = SYLAR_LOG_NAME("system");
@@ -45,7 +48,7 @@ Fiber::Fiber(){
         SYLAR_ASSERT2(false,"getcontext");
     }
     ++s_fiber_count;
-    SYLAR_LOG_DEBUG(g_logger) << "Fiber::Fiber";
+    SYLAR_LOG_INFO(g_logger) << "Fiber::fiber!!"; 
 }
 
 uint64_t Fiber::GetFiberId(){
@@ -73,11 +76,9 @@ Fiber::Fiber(std::function<void()>cb ,size_t stacksize, bool use_caller)
 
     if(use_caller){
         //会执行MainFunc函数 
-        SYLAR_LOG_INFO(g_logger) << "MainFunc!!";
         makecontext(&m_ctx, &Fiber::MainFunc,0);
     }else{
         //绑定执行函数
-        SYLAR_LOG_INFO(g_logger) << "makecontext!!";
         makecontext(&m_ctx, &Fiber::CallerMainFunc,0);
     }
     SYLAR_LOG_DEBUG(g_logger) << "Fiber::Fiber id= " << m_id;
@@ -97,7 +98,8 @@ Fiber::~Fiber(){
             SetThis(nullptr);
         }
     }
-    SYLAR_LOG_DEBUG(g_logger) << "Fiber::~Fiber id= " << m_id;
+    SYLAR_LOG_DEBUG(g_logger) << "Fiber::~Fiber id=" << m_id
+                              << " total=" << s_fiber_count;
 
 }
 //重置协程函数与状态
@@ -113,10 +115,13 @@ void Fiber::reset(std::function<void()> cb){
     m_ctx.uc_stack.ss_sp = m_stack;
     m_ctx.uc_stack.ss_size = m_stacksize;
 
-    makecontext(&m_ctx, &Fiber::MainFunc,0);
+    makecontext(&m_ctx, &Fiber::CallerMainFunc,0);
     m_state = INIT;
 }
-// 切换到当前协程执行到后台，自己进入执行状态
+    /**
+     * @brief 将当前线程切换到执行状态
+     * @pre 执行的为当前线程的主协程
+     */
 void Fiber::call(){
     SetThis(this);
     m_state = EXEC;
@@ -144,10 +149,10 @@ void Fiber::swapIn(){
 }    
 //当前切换到后台
 void Fiber::swapOut(){
-    SetThis(t_threadFiber.get());
-    //SetThis(Scheduler::GetMainFiber());
+    //SetThis(t_threadFiber.get());
+    SetThis(Scheduler::GetMainFiber());
     //if(swapcontext( &m_ctx,&t_threadFiber->m_ctx)){
-    if(swapcontext( &m_ctx,&Scheduler::GetMainFiber()->m_ctx)){
+    if(swapcontext(&m_ctx,&Scheduler::GetMainFiber()->m_ctx)){
         SYLAR_ASSERT2(false,"swapcontext");
     }
 }
@@ -185,7 +190,6 @@ uint64_t Fiber::Totalfibers(){
 }
 
 void Fiber::MainFunc(){
-    SYLAR_LOG_INFO(g_logger) << "MainFunc";
     Fiber::ptr cur = GetThis();
     SYLAR_ASSERT(cur);
     try{
@@ -205,7 +209,7 @@ void Fiber::MainFunc(){
     }
     auto raw_ptr = cur.get();
     cur.reset();
-    raw_ptr->swapOut();
+    raw_ptr->back();
 
     SYLAR_ASSERT2(false,"never reach fiber_id= " + std::to_string(raw_ptr->getId()));
 }
@@ -229,7 +233,8 @@ void Fiber::CallerMainFunc(){
     }
     auto raw_ptr = cur.get();
     cur.reset();
-    raw_ptr->back();
+    //raw_ptr->back();
+    raw_ptr->swapOut();
 
     SYLAR_ASSERT2(false,"never reach fiber_id= " + std::to_string(raw_ptr->getId()));
 }

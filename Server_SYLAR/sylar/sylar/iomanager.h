@@ -37,6 +37,12 @@ private:
 
     };
 public:
+    /**
+     * @brief 构造函数
+     * @param[in] threads 线程数量
+     * @param[in] use_caller 是否将调用线程包含进去(意为让线程参与创建协程的操作)
+     * @param[in] name 调度器的名称
+     */
     IOManager(size_t threads = 1,bool use_caller = true,const std::string& name = "");
     ~IOManager();
     

@@ -78,6 +78,7 @@ void set_hook_enable(bool flag){
 
 }
 extern "C" {
+    //connect_f(fd,addr,addrlen)
 #define XX(name) name ## _fun name ## _f =nullptr;
     HOOK_FUN(XX);
 #undef XX
@@ -158,12 +159,15 @@ retry:
     return n;
 }
 
+//sleep usleep 函数addTimer操作 在bind函数中希望指定scheduler添加任务，对应函数参数是fiber 和thread 参考usleep函数即可理解
 unsigned int sleep(unsigned int seconds){
     if(!sylar::t_hook_enable){
         return sleep_f(seconds);
     }
     sylar::Fiber::ptr fiber = sylar::Fiber::GetThis();
     sylar::IOManager* iom = sylar::IOManager::GetThis();
+
+    //inline void sylar::Scheduler::schedule<sylar::Fiber::ptr>(sylar::Fiber::ptr fc, int thread = -1) 
     iom->addTimer(seconds * 1000, std::bind((void(sylar::Scheduler::*)
             (sylar::Fiber::ptr, int thread))&sylar::IOManager::schedule
             ,iom,fiber,-1));
@@ -171,6 +175,7 @@ unsigned int sleep(unsigned int seconds){
     sylar::Fiber::YieldToHold();
     return 0;
 }
+//
 int usleep(useconds_t usec){
     if(!sylar::t_hook_enable){
         return usleep_f(usec);
@@ -191,7 +196,7 @@ extern sleep_fun sleep_f;
 
 typedef int (*usleep_func)(useconds_t usec);
 extern usleep_fun usleep_f;
-
+//
 int nanosleep(const struct timespec *req,struct timespec * rem){
     if(!sylar::t_hook_enable){
         return nanosleep_f(req,rem);
@@ -221,6 +226,8 @@ int socket(int domain, int type, int protocol){
     sylar::FdMgr::GetInstance()->get(fd,true);
     return fd;
 }
+
+
 int connect_with_timeout(int fd,const struct sockaddr* addr,socklen_t addrlen,uint64_t timeout_ms){
     if(!sylar::t_hook_enable){
         return connect_f(fd,addr,addrlen);

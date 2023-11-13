@@ -4,7 +4,9 @@
 #include <string.h>
 #include <assert.h>
 #include "util.h"
-
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 #if defined __GNUC__ || defined __llvm__
 //__builtin_expect(long exp,long c) 期望exp == c
 //条件大概率成立

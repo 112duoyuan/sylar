@@ -8,6 +8,7 @@ static sylar::ConfigVar<uint64_t>::ptr g_tcp_server_read_timeout =
         "tcp server read timeout");
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
+//
 TcpServer::TcpServer(sylar::IOManager * worker,
                     sylar::IOManager* accept_worker)
     :m_worker(worker)
@@ -16,18 +17,21 @@ TcpServer::TcpServer(sylar::IOManager * worker,
     ,m_name("sylar/1.0.0")
     ,m_isStop(true){
 }
+//
 TcpServer::~TcpServer(){
     for(auto &i:m_socks){
         i->close();
     }
     m_socks.clear();
 }
+//
 bool TcpServer::bind(sylar::Address::ptr addr){
     std::vector<Address::ptr> addrs;
     std::vector<Address::ptr> fails;
     addrs.push_back(addr);
     return bind(addrs,fails);
 }
+//
 bool TcpServer::bind(const std::vector<Address::ptr>& addrs,
                             std::vector<Address::ptr>& fails){
     for(auto& i : addrs){
@@ -57,6 +61,7 @@ bool TcpServer::bind(const std::vector<Address::ptr>& addrs,
     }
     return true;
 }
+//
 void TcpServer::startAccept(Socket::ptr sock){
     while(!m_isStop){
         Socket::ptr client = sock->accept();
@@ -70,6 +75,7 @@ void TcpServer::startAccept(Socket::ptr sock){
         }
     }
 }
+//
 bool TcpServer::start(){
     if(m_isStop){
         return true;
@@ -81,6 +87,7 @@ bool TcpServer::start(){
     }
     return true;
 }
+//
 void TcpServer::stop(){
     m_isStop = true;
     auto self = shared_from_this();
@@ -92,6 +99,7 @@ void TcpServer::stop(){
         m_socks.clear();
     });
 }
+//
 void TcpServer::handleClient(Socket::ptr client){
     SYLAR_LOG_INFO(g_logger) << "handleClient: "<< *client;
 }

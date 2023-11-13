@@ -18,6 +18,9 @@
 
 #include "pthread.h"
 
+/*
+-------------------------------20231018 read done ---------------------------------
+*/
 namespace sylar{
 /*
     ConfigVarBase基础功能：
@@ -307,6 +310,10 @@ public:
 
     std::string getTypeName() const override {return typeid(T).name();}
 
+    /**
+     * @brief 添加变化回调函数
+     * @return 返回该回调函数对应的唯一id,用于删除回调
+     */
     uint64_t addListener(on_change_cb cb){
         static uint64_t s_fun_id = 0;
         RWMutexType::WriteLock lock(m_mutex);
@@ -352,10 +359,6 @@ public:
                 SYLAR_LOG_INFO(SYLAR_LOG_ROOT()) << "Lookup name= " << name << " exists";
                 return tmp;
             } else{
-                std::cout << "name " << name << std::endl;
-                std::cout << typeid(T).name() << std::endl;
-                std::cout << it->second->getTypeName() << std::endl;
-
                 SYLAR_LOG_ERROR(SYLAR_LOG_ROOT()) << "Lookup name= " << name << " exists but type not"
                         << typeid(T).name() << " real_type = " << it->second->getTypeName()
                             <<" " << it->second->toString();
@@ -400,7 +403,5 @@ private:
 
 
 }
-
-
 
 #endif

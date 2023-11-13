@@ -128,14 +128,52 @@ enum class HttpStatus{
 #undef XX
 };
 
+/**
+ * @brief 将字符串方法名转成HTTP方法枚举
+ * @param[in] m HTTP方法
+ * @return HTTP方法枚举
+ */
 HttpMethod StringToHttpMethod(const std::string& m);
+
+
+/**
+ * @brief 将字符串指针转换成HTTP方法枚举
+ * @param[in] m 字符串方法枚举
+ * @return HTTP方法枚举
+ */
 HttpMethod CharsToHttpMethod(const char * m);
+
+/**
+ * @brief 将HTTP方法枚举转换成字符串
+ * @param[in] m HTTP方法枚举
+ * @return 字符串
+ */
 const char * HttpMethodToString(const HttpMethod& m);
+
+/**
+ * @brief 将HTTP状态枚举转换成字符串
+ * @param[in] m HTTP状态枚举
+ * @return 字符串
+ */
 const char * HttpStatusToString(const HttpStatus& s);
 
+/**
+ * @brief 忽略大小写比较仿函数
+ */
 struct CaseInsensitiveLess{
     bool operator()(const std::string& lhs,const std::string& rhs)const;
 };
+
+/**
+ * @brief 获取Map中的key值,并转成对应类型,返回是否成功
+ * @param[in] m Map数据结构
+ * @param[in] key 关键字
+ * @param[out] val 保存转换后的值
+ * @param[in] def 默认值
+ * @return
+ *      @retval true 转换成功, val 为对应的值
+ *      @retval false 不存在或者转换失败 val = def
+ */
 template<class MapType,class T>
 bool checkGetAs(const MapType& m,const std::string& key,T& val,const T& def =T()){
     auto it = m.find(key);
@@ -151,6 +189,14 @@ bool checkGetAs(const MapType& m,const std::string& key,T& val,const T& def =T()
     }
     return false;
 }
+
+/**
+ * @brief 获取Map中的key值,并转成对应类型
+ * @param[in] m Map数据结构
+ * @param[in] key 关键字
+ * @param[in] def 默认值
+ * @return 如果存在且转换成功返回对应的值,否则返回默认值
+ */
 template<class MapType,class T>
 T getAs(const MapType& m,const std::string& key,const T& def = T()){
     auto it = m.find(key);
@@ -158,15 +204,25 @@ T getAs(const MapType& m,const std::string& key,const T& def = T()){
         return def;
     }
     try {
+        //如果转换发生了错误，lexical_cast会抛出一个bad_lexical_cast异常
         return boost::lexical_cast<T>(it->second);
     }catch(...){
     }
     return def;
 }
+
+/**
+ * @brief HTTP请求结构
+ */
 class HttpRequest{
 public:
     typedef std::shared_ptr<HttpRequest> ptr;
     typedef std::map<std::string,std::string,CaseInsensitiveLess>MapType;
+        /**
+     * @brief 构造函数
+     * @param[in] version 版本
+     * @param[in] close 是否keepalive
+     */
     HttpRequest(uint8_t version = 0x11,bool close = true);
 
     HttpMethod getMethod() const {return m_method;}
@@ -197,7 +253,19 @@ public:
     void setParams(const MapType& v){m_params = v;}
     void setCookies(const MapType& v){m_cookies = v;}
 
+    /**
+     * @brief 获取HTTP请求的头部参数
+     * @param[in] key 关键字
+     * @param[in] def 默认值
+     * @return 如果存在则返回对应值,否则返回默认值
+     */
     std::string getHeader(const std::string& key,const std::string& def = "")const;
+        /**
+     * @brief 获取HTTP请求的请求参数
+     * @param[in] key 关键字
+     * @param[in] def 默认值
+     * @return 如果存在则返回对应值,否则返回默认值
+     */
     std::string getParam(const std::string& key,const std::string& def ="")const;
     std::string getCookie(const std::string& key,const std::string& def ="")const;
 
@@ -209,19 +277,49 @@ public:
     void delParam(const std::string& key);
     void delCookie(const std::string& key);
 
+    /**
+     * @brief 判断HTTP请求的头部参数是否存在
+     * @param[in] key 关键字
+     * @param[out] val 如果存在,val非空则赋值
+     * @return 是否存在
+     */
     bool hasHeader(const std::string& key, std::string* val = nullptr);
     bool hasParam(const std::string& key,std::string* val = nullptr);
     bool hasCookie(const std::string& key,std::string* val = nullptr);
 
+    /**
+     * @brief 检查并获取HTTP请求的头部参数
+     * @tparam T 转换类型
+     * @param[in] key 关键字
+     * @param[out] val 返回值
+     * @param[in] def 默认值
+     * @return 如果存在且转换成功返回true,否则失败val=def
+     */
     template<class T>
     bool checkGetHeaderAs(const std::string& key,T& val,const T& def = T()){
         return checkGetAs(m_headers,key,val,def);
     }
 
+    /**
+     * @brief 获取HTTP请求的头部参数
+     * @tparam T 转换类型
+     * @param[in] key 关键字
+     * @param[in] def 默认值
+     * @return 如果存在且转换成功返回对应的值,否则返回def
+     */
     template<class T>
     T getHeaderAs(const std::string& key,const T& def = T()){
         return getAs(m_headers,key,def);
     }
+
+        /**
+     * @brief 检查并获取HTTP请求的请求参数
+     * @tparam T 转换类型
+     * @param[in] key 关键字
+     * @param[out] val 返回值
+     * @param[in] def 默认值
+     * @return 如果存在且转换成功返回true,否则失败val=def
+     */
     template<class T>
     bool checkGetParamAs(const std::string& key,T& val,const T& def = T()){
         return checkGetAs(m_headers,key,val,def);
@@ -239,23 +337,38 @@ public:
     T getCookieAs(const std::string& key,const T& def = T()){
         return getAs(m_headers,key,def);
     }
+
+        /**
+     * @brief 序列化输出到流中
+     * @param[in, out] os 输出流
+     * @return 输出流
+     */
     std::ostream& dump(std::ostream& os) const;
     std::string toString() const;
 private:
    
 private:
+    /// HTTP方法
     HttpMethod m_method;
+    /// HTTP版本
     uint8_t m_version;
+
     HttpStatus m_status;
     bool m_close;//http支持长连接
-
+    /// 请求路径
     std::string m_path;
+    /// 请求参数
     std::string m_query;
+    /// 请求fragment
     std::string m_fragment;
+    /// 请求消息体
     std::string m_body;
 
+    /// 请求头部MAP
     MapType m_headers;
+    /// 请求参数MAP
     MapType m_params;
+    /// 请求Cookie MAP
     MapType m_cookies;
 };
 class HttpResponse{
@@ -283,6 +396,14 @@ public:
     void setHeader(const std::string& key,const std::string& val);
     void delHeader(const std::string& key);
 
+    /**
+     * @brief 检查并获取响应头部参数
+     * @tparam T 值类型
+     * @param[in] key 关键字
+     * @param[out] val 值
+     * @param[in] def 默认值
+     * @return 如果存在且转换成功返回true,否则失败val=def
+     */
     template<class T>
     bool checkGetHeaderAs(const std::string& key,T& val,const T& def = T()){
         return checkGetAs(m_headers,key,val,def);
@@ -297,11 +418,17 @@ public:
     std::string toString() const;
 
 private:
+    /// 响应状态
     HttpStatus m_status;
+    /// 版本
     uint8_t m_version;
+    /// 是否自动关闭
     bool m_close;
+    /// 响应消息体
     std::string m_body;
+    /// 响应原因
     std::string m_reason;
+    /// 响应头部MAP
     MapType m_headers;
 };
 std::ostream& operator<<(std::ostream& os,const HttpRequest& req);

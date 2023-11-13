@@ -7,6 +7,7 @@ namespace http{
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_NAME("system");
 
+//
 HttpServer::HttpServer(bool keepalive
                 ,sylar::IOManager* worker
                 ,sylar::IOManager* accept_worker)

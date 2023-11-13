@@ -10,18 +10,19 @@
 
 sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 
+void t_sleep(){
+    sleep(1);
+    SYLAR_LOG_INFO(g_logger) << "sleep 2";
+}
+void t_sleep2(){
+    sleep(1);
+    SYLAR_LOG_INFO(g_logger) << "sleep 3";
+}
 void test_sleep(){
-    sylar::IOManager iom(1,true,"xu");
-    iom.schedule([](){
-        sleep(2);
-        SYLAR_LOG_INFO(g_logger) << "sleep 2";
+    sylar::IOManager iom(1);
+    iom.schedule(t_sleep);
+    iom.schedule(t_sleep2);
 
-    });
-
-    iom.schedule([](){
-        sleep(3);
-        SYLAR_LOG_INFO(g_logger) << "sleep 3";
-    });
     SYLAR_LOG_INFO(g_logger) << "test_sleep";
 }
 
@@ -32,8 +33,10 @@ void test_sock(){
     sockaddr_in addr;
     memset(&addr,0,sizeof(addr));
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(84);
-    inet_pton(AF_INET,"14.119.104.254",&addr.sin_addr.s_addr);
+    addr.sin_port = htons(80);
+   // inet_pton(AF_INET,"14.119.104.254",&addr.sin_addr.s_addr);
+
+    inet_pton(AF_INET,"14.119.104.189",&addr.sin_addr.s_addr);
     SYLAR_LOG_INFO(g_logger) << "begin connect";
     int rt = connect(sock,(const sockaddr*)&addr,sizeof(addr));
     SYLAR_LOG_INFO(g_logger) << "connect rt= " << rt << " errno= " << errno << " strerror "   << strerror(errno); 
@@ -65,7 +68,7 @@ void test_sock(){
 }
 
 int main(int argc,char ** argv){
-   // test_sleep();
+    //test_sleep();
     //test_sock();
     sylar::IOManager iom;
     iom.schedule(test_sock);

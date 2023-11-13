@@ -61,6 +61,8 @@ sstream
 -
 iomanip
 -
+math.h
+-
 
 /home/xu/Server_SYLAR/sylar/sylar/bytearray.h
 memory
