@@ -83,6 +83,7 @@ extern "C" {
     HOOK_FUN(XX);
 #undef XX
 
+//定义一个结构体条件计时器
 struct timer_info{
     int cancelled = 0;
 };
@@ -92,6 +93,7 @@ template<typename OriginFun,typename ... Args>
 static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
         uint32_t event,int timeout_so, Args&&... args){
     if(!sylar::t_hook_enable){
+        //  没有hook直接返回原函数
         //forward完美转换传右值 为了避免不必要的拷贝
         return fun(fd,std::forward<Args>(args)...);
     }
@@ -100,12 +102,15 @@ static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
 
     sylar::FdCtx::ptr ctx = sylar::FdMgr::GetInstance()->get(fd);
     if(!ctx){
+        //不是socket 按照原来方法走
         return fun(fd,std::forward<Args>(args)...);
     }    
     if(ctx->isClose()){
+        //socket存在但是关闭直接返回文件有问题
         errno = EBADF;
         return -1;
     }
+    //不是socket 用户设置非阻塞，走原函数
     if(!ctx->isSocket() || ctx->getUserNonblock()){
         return fun(fd,std::forward<Args>(args)...);
     }
@@ -116,21 +121,24 @@ static ssize_t do_io(int fd,OriginFun fun,const char * hook_fun_name,
 retry:
     ssize_t n =fun(fd,std::forward<Args>(args)...);
     while (n == -1 && errno == EINTR){
+        //重试
         n =fun(fd,std::forward<Args>(args)...);
     }
     //EAGAIN 阻塞状态
     if(n == -1 && errno == EAGAIN){
         sylar::IOManager * iom = sylar::IOManager::GetThis();
         sylar::Timer::ptr timer;
-        //条件变量
+        //条件变量  直接使用共享指针初始化
         std::weak_ptr<timer_info> winfo(tinfo);
 
         if(to != (uint64_t)-1){
             timer = iom->addConditionTimer(to,[winfo,fd,iom,event](){
                 auto t = winfo.lock();
                 if(!t || t->cancelled){
+                    //定时器失效
                     return;
                 }
+                //到时强制cancel
                 t->cancelled = ETIMEDOUT;
                 iom->cancelEvent(fd,(sylar::IOManager::Event)(event));
             },winfo);

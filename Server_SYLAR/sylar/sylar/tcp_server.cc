@@ -77,7 +77,7 @@ void TcpServer::startAccept(Socket::ptr sock){
 }
 //
 bool TcpServer::start(){
-    if(m_isStop){
+    if(!m_isStop){
         return true;
     }
     m_isStop = false;

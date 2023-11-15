@@ -5,7 +5,7 @@
 
 static sylar::Logger::ptr g_logger = SYLAR_LOG_ROOT();
 void run(){
-    auto addr= sylar::Address::LookupAny("0.0.0.0:8033");
+    auto addr= sylar::Address::LookupAny("www.baidu.com:80");
     //auto addr2 = sylar::UnixAddress::ptr(new sylar::UnixAddress("tmp/unix_addr"));
     SYLAR_LOG_INFO(g_logger) << *addr;
     std::vector<sylar::Address::ptr>addrs;

@@ -17,7 +17,8 @@ void test_response(){
     rsp->dump(std::cout) << std::endl;
 }
 int main(int argc,char ** argv){
-    test_request();
+    //test_request();
+    test_response();
 
     return 0;
 }

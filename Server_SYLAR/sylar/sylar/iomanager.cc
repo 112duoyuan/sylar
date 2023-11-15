@@ -370,7 +370,6 @@ void IOManager::idle(){
         Fiber::ptr cur = Fiber::GetThis();
         auto raw_ptr = cur.get();
         cur.reset();
-        SYLAR_LOG_INFO(g_logger) << "swapOut "; 
         raw_ptr->swapOut();
     }
     SYLAR_LOG_INFO(g_logger) << "jump idle!";

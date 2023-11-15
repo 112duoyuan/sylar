@@ -14,7 +14,8 @@ void test_socket(){
     //     if(addr)
     //         break;
     // }
-    sylar::IPAddress::ptr addr = sylar::Address::LookupAnyIPAddress("www.baidu.com");
+    //sylar::IPAddress::ptr addr = sylar::Address::LookupAnyIPAddress("www.baidu.com");
+    sylar::IPAddress::ptr addr = sylar::Address::LookupAnyIPAddress("0.0.0.0");
     if(addr){
         SYLAR_LOG_INFO(g_logger) << "get address: " << addr->toString();
     }else{
@@ -23,7 +24,8 @@ void test_socket(){
     }
 
     sylar::Socket::ptr sock = sylar::Socket::CreateTCP(addr);
-    addr->setPort(80);
+    //addr->setPort(80);
+    addr->setPort(8020);
     SYLAR_LOG_INFO(g_logger) << "addr=" << addr->toString();
     if(!sock->connect(addr)){
         SYLAR_LOG_ERROR(g_logger) << "connect "<<addr->toString() << " fail";

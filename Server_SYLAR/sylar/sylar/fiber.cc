@@ -168,7 +168,7 @@ Fiber::ptr Fiber::GetThis(){
     Fiber::ptr main_fiber(new Fiber);
     
     SYLAR_ASSERT(t_fiber == main_fiber.get());
-    t_threadFiber = main_fiber;//设置该线程的主携程 状态为执行
+    t_threadFiber = main_fiber;//设置线程携程 状态为执行
     return t_fiber->shared_from_this();
 
 }

@@ -65,7 +65,7 @@ public:
     /**
      * @brief 获取sockopt @see getsockopt
      */
-    bool getOption(int level,int option,void* result,size_t * len);
+    bool getOption(int level,int option,void* result,socklen_t * len);
 
     /**
      * @brief 获取sockopt模板 @see getsockopt
@@ -76,10 +76,10 @@ public:
         return getOption(level,option,&result,&length);
     }
 
-    bool setOption(int level,int option,const void * result,size_t len);
+    bool setOption(int level,int option,const void * result,socklen_t len);
     template<class T>
     bool setOption(int level,int option,const T& value){
-        return setOption(level,option,value);
+        return setOption(level,option,&value,sizeof(T));
     }
 
     /**

@@ -96,7 +96,7 @@ void Socket::setRecvTimeout(int64_t v){
     setOption(SOL_SOCKET,SO_RCVTIMEO,tv);
 }
 //
-bool Socket::getOption(int level,int option,void* result,size_t * len){
+bool Socket::getOption(int level,int option,void* result,socklen_t * len){
     //获取一个套接字
     int rt =getsockopt(m_sock,level,option,result,(socklen_t*)len);
     if(rt){
@@ -108,7 +108,7 @@ bool Socket::getOption(int level,int option,void* result,size_t * len){
     return true;
 }
 //
-bool Socket::setOption(int level,int option,const void * result,size_t len){
+bool Socket::setOption(int level,int option,const void * result,socklen_t len){
     if(setsockopt(m_sock,level,option,result,(socklen_t)len)){
         SYLAR_LOG_DEBUG(g_logger) << "setOption sock=" << m_sock
             <<" level=" << level << " option=" << option 
@@ -127,7 +127,7 @@ Socket::ptr Socket::accept(){
         return nullptr;
     }
     if(sock->init(newsock)){
-        return nullptr;
+        return sock;
     }
     return nullptr;
 }
@@ -170,7 +170,7 @@ bool Socket::bind(const Address::ptr addr){
 }
 //
 bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
-    if(isValid()){
+    if(!isValid()){
         newSock();
         if(SYLAR_UNLICKLY(!isValid())){
             return false;
@@ -192,6 +192,7 @@ bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
             return false;
         }
     } else{
+        SYLAR_LOG_INFO(g_logger) << "conenct with timeout!!!";
         if(::connect_with_timeout(m_sock,addr->getAddr(),addr->getAddrLen(),timeout_ms)){
             SYLAR_LOG_ERROR(g_logger) << "sock=" << m_sock 
                 << " connect(" << addr->toString() << ") timeout="
@@ -202,6 +203,7 @@ bool Socket::connect(const Address::ptr addr,uint64_t timeout_ms){
         }
     }
     m_isConnected = true;
+    //获取远程ip 端口
     getRemoteAddress();
     getLocalAddress();
     return true;
@@ -331,12 +333,13 @@ Address::ptr Socket::getRemoteAddress(){
     }
     socklen_t addrlen = result->getAddrLen();
     //用于获取与某个套接字关联的外地协议地址
+    //来获取当前连接的客户端的IP地址和端口号。
     if(getpeername(m_sock,result->getAddr(),&addrlen)){
         SYLAR_LOG_ERROR(g_logger) << "getpeername error sock=" << m_sock
             << " errno=" << errno << " errstr=" << strerror(errno);
         return Address::ptr(new UnknownAddress(m_family));
     }
-    if(m_family == AF_INET){
+    if(m_family == AF_UNIX){
         UnixAddress::ptr addr = std::dynamic_pointer_cast<UnixAddress>(result);
         addr->setAddrLen(addrlen);
     }
@@ -370,7 +373,7 @@ if(m_localAddress){
             << " errno=" << errno << " errstr=" << strerror(errno);
         return Address::ptr(new UnknownAddress(m_family));
     }
-    if(m_family == AF_INET){
+    if(m_family == AF_UNIX){
         UnixAddress::ptr addr = std::dynamic_pointer_cast<UnixAddress>(result);
         addr->setAddrLen(addrlen);
     }
@@ -385,7 +388,7 @@ bool Socket::isValid() const{
 //
 int Socket::getError(){
     int error = 0;
-    size_t len = sizeof(error);
+    socklen_t len = sizeof(error);
     if(!getOption(SOL_SOCKET,SO_ERROR,&error,&len)){
         return -1;
     }
@@ -398,7 +401,7 @@ std::ostream& Socket::dump(std::ostream& os)const{
         << " is_connected=" << m_isConnected
         << " family=" << m_family
         << " type=" << m_type
-        << "protocol=" << m_protocol;
+        << " protocol=" << m_protocol;
     if(m_localAddress){
         os << " local_address=" << m_localAddress->toString();
     }
